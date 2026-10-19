@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1.0">
-    <title>Bookley's Word Drop - v.0.0.001</title>
+    <title>Bookley's Word Drop - v.0.0.033</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@700;900&family=Quicksand:wght@600;700&display=swap');
 
@@ -238,6 +238,40 @@
             z-index: 1;
             box-shadow: inset 0 -3px 0 rgba(0,0,0,0.08);
             touch-action: none;
+            transition: transform 0.38s cubic-bezier(0.2, 0.8, 0.2, 1);
+            will-change: transform;
+        }
+
+        .tile.spinning {
+            animation: spinTileShuffle 0.4s ease-in-out forwards;
+        }
+
+        @keyframes spinTileShuffle {
+            0% { transform: scale(1) rotate(0deg); filter: brightness(1); }
+            50% { transform: scale(0.6) rotate(180deg) scale(0.8); filter: brightness(1.3); background: var(--mustard); }
+            100% { transform: scale(1) rotate(360deg); filter: brightness(1); }
+        }
+
+        .tile.fade-in {
+            animation: fadeInTile 0.3s ease forwards;
+        }
+
+        @keyframes fadeInTile {
+            0% { opacity: 0; transform: scale(0.6); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+
+        .tile.burning-away {
+            animation: burnToCrisp 0.85s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+            z-index: 5;
+        }
+
+        @keyframes burnToCrisp {
+            0% { transform: scale(1) rotate(0deg); background: var(--tile-bg); filter: brightness(1); opacity: 1; color: var(--ink); }
+            20% { transform: scale(1.12) rotate(-3deg); background: #f59e0b; filter: brightness(1.4); color: #fff; }
+            50% { transform: scale(0.95) rotate(6deg); background: #ea580c; filter: brightness(1.8); color: #ffedd5; box-shadow: 0 0 16px #f97316; }
+            80% { transform: scale(0.5) rotate(12deg); background: #292524; filter: brightness(0.6); color: #78716c; opacity: 0.7; }
+            100% { transform: scale(0.1) rotate(25deg); background: #1c1917; filter: brightness(0.2); opacity: 0; color: #1c1917; }
         }
 
         .tile.tier-green {
@@ -280,7 +314,7 @@
             background: var(--tile-flame);
             color: white;
             animation: flamePulse 0.8s infinite alternate ease-in-out;
-            z-index: 5;
+            z-index: 2;
         }
 
         .tile.hazard-flame::after {
@@ -294,6 +328,10 @@
         @keyframes flamePulse {
             0% { transform: scale(1); box-shadow: 0 0 8px rgba(239, 68, 68, 0.6); }
             100% { transform: scale(1.06); box-shadow: 0 0 16px rgba(239, 68, 68, 0.95); }
+        }
+
+        .grid.is-animating .tile.hazard-flame {
+            animation: none !important;
         }
 
         .tile.selected {
@@ -529,7 +567,7 @@
     <div class="ambient-dust" id="ambient-dust"></div>
 
     <header>
-        <div class="version-badge">v.0.0.001</div>
+        <div class="version-badge">v.0.0.033</div>
         <div class="stat-group">
             <span class="stat-label">Score</span>
             <span id="score" class="stat-value">0</span>
@@ -551,7 +589,7 @@
     <div class="mascot-container">
         <div class="mascot-svg-wrapper" id="mascot-avatar"></div>
         <div class="speech-bubble" id="speech-text">
-            v.0.0.001 Loaded! Swipe smoothly across letters to build words! 📚🐛
+            v.0.0.033 Ready! Hold-spam sound bug fixed! 📚✨
         </div>
     </div>
 
@@ -604,7 +642,9 @@
         let validDefinitionText = "";
         let isAnimating = false;
         let isDragging = false;
+        let lastProcessedIndex = null; // Tracks the last tile interacted with during a drag/hold
         let tileRects = [];
+        let nextTileId = 1;
 
         let score = 0;
         let highScore = parseInt(localStorage.getItem('bookley_high_score') || '0', 10);
@@ -635,56 +675,15 @@
             "Science": ["ATOM", "CELL", "GENE", "ION", "MASS", "VOLT", "WATT", "ACID", "BASE", "DATA", "TEST", "LABS", "LASER", "RADAR", "PHYSICS", "BIOLOGY", "CHEMISTRY", "GENETICS", "QUANTUM", "ELECTRON"]
         };
 
+        const OVERRIDE_WORDS = new Set([
+            "PEE", "POO", "FART", "CRAP", "DAMN", "HELL", "SHIT", "BITCH", "BASTARD", 
+            "ASS", "COCK", "PUSSY", "DICKS", "CUNT", "SLUT", "WHORE", "TITS", "BOOB", 
+            "SEX", "CUM", "JIZZ", "PISS", "TURD", "BUTT", "BALLS", "BONER", "SNATCH",
+            "BEEP", "BUZZ", "ZOOM", "BANG", "BOOM", "ZAP", "HISS", "CLICK", "SNAP", "CRASH"
+        ]);
+
         let discoveredWords = JSON.parse(localStorage.getItem('bookley_discovered') || '{}');
-
-        let DICTIONARY_DB = {
-            "SIR": "A polite or formal title of address for a man.",
-            "SIRS": "Plural of sir.",
-            "GLAM": "Informal term for glamour or glamorous.",
-            "QUILL": "A feather used as a writing pen.",
-            "SLIMEY": "Variant spelling of slimy; covered with or resembling slime.",
-            "SLIMY": "Covered with or resembling slime.",
-            "SLIME": "A moist, soft, slippery substance.",
-            "SLIMING": "Present participle of slime.",
-            "SUS": "Short for suspicious or suspect.",
-            "YEET": "To throw something with force and enthusiasm.",
-            "CHONK": "An affectionately heavy or chubby animal.",
-            "BAE": "A term of endearment for a romantic partner.",
-            "MAAM": "A polite term of address for a woman.",
-            "POO": "Excrement; fecal matter.",
-            "POOP": "Excrement.",
-            "SEX": "Sexual activity or anatomical classification.",
-            "FUCK": "An expletive expressing anger, annoyance, or emphasis.",
-            "SHIT": "Fecal matter or an expression of dismay.",
-            "CUNT": "A vulgar term for genitalia or an obnoxious person.",
-            "DICK": "A vulgar term for a penis or an obnoxious person.",
-            "ASS": "The buttocks or a foolish person.",
-            "COCK": "A rooster or vulgar term for a penis.",
-            "BITCH": "A female dog or an offensive term for a person.",
-            "PISS": "Urine or to urinate.",
-            "CRAP": "Excrement or nonsense.",
-            "DAMN": "An expression of anger or frustration.",
-            "HELL": "A netherworld or expression of annoyance.",
-            "ZOO": "An establishment maintained for public exhibition of captive animals.",
-            "ZOOS": "Plural of zoo.",
-            "ZIP": "A zip fastener or a sound of movement.",
-            "ZAP": "To destroy or hit with a sudden force.",
-            "ZIT": "A pimple or skin blemish.",
-            "QUA": "In the capacity or character of.",
-            "QI": "The circulating life force in traditional Chinese philosophy.",
-            "QIS": "Plural of qi.",
-            "XI": "The fourteenth letter of the Greek alphabet.",
-            "XIS": "Plural of xi.",
-            "TAD": "A small amount or degree.",
-            "BEER": "An alcoholic drink brewed from malt and hops.",
-            "PORN": "Explicit sexually gratifying content."
-        };
-
-        for (let cat in WORD_CATEGORIES) {
-            WORD_CATEGORIES[cat].forEach(w => {
-                if (!DICTIONARY_DB[w]) DICTIONARY_DB[w] = `Common term in the ${cat} category.`;
-            });
-        }
+        let onlineSessionCache = {};
 
         function initAmbientDust() {
             const container = document.getElementById('ambient-dust');
@@ -728,13 +727,13 @@
                     osc.stop(now + 0.08);
                 } else if (type === 'burn') {
                     osc.type = 'sawtooth';
-                    osc.frequency.setValueAtTime(150, now);
-                    osc.frequency.linearRampToValueAtTime(300, now + 0.15);
-                    osc.frequency.linearRampToValueAtTime(60, now + 0.4);
-                    gain.gain.setValueAtTime(0.18, now);
-                    gain.gain.exponentialRampToValueAtTime(0.01, now + 0.4);
+                    osc.frequency.setValueAtTime(120, now);
+                    osc.frequency.linearRampToValueAtTime(250, now + 0.4);
+                    osc.frequency.linearRampToValueAtTime(50, now + 0.85);
+                    gain.gain.setValueAtTime(0.22, now);
+                    gain.gain.exponentialRampToValueAtTime(0.01, now + 0.85);
                     osc.start(now);
-                    osc.stop(now + 0.4);
+                    osc.stop(now + 0.85);
                 } else if (type === 'shuffle') {
                     osc.type = 'sine';
                     osc.frequency.setValueAtTime(300, now);
@@ -826,26 +825,6 @@
             `;
         }
 
-        async function loadWebsterDictionary() {
-            try {
-                const res = await fetch("https://raw.githubusercontent.com/adambom/dictionary/master/dictionary.json");
-                if (res.ok) {
-                    const rawData = await res.json();
-                    for (let key in rawData) {
-                        DICTIONARY_DB[key.toUpperCase()] = rawData[key];
-                    }
-                }
-            } catch(e) {}
-
-            for (let cat in WORD_CATEGORIES) {
-                WORD_CATEGORIES[cat].forEach(w => {
-                    if (!DICTIONARY_DB[w]) DICTIONARY_DB[w] = `Common term in the ${cat} category.`;
-                });
-            }
-
-            setMascot("v.0.0.001 Ready! Swipe smoothly across letters to build words! 📚", "happy");
-        }
-
         const gridEl = document.getElementById('grid');
         const wordEl = document.getElementById('current-word');
         const submitBtn = document.getElementById('submit-btn');
@@ -863,7 +842,7 @@
         }
 
         function createTileObject(letter = getRandomLetter(), bonus = null) {
-            return { letter, bonus };
+            return { id: nextTileId++, letter, bonus };
         }
 
         function initGrid() {
@@ -872,7 +851,7 @@
                 gridState.push(createTileObject());
             }
             highScoreEl.textContent = highScore.toLocaleString();
-            renderGrid();
+            renderGridInitial();
         }
 
         function shuffleGrid() {
@@ -921,16 +900,47 @@
             let addedFlames = 0;
             for (let i = 0; i < topRowIndices.length && addedFlames < shufflePenaltyCount; i++) {
                 let idx = topRowIndices[i];
-                gridState[idx] = { letter: getRandomLetter(), bonus: 'flame' };
+                gridState[idx] = { id: nextTileId++, letter: getRandomLetter(), bonus: 'flame' };
                 addedFlames++;
             }
 
-            renderGrid(new Map(), [], true);
+            renderGridWithSpinAnimation();
             setMascot(`Shuffle penalty applied! ${shufflePenaltyCount} flame tile(s) added to top row! 🔥🔀`, "scared");
 
             setTimeout(() => {
                 isAnimating = false;
-            }, 360);
+            }, 420);
+        }
+
+        function renderGridWithSpinAnimation() {
+            gridEl.innerHTML = '';
+            for (let row = 0; row < GRID_SIZE; row++) {
+                const rowEl = document.createElement('div');
+                rowEl.classList.add('row');
+                if (row % 2 === 1) rowEl.classList.add('offset');
+
+                for (let col = 0; col < GRID_SIZE; col++) {
+                    let index = row * GRID_SIZE + col;
+                    let tileData = gridState[index];
+
+                    const tile = document.createElement('div');
+                    tile.classList.add('tile', 'spinning');
+                    tile.dataset.index = index;
+                    tile.dataset.tileId = tileData ? tileData.id : '';
+
+                    if (tileData) {
+                        if (tileData.bonus === 'green') tile.classList.add('tier-green');
+                        else if (tileData.bonus === 'gold') tile.classList.add('tier-gold');
+                        else if (tileData.bonus === 'flame') tile.classList.add('hazard-flame');
+                        tile.textContent = tileData.letter;
+                    }
+
+                    rowEl.appendChild(tile);
+                }
+                gridEl.appendChild(rowEl);
+            }
+            updateButtonStates();
+            setTimeout(cacheTileRects, 10);
         }
 
         function cacheTileRects() {
@@ -939,19 +949,16 @@
             tileElements.forEach(el => {
                 const idx = parseInt(el.dataset.index, 10);
                 const rect = el.getBoundingClientRect();
-                tileRects[idx] = { left: rect.left, right: rect.right, top: rect.top, bottom: rect.bottom };
+                tileRects[idx] = { left: rect.left, right: rect.right, top: rect.top, bottom: rect.bottom, width: rect.width, height: rect.height };
             });
         }
 
-        function renderGrid(fallingIndicesMap = new Map(), poppingIndices = [], isShuffling = false) {
+        function renderGridInitial() {
             gridEl.innerHTML = '';
-
             for (let row = 0; row < GRID_SIZE; row++) {
                 const rowEl = document.createElement('div');
                 rowEl.classList.add('row');
-                if (row % 2 === 1) {
-                    rowEl.classList.add('offset');
-                }
+                if (row % 2 === 1) rowEl.classList.add('offset');
 
                 for (let col = 0; col < GRID_SIZE; col++) {
                     let index = row * GRID_SIZE + col;
@@ -960,39 +967,111 @@
                     const tile = document.createElement('div');
                     tile.classList.add('tile');
                     tile.dataset.index = index;
-                    
+                    tile.dataset.tileId = tileData ? tileData.id : '';
+
                     if (tileData) {
                         if (tileData.bonus === 'green') tile.classList.add('tier-green');
                         else if (tileData.bonus === 'gold') tile.classList.add('tier-gold');
                         else if (tileData.bonus === 'flame') tile.classList.add('hazard-flame');
-                    }
-
-                    if (isShuffling) {
-                        tile.classList.add('shuffling');
-                        tile.style.animationDelay = `${(index % GRID_SIZE) * 20}ms`;
-                    } else if (poppingIndices.includes(index)) {
-                        tile.classList.add('popping');
-                    } else if (fallingIndicesMap.has(index)) {
-                        const dropInfo = fallingIndicesMap.get(index);
-                        tile.classList.add('falling');
-                        tile.style.setProperty('--drop-distance', `-${dropInfo.distance * 45}px`);
-                        tile.style.animationDelay = `${dropInfo.delay}ms`;
+                        tile.textContent = tileData.letter;
                     }
 
                     if (selectedIndices.includes(index)) {
                         tile.classList.add('selected');
-                        if (isCurrentWordValid) {
-                            tile.classList.add('valid-word');
+                        if (isCurrentWordValid) tile.classList.add('valid-word');
+                    }
+
+                    rowEl.appendChild(tile);
+                }
+                gridEl.appendChild(rowEl);
+            }
+            updateButtonStates();
+            setTimeout(cacheTileRects, 10);
+        }
+
+        async function renderGridFLIP(duration = '0.38s', specialBurnIds = new Set()) {
+            const oldRects = new Map();
+            gridEl.querySelectorAll('.tile').forEach(el => {
+                const id = el.dataset.tileId;
+                if (id) {
+                    oldRects.set(id, el.getBoundingClientRect());
+                }
+            });
+
+            gridEl.classList.add('is-animating');
+
+            gridEl.innerHTML = '';
+            for (let row = 0; row < GRID_SIZE; row++) {
+                const rowEl = document.createElement('div');
+                rowEl.classList.add('row');
+                if (row % 2 === 1) rowEl.classList.add('offset');
+
+                for (let col = 0; col < GRID_SIZE; col++) {
+                    let index = row * GRID_SIZE + col;
+                    let tileData = gridState[index];
+
+                    const tile = document.createElement('div');
+                    tile.classList.add('tile');
+                    tile.dataset.index = index;
+                    tile.dataset.tileId = tileData ? tileData.id : '';
+
+                    if (tileData) {
+                        if (tileData.bonus === 'green') tile.classList.add('tier-green');
+                        else if (tileData.bonus === 'gold') tile.classList.add('tier-gold');
+                        else if (tileData.bonus === 'flame') tile.classList.add('hazard-flame');
+                        tile.textContent = tileData.letter;
+
+                        if (tileData.isNewSpawn) {
+                            tile.classList.add('fade-in');
+                        }
+                        if (specialBurnIds.has(tileData.id)) {
+                            tile.classList.add('burning-away');
                         }
                     }
 
-                    tile.textContent = tileData ? tileData.letter : '';
+                    if (selectedIndices.includes(index)) {
+                        tile.classList.add('selected');
+                        if (isCurrentWordValid) tile.classList.add('valid-word');
+                    }
+
                     rowEl.appendChild(tile);
                 }
-
                 gridEl.appendChild(rowEl);
             }
 
+            updateButtonStates();
+
+            const newTiles = gridEl.querySelectorAll('.tile');
+            newTiles.forEach(el => {
+                const id = el.dataset.tileId;
+                if (oldRects.has(id)) {
+                    const oldRect = oldRects.get(id);
+                    const newRect = el.getBoundingClientRect();
+                    const deltaX = oldRect.left - newRect.left;
+                    const deltaY = oldRect.top - newRect.top;
+
+                    if (deltaX !== 0 || deltaY !== 0) {
+                        el.style.transform = `translate(${deltaX}px, ${deltaY}px)`;
+                        el.style.transition = 'none';
+
+                        requestAnimationFrame(() => {
+                            requestAnimationFrame(() => {
+                                el.style.transition = `transform ${duration} cubic-bezier(0.25, 1, 0.5, 1)`;
+                                el.style.transform = 'translate(0, 0)';
+                            });
+                        });
+                    }
+                }
+            });
+
+            const durationMs = parseFloat(duration) * 1000;
+            await new Promise(r => setTimeout(r, durationMs + 30));
+            
+            gridEl.classList.remove('is-animating');
+            cacheTileRects();
+        }
+
+        function updateButtonStates() {
             if (isCurrentWordValid) {
                 wordEl.classList.add('valid-word');
                 submitBtn.classList.add('valid-word');
@@ -1000,8 +1079,6 @@
                 wordEl.classList.remove('valid-word');
                 submitBtn.classList.remove('valid-word');
             }
-
-            setTimeout(cacheTileRects, 10);
         }
 
         function getTileIndexAtCoords(clientX, clientY) {
@@ -1020,6 +1097,7 @@
             const index = getTileIndexAtCoords(e.clientX, e.clientY);
             if (index !== null) {
                 isDragging = true;
+                lastProcessedIndex = null; // Reset hold tracker on new touch/click
                 try { e.target.setPointerCapture(e.pointerId); } catch(err) {}
                 processTileSelection(index);
             }
@@ -1033,43 +1111,50 @@
             }
         });
 
-        window.addEventListener('pointerup', () => { isDragging = false; });
-        window.addEventListener('pointercancel', () => { isDragging = false; });
+        window.addEventListener('pointerup', () => { isDragging = false; lastProcessedIndex = null; });
+        window.addEventListener('pointercancel', () => { isDragging = false; lastProcessedIndex = null; });
 
         function processTileSelection(index) {
+            // Prevent spamming / infinite toggling if holding down on the same tile continuously
+            if (index === lastProcessedIndex) return;
+            lastProcessedIndex = index;
+
             const lastIdx = selectedIndices.length > 0 ? selectedIndices[selectedIndices.length - 1] : null;
-            if (lastIdx === index) return;
+            if (lastIdx === index && selectedIndices.length > 1) return;
 
             const existingPos = selectedIndices.indexOf(index);
 
-            if (existingPos > -1 && existingPos < selectedIndices.length - 1) {
-                selectedIndices = selectedIndices.slice(0, existingPos + 1);
-                playSound('tap');
-                updateCurrentWord();
-                renderGrid();
-                return;
+            if (existingPos > -1) {
+                if (existingPos === 0 && selectedIndices.length === 1) {
+                    clearSelection();
+                    return;
+                }
+                if (existingPos === selectedIndices.length - 1) {
+                    selectedIndices.pop();
+                    playSound('tap');
+                    updateCurrentWord();
+                    renderGridInitial();
+                    return;
+                }
+                if (existingPos < selectedIndices.length - 1) {
+                    selectedIndices = selectedIndices.slice(0, existingPos + 1);
+                    playSound('tap');
+                    updateCurrentWord();
+                    renderGridInitial();
+                    return;
+                }
             }
-
-            if (existingPos > -1 && existingPos === selectedIndices.length - 1) {
-                selectedIndices.pop();
-                playSound('tap');
-                updateCurrentWord();
-                renderGrid();
-                return;
-            }
-
-            if (existingPos > -1) return;
 
             if (selectedIndices.length === 0 || !areTilesAdjacent(lastIdx, index)) {
                 selectedIndices = [index];
                 playSound('tap');
                 updateCurrentWord();
-                renderGrid();
+                renderGridInitial();
             } else {
                 selectedIndices.push(index);
                 playSound('tap');
                 updateCurrentWord();
-                renderGrid();
+                renderGridInitial();
             }
         }
 
@@ -1097,58 +1182,91 @@
             return false;
         }
 
-        function updateCurrentWord() {
+        // --- ONLINE VALIDATION (MIN 3 LETTERS + FREQUENCY FILTER + OVERRIDE LIST) ---
+        async function updateCurrentWord() {
             currentWordString = selectedIndices.map(i => gridState[i].letter).join('');
             wordEl.textContent = currentWordString;
             isCurrentWordValid = false;
             validDefinitionText = "";
 
-            let minLength = 3;
-            if (currentWordString.length === 2 || currentWordString.length === 3) {
-                if (currentWordString.includes("Z") || currentWordString.includes("QU") || currentWordString.includes("X") || currentWordString.includes("Q")) {
-                    minLength = 2;
-                }
-            }
-
-            if (currentWordString.length >= minLength) {
+            if (currentWordString.length >= 3) {
                 const word = currentWordString.toUpperCase();
 
-                if (DICTIONARY_DB[word]) {
-                    isCurrentWordValid = true;
-                    validDefinitionText = DICTIONARY_DB[word];
-                } 
-                else if (word.length >= 4 && word.endsWith("S")) {
-                    const rootWord = word.slice(0, -1);
-                    if (DICTIONARY_DB[rootWord]) {
-                        isCurrentWordValid = true;
-                        validDefinitionText = `(Plural of ${rootWord}): ${DICTIONARY_DB[rootWord]}`;
-                    } else if (word.endsWith("ES") && word.length >= 5) {
-                        const rootEs = word.slice(0, -2);
-                        if (DICTIONARY_DB[rootEs]) {
-                            isCurrentWordValid = true;
-                            validDefinitionText = `(Plural of ${rootEs}): ${DICTIONARY_DB[rootEs]}`;
-                        }
-                    }
-                } 
-                else if (word.length >= 5 && word.endsWith("ING")) {
-                    const rootIng = word.slice(0, -3);
-                    const rootIngE = rootIng + "E";
-
-                    if (DICTIONARY_DB[rootIng]) {
-                        isCurrentWordValid = true;
-                        validDefinitionText = `(Present participle of ${rootIng}): ${DICTIONARY_DB[rootIng]}`;
-                    } else if (DICTIONARY_DB[rootIngE]) {
-                        isCurrentWordValid = true;
-                        validDefinitionText = `(Present participle of ${rootIngE}): ${DICTIONARY_DB[rootIngE]}`;
-                    } else if (rootIng.length >= 3 && rootIng[rootIng.length - 1] === rootIng[rootIng.length - 2]) {
-                        const rootIngSingle = rootIng.slice(0, -1);
-                        if (DICTIONARY_DB[rootIngSingle]) {
-                            isCurrentWordValid = true;
-                            validDefinitionText = `(Present participle of ${rootIngSingle}): ${DICTIONARY_DB[rootIngSingle]}`;
-                        }
-                    }
+                if (onlineSessionCache[word] !== undefined) {
+                    isCurrentWordValid = onlineSessionCache[word].valid;
+                    validDefinitionText = onlineSessionCache[word].def;
+                    updateButtonStates();
+                    renderGridInitial();
+                    return;
                 }
+
+                if (OVERRIDE_WORDS.has(word)) {
+                    let def = `Valid colloquial/slang term (${word.length} letters).`;
+                    onlineSessionCache[word] = { valid: true, def: def };
+                    isCurrentWordValid = true;
+                    validDefinitionText = def;
+                    updateButtonStates();
+                    renderGridInitial();
+                    return;
+                }
+
+                try {
+                    const res = await fetch(`https://api.datamuse.com/words?sp=${word.toLowerCase()}&qe=1&md=df&max=1`);
+                    if (res.ok) {
+                        const data = await res.json();
+                        if (data.length > 0 && data[0].word.toUpperCase() === word) {
+                            
+                            let freqScore = 0;
+                            if (data[0].tags) {
+                                for (let tag of data[0].tags) {
+                                    if (tag.startsWith('f:')) {
+                                        freqScore = parseFloat(tag.substring(2));
+                                        break;
+                                    }
+                                }
+                            }
+
+                            const MIN_FREQUENCY_THRESHOLD = 1.2;
+                            
+                            let isInCategory = false;
+                            for (let cat in WORD_CATEGORIES) {
+                                if (WORD_CATEGORIES[cat].includes(word)) {
+                                    isInCategory = true;
+                                    break;
+                                }
+                            }
+
+                            if (freqScore >= MIN_FREQUENCY_THRESHOLD || isInCategory) {
+                                let def = `Valid common word (${word.length} letters).`;
+                                if (data[0].defs && data[0].defs.length > 0) {
+                                    let rawDef = data[0].defs[0];
+                                    if (rawDef.includes('\t')) {
+                                        let parts = rawDef.split('\t');
+                                        def = `(${parts[0].toUpperCase()}) ${parts[1]}`;
+                                    } else {
+                                        def = rawDef;
+                                    }
+                                }
+
+                                onlineSessionCache[word] = { valid: true, def: def };
+                                
+                                if (currentWordString.toUpperCase() === word) {
+                                    isCurrentWordValid = true;
+                                    validDefinitionText = def;
+                                    updateButtonStates();
+                                    renderGridInitial();
+                                }
+                            } else {
+                                onlineSessionCache[word] = { valid: false, def: "" };
+                            }
+                        } else {
+                            onlineSessionCache[word] = { valid: false, def: "" };
+                        }
+                    }
+                } catch (e) {}
             }
+            updateButtonStates();
+            renderGridInitial();
         }
 
         function clearSelection() {
@@ -1156,7 +1274,8 @@
             isCurrentWordValid = false;
             currentWordString = "";
             wordEl.textContent = "";
-            renderGrid();
+            playSound('tap');
+            renderGridInitial();
         }
 
         function spawnFloatingScore(points) {
@@ -1172,9 +1291,9 @@
 
         async function advanceFlamingHazards(usedFlameIndices) {
             let gameOverTriggered = false;
-            let movesToAnimate = [];
+            let movesToAdvance = [];
 
-            for (let row = GRID_SIZE - 1; row >= 0; row--) {
+            for (let row = 0; row < GRID_SIZE; row++) {
                 for (let col = 0; col < GRID_SIZE; col++) {
                     let idx = row * GRID_SIZE + col;
                     let tile = gridState[idx];
@@ -1203,40 +1322,31 @@
                             }
 
                             let targetIdx = nextRow * GRID_SIZE + targetCol;
-                            movesToAnimate.push({ fromIdx: idx, targetIdx: targetIdx, fromRow: row, fromCol: col, targetRow: nextRow, targetCol: targetCol });
+                            
+                            if (gridState[targetIdx] !== null) {
+                                movesToAdvance.push({ fromIdx: idx, targetIdx: targetIdx, tileObj: tile });
+                            }
                         }
                     }
                 }
             }
 
-            if (movesToAnimate.length > 0 && !gameOverTriggered) {
+            if (movesToAdvance.length > 0 && !gameOverTriggered) {
                 playSound('burn');
 
-                movesToAnimate.forEach(m => {
-                    const fromEl = document.querySelector(`.tile[data-index="${m.fromIdx}"]`);
-                    const targetEl = document.querySelector(`.tile[data-index="${m.targetIdx}"]`);
-                    
-                    if (targetEl) targetEl.classList.add('being-eaten');
-                    if (fromEl && targetEl) {
-                        const fromRect = fromEl.getBoundingClientRect();
-                        const targetRect = targetEl.getBoundingClientRect();
-                        const dx = targetRect.left - fromRect.left;
-                        const dy = targetRect.top - fromRect.top;
-
-                        fromEl.style.setProperty('--dx', `${dx}px`);
-                        fromEl.style.setProperty('--dy', `${dy}px`);
-                        fromEl.classList.add('descending-flame');
+                let eatenTileIds = new Set();
+                movesToAdvance.forEach(m => {
+                    if (gridState[m.targetIdx]) {
+                        eatenTileIds.add(gridState[m.targetIdx].id);
                     }
                 });
 
-                setMascot("Watch out! The fire is burning the letter below! 🔥", "scared");
-
-                await new Promise(r => setTimeout(r, 600));
-
-                movesToAnimate.forEach(m => {
-                    gridState[m.targetIdx] = gridState[m.fromIdx];
-                    gridState[m.fromIdx] = createTileObject();
+                movesToAdvance.forEach(m => {
+                    gridState[m.targetIdx] = m.tileObj;
+                    gridState[m.fromIdx] = { id: nextTileId++, letter: getRandomLetter(), isNewSpawn: true };
                 });
+
+                await renderGridFLIP('0.85s', eatenTileIds);
             }
 
             return gameOverTriggered;
@@ -1246,7 +1356,7 @@
             if (isAnimating) return;
 
             if (!isCurrentWordValid) {
-                setMascot(`"${currentWordString}" isn't in the dictionary!`, "error");
+                setMascot(`Words must be at least 3 letters long and common!`, "error");
                 return;
             }
 
@@ -1310,59 +1420,29 @@
             if (word.length >= 7) bonusTileTypeToSpawn = 'gold';
             else if (word.length >= 5) bonusTileTypeToSpawn = 'green';
 
-            renderGrid(new Map(), savedIndices);
-
-            await new Promise(r => setTimeout(r, 350));
+            renderGridInitial();
+            await new Promise(r => setTimeout(r, 200));
 
             savedIndices.forEach(i => {
                 gridState[i] = null;
             });
 
-            const isGameOver = await advanceFlamingHazards(savedIndices);
-
-            if (isGameOver) {
-                triggerGameOver("A flaming red letter reached the bottom and burned through your board!");
-                return;
-            }
-
-            const fallingIndicesMap = new Map();
-
-            for (let col = 0; col < GRID_SIZE; col++) {
-                let emptySpacesBelow = 0;
-                
-                for (let row = GRID_SIZE - 1; row >= 0; row--) {
-                    let idx = row * GRID_SIZE + col;
-                    
-                    if (gridState[idx] === null) {
-                        emptySpacesBelow++;
-                    } else if (emptySpacesBelow > 0) {
-                        const delay = (GRID_SIZE - row) * 35 + col * 20;
-                        fallingIndicesMap.set(idx, { distance: emptySpacesBelow, delay });
-                    }
-                }
-
-                for (let row = emptySpacesBelow - 1; row >= 0; row--) {
-                    let idx = row * GRID_SIZE + col;
-                    const delay = (emptySpacesBelow - row) * 45 + col * 25;
-                    fallingIndicesMap.set(idx, { distance: emptySpacesBelow + 1, delay });
-                }
-            }
-
             let bonusInjected = false;
 
             for (let col = 0; col < GRID_SIZE; col++) {
-                let columnLetters = [];
+                let columnTiles = [];
                 for (let row = GRID_SIZE - 1; row >= 0; row--) {
                     let idx = row * GRID_SIZE + col;
                     if (gridState[idx] !== null) {
-                        columnLetters.push(gridState[idx]);
+                        columnTiles.push(gridState[idx]);
                     }
                 }
 
                 for (let row = GRID_SIZE - 1; row >= 0; row--) {
                     let idx = row * GRID_SIZE + col;
-                    if (columnLetters.length > 0) {
-                        gridState[idx] = columnLetters.shift();
+                    if (columnTiles.length > 0) {
+                        gridState[idx] = columnTiles.shift();
+                        gridState[idx].isNewSpawn = false;
                     } else {
                         let bType = null;
                         if (bonusTileTypeToSpawn && !bonusInjected) {
@@ -1371,7 +1451,7 @@
                         } else if (Math.random() < 0.08) {
                             bType = 'flame';
                         }
-                        gridState[idx] = createTileObject(getRandomLetter(), bType);
+                        gridState[idx] = { id: nextTileId++, letter: getRandomLetter(), bonus: bType, isNewSpawn: true };
                     }
                 }
             }
@@ -1380,7 +1460,15 @@
             isCurrentWordValid = false;
             currentWordString = "";
             wordEl.textContent = "";
-            renderGrid(fallingIndicesMap);
+
+            await renderGridFLIP('0.38s');
+
+            const isGameOver = await advanceFlamingHazards(savedIndices);
+
+            if (isGameOver) {
+                triggerGameOver("A flaming red letter reached the bottom and burned through your board!");
+                return;
+            }
 
             let speechNote = `"${word}": ${definitionText}`;
             let mascotExp = "happy";
@@ -1412,7 +1500,7 @@
 
             setTimeout(() => {
                 isAnimating = false;
-            }, 550);
+            }, 200);
         }
 
         function openCollectionModal(highlightCategory = null, highlightWord = null) {
@@ -1539,7 +1627,6 @@
 
         renderMascot('neutral');
         initAmbientDust();
-        loadWebsterDictionary();
         initGrid();
     </script>
 </body>
