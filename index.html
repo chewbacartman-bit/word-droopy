@@ -42,7 +42,7 @@
             justify-content: space-between;
             min-height: 100vh;
             padding: 12px;
-            overflow: hidden; /* Prevents whole-page scrolling/bouncing on iOS */
+            overflow: hidden;
             background-image: 
                 radial-gradient(#d6cbbd 1px, transparent 1px),
                 radial-gradient(circle at 50% 30%, rgba(255,255,255,0.6) 0%, rgba(0,0,0,0.05) 100%);
@@ -50,7 +50,6 @@
             position: relative;
         }
 
-        /* Ambient floating background paper dust */
         .ambient-dust {
             position: fixed;
             top: 0;
@@ -118,7 +117,6 @@
             color: var(--mustard);
         }
 
-        /* Mascot Section */
         .mascot-container {
             width: 100%;
             max-width: 420px;
@@ -154,7 +152,6 @@
             box-shadow: 2.5px 2.5px 0px var(--ink);
         }
 
-        /* Game Board Area */
         .game-area {
             width: 100%;
             max-width: 420px;
@@ -182,7 +179,6 @@
             color: var(--blue);
         }
 
-        /* Staggered Grid Container */
         .grid {
             display: flex;
             flex-direction: column;
@@ -195,7 +191,7 @@
             box-shadow: 6px 6px 0px var(--ink);
             position: relative;
             overflow: hidden;
-            touch-action: none; /* Crucial for preventing iOS gesture conflicts */
+            touch-action: none;
         }
 
         .row {
@@ -229,7 +225,6 @@
             box-shadow: inset 0 -3px 0 rgba(0,0,0,0.08);
         }
 
-        /* Tier Special Tiles & Flame Hazard */
         .tile.tier-green {
             background: var(--tile-green);
             color: white;
@@ -284,66 +279,6 @@
         @keyframes flamePulse {
             0% { transform: scale(1); box-shadow: 0 0 8px rgba(239, 68, 68, 0.6); }
             100% { transform: scale(1.06); box-shadow: 0 0 16px rgba(239, 68, 68, 0.95); }
-        }
-
-        .tile.being-eaten {
-            animation: scorchAsh 0.5s forwards ease-in-out;
-            z-index: 4;
-        }
-
-        @keyframes scorchAsh {
-            0% { background-color: var(--tile-bg); transform: scale(1); }
-            40% { background-color: #f97316; color: #1c1917; transform: scale(1.12); box-shadow: 0 0 18px #f97316; }
-            100% { background-color: #27272a; color: #71717a; transform: scale(0.2); opacity: 0; }
-        }
-
-        .tile.descending-flame {
-            animation: moveFlameDiagonal 0.55s cubic-bezier(0.25, 1, 0.5, 1) forwards;
-            z-index: 15;
-        }
-
-        @keyframes moveFlameDiagonal {
-            0% { transform: translate(0px, 0px) scale(1); }
-            100% { transform: translate(var(--dx, 0px), var(--dy, 100%)) scale(1); }
-        }
-
-        .tile.shuffling {
-            animation: tileShuffle 0.35s cubic-bezier(0.34, 1.56, 0.64, 1) both;
-        }
-
-        @keyframes tileShuffle {
-            0% { transform: scale(1) rotate(0deg); }
-            50% { transform: scale(0.55) rotate(180deg); opacity: 0.4; }
-            100% { transform: scale(1) rotate(360deg); opacity: 1; }
-        }
-
-        .tile.popping {
-            animation: bubblePop 0.35s ease-out forwards;
-            z-index: 10;
-        }
-
-        @keyframes bubblePop {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.4) rotate(18deg); background-color: var(--mustard); }
-            100% { transform: scale(0); opacity: 0; }
-        }
-
-        .tile.falling {
-            animation: cascadeDropScorch 0.5s cubic-bezier(0.25, 1, 0.5, 1) both;
-            opacity: 0;
-            z-index: 12;
-        }
-
-        @keyframes cascadeDropScorch {
-            0% { 
-                transform: translateY(var(--drop-distance, -45px)) scale(0.75); 
-                background-color: #f97316;
-                box-shadow: 0 0 14px #f97316;
-                opacity: 0; 
-            }
-            20% { opacity: 1; }
-            60% { transform: translateY(5px) scale(1.08); background-color: var(--tile-bg); }
-            100% { transform: translateY(0) scale(1); opacity: 1; }
         }
 
         .tile.selected {
@@ -445,7 +380,6 @@
             box-shadow: 1px 1px 0px var(--ink);
         }
 
-        /* Modal Overlay & Drawer */
         .modal-overlay {
             position: fixed;
             top: 0;
@@ -520,10 +454,6 @@
             justify-content: space-between;
             align-items: center;
         }
-
-        .category-header.tier-blue { color: var(--blue); }
-        .category-header.tier-silver { color: var(--silver); }
-        .category-header.tier-gold { color: var(--gold); }
 
         .category-words {
             display: none;
@@ -605,7 +535,7 @@
     <div class="mascot-container">
         <div class="mascot-svg-wrapper" id="mascot-avatar"></div>
         <div class="speech-bubble" id="speech-text">
-            Glide your thumb smoothly across adjacent tiles! 📚🐛
+            Swipe smoothly across letters to build words! 📚🐛
         </div>
     </div>
 
@@ -754,7 +684,6 @@
             }
         }
 
-        // Audio Effects (Synthesizer)
         let audioCtx = null;
         function initAudio() {
             if (!audioCtx) {
@@ -832,7 +761,6 @@
             } catch(e) {}
         }
 
-        // Green Bookley SVG Mascot Generator
         function renderMascot(expression = 'neutral') {
             const container = document.getElementById('mascot-avatar');
 
@@ -898,7 +826,7 @@
                 });
             }
 
-            setMascot("Ready! Swipe your finger smoothly across letters to build words! 📚", "happy");
+            setMascot("Ready! Swipe smoothly across letters to build words! 📚", "happy");
         }
 
         const gridEl = document.getElementById('grid');
@@ -1047,32 +975,80 @@
             }
         }
 
-        // Robust Touch & Mouse Coordinate Handlers for iOS
-        gridEl.addEventListener('pointerdown', handlePointerStart);
-        gridEl.addEventListener('pointermove', handlePointerMove);
-        window.addEventListener('pointerup', handlePointerEnd);
-        window.addEventListener('pointercancel', handlePointerEnd);
+        // Direct Touch & Mouse Move Listeners for iOS Safari compatibility
+        gridEl.addEventListener('touchstart', handleTouchStart, { passive: false });
+        gridEl.addEventListener('touchmove', handleTouchMove, { passive: false });
+        window.addEventListener('touchend', handleTouchEnd);
+        window.addEventListener('touchcancel', handleTouchEnd);
 
-        function getTileIndexFromEvent(e) {
-            const target = document.elementFromPoint(e.clientX, e.clientY);
-            if (target && target.classList.contains('tile')) {
-                const idx = parseInt(target.dataset.index, 10);
-                return isNaN(idx) ? null : idx;
+        gridEl.addEventListener('mousedown', handleMouseDown);
+        window.addEventListener('mousemove', handleMouseMove);
+        window.addEventListener('mouseup', handleMouseUp);
+
+        function getTileIndexAtPoint(clientX, clientY) {
+            const elements = document.elementsFromPoint(clientX, clientY);
+            for (let el of elements) {
+                if (el && el.classList.contains('tile')) {
+                    const idx = parseInt(el.dataset.index, 10);
+                    return isNaN(idx) ? null : idx;
+                }
             }
             return null;
         }
 
-        function handlePointerStart(e) {
+        function handleTouchStart(e) {
             if (isAnimating) return;
-            const index = getTileIndexFromEvent(e);
-            if (index === null) return;
+            e.preventDefault();
+            const touch = e.touches[0];
+            const index = getTileIndexAtPoint(touch.clientX, touch.clientY);
+            if (index !== null) {
+                isDragging = true;
+                processTileSelection(index);
+            }
+        }
 
-            isDragging = true;
-            try { e.target.setPointerCapture(e.pointerId); } catch(err) {}
+        function handleTouchMove(e) {
+            if (!isDragging || isAnimating) return;
+            e.preventDefault();
+            const touch = e.touches[0];
+            const index = getTileIndexAtPoint(touch.clientX, touch.clientY);
+            if (index !== null) {
+                processTileSelection(index);
+            }
+        }
+
+        function handleTouchEnd(e) {
+            isDragging = false;
+        }
+
+        function handleMouseDown(e) {
+            if (isAnimating) return;
+            const index = getTileIndexAtPoint(e.clientX, e.clientY);
+            if (index !== null) {
+                isDragging = true;
+                processTileSelection(index);
+            }
+        }
+
+        function handleMouseMove(e) {
+            if (!isDragging || isAnimating) return;
+            const index = getTileIndexAtPoint(e.clientX, e.clientY);
+            if (index !== null) {
+                processTileSelection(index);
+            }
+        }
+
+        function handleMouseUp(e) {
+            isDragging = false;
+        }
+
+        function processTileSelection(index) {
+            const lastIdx = selectedIndices.length > 0 ? selectedIndices[selectedIndices.length - 1] : null;
+            if (lastIdx === index) return;
 
             const existingPos = selectedIndices.indexOf(index);
-            
-            // 1. Jump back / truncate if tapping an earlier letter in current chain
+
+            // 1. If tapping an earlier letter in the chain, truncate back to it
             if (existingPos > -1 && existingPos < selectedIndices.length - 1) {
                 selectedIndices = selectedIndices.slice(0, existingPos + 1);
                 playSound('tap');
@@ -1081,7 +1057,7 @@
                 return;
             }
 
-            // 2. Toggle off if tapping the very last letter
+            // 2. If tapping the exact last letter, toggle it off
             if (existingPos > -1 && existingPos === selectedIndices.length - 1) {
                 selectedIndices.pop();
                 playSound('tap');
@@ -1090,8 +1066,10 @@
                 return;
             }
 
-            // 3. Start fresh chain or append if adjacent
-            const lastIdx = selectedIndices.length > 0 ? selectedIndices[selectedIndices.length - 1] : null;
+            // 3. If already selected elsewhere, ignore
+            if (existingPos > -1) return;
+
+            // 4. Start fresh chain or append if adjacent
             if (selectedIndices.length === 0 || !areTilesAdjacent(lastIdx, index)) {
                 selectedIndices = [index];
                 playSound('tap');
@@ -1103,39 +1081,6 @@
                 updateCurrentWord();
                 renderGrid();
             }
-        }
-
-        function handlePointerMove(e) {
-            if (!isDragging || isAnimating) return;
-            const index = getTileIndexFromEvent(e);
-            if (index === null) return;
-
-            const lastIdx = selectedIndices[selectedIndices.length - 1];
-            if (lastIdx === index) return;
-
-            // Backtracking / Truncation during slide
-            const existingPos = selectedIndices.indexOf(index);
-            if (existingPos > -1 && existingPos < selectedIndices.length - 1) {
-                selectedIndices = selectedIndices.slice(0, existingPos + 1);
-                playSound('tap');
-                updateCurrentWord();
-                renderGrid();
-                return;
-            }
-
-            if (selectedIndices.includes(index)) return;
-
-            // Must be adjacent to continue sliding chain
-            if (areTilesAdjacent(lastIdx, index)) {
-                selectedIndices.push(index);
-                playSound('tap');
-                updateCurrentWord();
-                renderGrid();
-            }
-        }
-
-        function handlePointerEnd() {
-            isDragging = false;
         }
 
         function areTilesAdjacent(index1, index2) {
