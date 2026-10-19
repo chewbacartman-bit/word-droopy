@@ -1,0 +1,1710 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Bookley's Word Drop - Polished Edition</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@700;900&family=Quicksand:wght@600;700&display=swap');
+
+        :root {
+            --bg-paper: #f4efe6;
+            --ink: #1c1917;
+            --mustard: #eab308;
+            --teal: #0d9488;
+            --blue: #0284c7;
+            --silver: #64748b;
+            --gold: #d97706;
+            --tile-green: #22c55e;
+            --tile-gold: #f59e0b;
+            --tile-flame: #ef4444;       /* Flaming Hazard Red */
+            --worm-green: #84cc16;
+            --card-bg: #fffdf9;
+            --tile-bg: #ece3d2;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Quicksand', sans-serif;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+
+        body {
+            background-color: var(--bg-paper);
+            color: var(--ink);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+            min-height: 100vh;
+            padding: 12px;
+            overflow-x: hidden;
+            background-image: 
+                radial-gradient(#d6cbbd 1px, transparent 1px),
+                radial-gradient(circle at 50% 30%, rgba(255,255,255,0.6) 0%, rgba(0,0,0,0.05) 100%);
+            background-size: 20px 20px, 100% 100%;
+            position: relative;
+        }
+
+        /* Ambient floating background paper dust */
+        .ambient-dust {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .dust-particle {
+            position: absolute;
+            background: rgba(28, 25, 23, 0.08);
+            border-radius: 50%;
+            animation: floatParticle 12s infinite linear;
+        }
+
+        @keyframes floatParticle {
+            0% { transform: translateY(105vh) translateX(0); opacity: 0; }
+            20% { opacity: 1; }
+            80% { opacity: 1; }
+            100% { transform: translateY(-10vh) translateX(50px); opacity: 0; }
+        }
+
+        header, .mascot-container, .game-area, .collection-btn, .controls {
+            z-index: 2;
+        }
+
+        header {
+            width: 100%;
+            max-width: 420px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--card-bg);
+            padding: 12px 14px;
+            border-radius: 18px;
+            border: 3.5px solid var(--ink);
+            box-shadow: 4px 4px 0px var(--ink);
+            animation: slideDown 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        @keyframes slideDown {
+            0% { transform: translateY(-30px); opacity: 0; }
+            100% { transform: translateY(0); opacity: 1; }
+        }
+
+        .stat-group {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .stat-label {
+            font-size: 0.62rem;
+            color: #78716c;
+            text-transform: uppercase;
+            font-weight: 700;
+            letter-spacing: 0.06em;
+        }
+
+        .stat-value {
+            font-size: 1.05rem;
+            font-weight: 900;
+            color: var(--teal);
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        .stat-value.high-score {
+            color: var(--mustard);
+        }
+
+        /* Mascot Section with Organic Bobbing */
+        .mascot-container {
+            width: 100%;
+            max-width: 420px;
+            background: var(--card-bg);
+            border-radius: 18px;
+            border: 3.5px solid var(--ink);
+            padding: 10px 14px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            box-shadow: 4px 4px 0px var(--ink);
+            min-height: 98px;
+            animation: bounceIn 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) 0.1s both;
+        }
+
+        @keyframes bounceIn {
+            0% { transform: scale(0.9); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .mascot-svg-wrapper {
+            width: 78px;
+            height: 78px;
+            flex-shrink: 0;
+            filter: drop-shadow(2px 3px 0px rgba(0,0,0,0.18));
+            animation: mascotIdle 3s infinite ease-in-out;
+        }
+
+        @keyframes mascotIdle {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-3px) rotate(1.5deg); }
+        }
+
+        .speech-bubble {
+            background: #fef08a;
+            border: 3px solid var(--ink);
+            padding: 9px 13px;
+            border-radius: 14px;
+            font-size: 0.82rem;
+            font-weight: 700;
+            flex-grow: 1;
+            line-height: 1.35;
+            max-height: 78px;
+            overflow-y: auto;
+            box-shadow: 2.5px 2.5px 0px var(--ink);
+            position: relative;
+        }
+
+        /* Game Board Area */
+        .game-area {
+            width: 100%;
+            max-width: 420px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            position: relative;
+        }
+
+        .word-display {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.6rem;
+            font-weight: 900;
+            letter-spacing: 0.14em;
+            color: var(--teal);
+            height: 38px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-shadow: 2px 2px 0px rgba(0,0,0,0.12);
+            transition: transform 0.15s ease;
+        }
+
+        .word-display.valid-word {
+            color: var(--blue);
+            transform: scale(1.04);
+        }
+
+        /* Staggered Grid Container */
+        .grid {
+            display: flex;
+            flex-direction: column;
+            gap: 0px;
+            width: 100%;
+            background: var(--card-bg);
+            padding: 10px 8px;
+            border-radius: 22px;
+            border: 3.5px solid var(--ink);
+            box-shadow: 6px 6px 0px var(--ink);
+            position: relative;
+            overflow: hidden;
+            touch-action: none;
+        }
+
+        .row {
+            display: flex;
+            gap: 0px;
+            width: 100%;
+            justify-content: center;
+        }
+
+        .row.offset {
+            transform: translateX(3.5%);
+        }
+
+        .tile {
+            flex: 1;
+            aspect-ratio: 1;
+            background: var(--tile-bg);
+            border: 2px solid var(--ink);
+            margin: -1px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.2rem;
+            font-weight: 900;
+            color: var(--ink);
+            cursor: pointer;
+            transition: transform 0.1s cubic-bezier(0.34, 1.56, 0.64, 1), background-color 0.15s, box-shadow 0.15s;
+            position: relative;
+            will-change: transform, opacity;
+            z-index: 1;
+            box-shadow: inset 0 -3px 0 rgba(0,0,0,0.08);
+        }
+
+        .tile:hover {
+            transform: translateY(-2px);
+            z-index: 4;
+            box-shadow: 0 4px 0 var(--ink), inset 0 -3px 0 rgba(0,0,0,0.05);
+        }
+
+        /* Tier Special Tiles & Flame Hazard */
+        .tile.tier-green {
+            background: var(--tile-green);
+            color: white;
+            z-index: 2;
+        }
+
+        .tile.tier-green::after {
+            content: '+500';
+            position: absolute;
+            bottom: 2px;
+            font-size: 0.42rem;
+            font-weight: 900;
+            color: #15803d;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 0px 3px;
+            border-radius: 4px;
+        }
+
+        .tile.tier-gold {
+            background: linear-gradient(135deg, #fbbf24 0%, #d97706 100%);
+            color: white;
+            z-index: 2;
+        }
+
+        .tile.tier-gold::after {
+            content: '+1k';
+            position: absolute;
+            bottom: 2px;
+            font-size: 0.42rem;
+            font-weight: 900;
+            color: #78350f;
+            background: rgba(255, 255, 255, 0.92);
+            padding: 0px 3px;
+            border-radius: 4px;
+        }
+
+        .tile.hazard-flame {
+            background: var(--tile-flame);
+            color: white;
+            animation: flamePulse 0.8s infinite alternate ease-in-out;
+            z-index: 5;
+        }
+
+        .tile.hazard-flame::after {
+            content: '🔥';
+            position: absolute;
+            top: -6px;
+            right: -4px;
+            font-size: 0.78rem;
+            filter: drop-shadow(0 2px 2px rgba(0,0,0,0.3));
+        }
+
+        @keyframes flamePulse {
+            0% { transform: scale(1); box-shadow: 0 0 8px rgba(239, 68, 68, 0.6); }
+            100% { transform: scale(1.06); box-shadow: 0 0 16px rgba(239, 68, 68, 0.95); }
+        }
+
+        .tile.being-eaten {
+            animation: scorchAsh 0.5s forwards ease-in-out;
+            z-index: 4;
+        }
+
+        @keyframes scorchAsh {
+            0% { background-color: var(--tile-bg); transform: scale(1); }
+            40% { background-color: #f97316; color: #1c1917; transform: scale(1.12); box-shadow: 0 0 18px #f97316; }
+            100% { background-color: #27272a; color: #71717a; transform: scale(0.2); opacity: 0; }
+        }
+
+        .tile.descending-flame {
+            animation: moveFlameDiagonal 0.55s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+            z-index: 15;
+        }
+
+        @keyframes moveFlameDiagonal {
+            0% { transform: translate(0px, 0px) scale(1); }
+            100% { transform: translate(var(--dx, 0px), var(--dy, 100%)) scale(1); }
+        }
+
+        .tile.shuffling {
+            animation: tileShuffle 0.35s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+        }
+
+        @keyframes tileShuffle {
+            0% { transform: scale(1) rotate(0deg); }
+            50% { transform: scale(0.55) rotate(180deg); opacity: 0.4; }
+            100% { transform: scale(1) rotate(360deg); opacity: 1; }
+        }
+
+        .tile.popping {
+            animation: bubblePop 0.35s ease-out forwards;
+            z-index: 10;
+        }
+
+        @keyframes bubblePop {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.4) rotate(18deg); background-color: var(--mustard); }
+            100% { transform: scale(0); opacity: 0; }
+        }
+
+        .tile.falling {
+            animation: cascadeDropScorch 0.5s cubic-bezier(0.25, 1, 0.5, 1) both;
+            opacity: 0;
+            z-index: 12;
+        }
+
+        @keyframes cascadeDropScorch {
+            0% { 
+                transform: translateY(var(--drop-distance, -45px)) scale(0.75); 
+                background-color: #f97316;
+                box-shadow: 0 0 14px #f97316;
+                opacity: 0; 
+            }
+            20% { opacity: 1; }
+            60% { transform: translateY(5px) scale(1.08); background-color: var(--tile-bg); }
+            100% { transform: translateY(0) scale(1); opacity: 1; }
+        }
+
+        .tile:active { 
+            transform: scale(0.92);
+            z-index: 8;
+        }
+
+        .tile.selected {
+            background: var(--teal);
+            color: white;
+            z-index: 7;
+            transform: scale(1.06);
+            box-shadow: 0 4px 0 rgba(13, 148, 136, 0.5);
+        }
+
+        .tile.selected.valid-word {
+            background: var(--blue);
+            animation: pulseGlow 0.9s infinite alternate ease-in-out;
+            z-index: 8;
+            box-shadow: 0 4px 0 rgba(2, 132, 199, 0.5);
+        }
+
+        @keyframes pulseGlow {
+            0% { transform: scale(1.04); }
+            100% { transform: scale(1.1); }
+        }
+
+        .score-particle {
+            position: absolute;
+            font-family: 'Montserrat', sans-serif;
+            color: var(--mustard);
+            font-size: 1.5rem;
+            font-weight: 900;
+            pointer-events: none;
+            animation: floatUpParticle 0.85s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+            z-index: 25;
+            text-shadow: 2px 2px 0px var(--ink), 0 0 10px rgba(234, 179, 8, 0.6);
+        }
+
+        @keyframes floatUpParticle {
+            0% { opacity: 1; transform: translateY(0) scale(0.8) rotate(-6deg); }
+            50% { transform: translateY(-30px) scale(1.3) rotate(8deg); }
+            100% { opacity: 0; transform: translateY(-65px) scale(1.1) rotate(12deg); }
+        }
+
+        .controls {
+            display: flex;
+            gap: 8px;
+            width: 100%;
+            max-width: 420px;
+        }
+
+        button.btn {
+            flex: 1;
+            padding: 13px 6px;
+            border: 3.5px solid var(--ink);
+            border-radius: 14px;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.85rem;
+            font-weight: 900;
+            cursor: pointer;
+            box-shadow: 3px 3px 0px var(--ink);
+            transition: transform 0.08s, box-shadow 0.08s, filter 0.15s;
+        }
+
+        button.btn:hover {
+            filter: brightness(1.05);
+        }
+
+        button.btn:active {
+            transform: translate(2px, 2px);
+            box-shadow: 1px 1px 0px var(--ink);
+        }
+
+        .btn-clear { background: #d6cbbd; color: var(--ink); }
+        .btn-shuffle { background: var(--mustard); color: var(--ink); }
+        .btn-submit { background: var(--teal); color: white; opacity: 0.5; pointer-events: none; }
+
+        .btn-submit.valid-word {
+            background: var(--blue);
+            opacity: 1;
+            pointer-events: auto;
+            animation: bounceBtn 1s infinite ease-in-out;
+        }
+
+        @keyframes bounceBtn {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-4px); }
+        }
+
+        .collection-btn {
+            width: 100%;
+            max-width: 420px;
+            background: #84cc16;
+            color: var(--ink);
+            padding: 10px;
+            border: 3.5px solid var(--ink);
+            border-radius: 14px;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.88rem;
+            font-weight: 900;
+            cursor: pointer;
+            box-shadow: 3px 3px 0px var(--ink);
+            text-align: center;
+            transition: transform 0.08s, box-shadow 0.08s;
+        }
+
+        .collection-btn:active {
+            transform: translate(2px, 2px);
+            box-shadow: 1px 1px 0px var(--ink);
+        }
+
+        /* Modal Overlay & Drawer */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(28, 25, 23, 0.75);
+            backdrop-filter: blur(4px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.25s ease;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .modal-card {
+            background: var(--card-bg);
+            border: 4px solid var(--ink);
+            border-radius: 22px;
+            padding: 24px 20px;
+            max-width: 360px;
+            width: 90%;
+            text-align: center;
+            box-shadow: 8px 8px 0px var(--ink);
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            align-items: center;
+            max-height: 85vh;
+            overflow-y: auto;
+            transform: scale(0.9) translateY(20px);
+            transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .modal-overlay.active .modal-card {
+            transform: scale(1) translateY(0);
+        }
+
+        .modal-title {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 900;
+            color: var(--teal);
+            text-transform: uppercase;
+        }
+
+        .category-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            width: 100%;
+            max-height: 52vh;
+            overflow-y: auto;
+            text-align: left;
+            padding-right: 4px;
+        }
+
+        .category-group {
+            background: #f4efe6;
+            border: 2px solid var(--ink);
+            border-radius: 10px;
+            padding: 8px 10px;
+            cursor: pointer;
+            transition: background 0.15s;
+        }
+
+        .category-group:hover {
+            background: #eae2d5;
+        }
+
+        .category-header {
+            font-size: 0.85rem;
+            font-weight: 900;
+            color: var(--ink);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .category-header.tier-blue { color: var(--blue); }
+        .category-header.tier-silver { color: var(--silver); }
+        .category-header.tier-gold { color: var(--gold); }
+
+        .category-words {
+            display: none;
+            margin-top: 8px;
+            padding-top: 6px;
+            border-top: 1.5px dashed #d6cbbd;
+            font-size: 0.75rem;
+            font-weight: 700;
+            line-height: 1.5;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+
+        .category-group.collapsed .category-words {
+            display: none;
+        }
+
+        .category-group:not(.collapsed) .category-words {
+            display: flex;
+        }
+
+        .word-badge {
+            background: #e2d9cc;
+            padding: 2px 6px;
+            border-radius: 4px;
+            color: #78716c;
+            border: 1px solid #d6cbbd;
+            transition: transform 0.3s ease, background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .word-badge.discovered {
+            background: #fef08a;
+            color: var(--ink);
+            border-color: var(--ink);
+        }
+
+        .word-badge.tier-blue-word {
+            background: var(--blue);
+            color: white;
+            border-color: var(--ink);
+        }
+
+        .word-badge.tier-silver-word {
+            background: var(--silver);
+            color: white;
+            border-color: var(--ink);
+        }
+
+        .word-badge.tier-gold-word {
+            background: var(--gold);
+            color: white;
+            border-color: var(--ink);
+        }
+
+        .word-badge.reveal-anim {
+            animation: wordPopReveal 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+            z-index: 10;
+        }
+
+        @keyframes wordPopReveal {
+            0% { transform: scale(1); filter: brightness(1); }
+            50% { transform: scale(1.4) rotate(5deg); filter: brightness(1.3); box-shadow: 0 0 12px rgba(2, 132, 199, 0.8); }
+            100% { transform: scale(1) rotate(0deg); filter: brightness(1); }
+        }
+
+        .btn-restart {
+            background: var(--mustard);
+            color: var(--ink);
+            padding: 11px 20px;
+            border: 3.5px solid var(--ink);
+            border-radius: 14px;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.95rem;
+            font-weight: 900;
+            cursor: pointer;
+            box-shadow: 3px 3px 0px var(--ink);
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Ambient Floating Background Particles -->
+    <div class="ambient-dust" id="ambient-dust"></div>
+
+    <!-- Header Stats -->
+    <header>
+        <div class="stat-group">
+            <span class="stat-label">Score</span>
+            <span id="score" class="stat-value">0</span>
+        </div>
+        <div class="stat-group">
+            <span class="stat-label">Best</span>
+            <span id="high-score" class="stat-value high-score">0</span>
+        </div>
+        <div class="stat-group">
+            <span class="stat-label">Level</span>
+            <span id="level" class="stat-value">1</span>
+        </div>
+        <div class="stat-group">
+            <span class="stat-label">Target</span>
+            <span id="target" class="stat-value">5,000</span>
+        </div>
+    </header>
+
+    <!-- Mascot Section (Bookley the Green Worm) -->
+    <div class="mascot-container">
+        <div class="mascot-svg-wrapper" id="mascot-avatar">
+            <!-- Dynamic Green Bookley SVG -->
+        </div>
+        <div class="speech-bubble" id="speech-text">
+            Tap any letter to start a fresh word anytime! 📚🐛
+        </div>
+    </div>
+
+    <!-- Main Game Board -->
+    <div class="game-area" id="game-area">
+        <div class="word-display" id="current-word"></div>
+        <div class="grid" id="grid"></div>
+    </div>
+
+    <!-- Collection Drawer Button -->
+    <button class="collection-btn" onclick="openCollectionModal()">📖 View Collection Categories</button>
+
+    <!-- Buttons -->
+    <div class="controls">
+        <button class="btn btn-clear" onclick="clearSelection()">Clear</button>
+        <button class="btn btn-shuffle" onclick="shuffleGrid()">Shuffle</button>
+        <button class="btn btn-submit" id="submit-btn" onclick="submitWord()">Submit</button>
+    </div>
+
+    <!-- Collection Modal -->
+    <div class="modal-overlay" id="collection-modal">
+        <div class="modal-card" onclick="event.stopPropagation()">
+            <div class="modal-title">Word Collection</div>
+            <div style="font-size: 0.8rem; font-weight: 700; color: #78716c;">
+                Discovered: <span id="collection-count">0</span> / 400 words
+            </div>
+            <div class="category-list" id="category-list-container">
+                <!-- Dynamically populated categories -->
+            </div>
+            <button class="btn-restart" onclick="closeCollectionModal()">Close Drawer</button>
+        </div>
+    </div>
+
+    <!-- Game Over Modal -->
+    <div class="modal-overlay" id="game-over-modal">
+        <div class="modal-card">
+            <div class="modal-title" style="color: var(--tile-flame);">Game Over! 🔥</div>
+            <div class="modal-body" id="game-over-text" style="font-size: 0.95rem; font-weight: 700;">
+                A flaming red letter burned through the bottom of your board!
+            </div>
+            <button class="btn-restart" onclick="resetGame()">Play Again</button>
+        </div>
+    </div>
+
+    <script>
+        const STANDARD_LETTERS = ["E","E","E","E","E","A","A","A","L","L","L","R","R","R","T","T","T","N","N","N","O","O","O","I","I","I","S","S","S","D","D","F","F","G","G","H","H","L","M","M","P","P","B","B","W","W","Y","Y","V","V","J"];
+        const CHALLENGING_LETTERS = ["K", "QU", "X", "Z"];
+        const CHALLENGING_KEYS = ["K", "QU", "X", "Z", "Q"];
+
+        const GRID_SIZE = 7;
+        const TOTAL_TILES = GRID_SIZE * GRID_SIZE;
+        
+        let gridState = [];
+        let selectedIndices = [];
+        let currentWordString = "";
+        let isCurrentWordValid = false;
+        let validDefinitionText = "";
+        let isAnimating = false;
+        let isDragging = false;
+        let dragMode = null;
+
+        let score = 0;
+        let highScore = parseInt(localStorage.getItem('bookley_high_score') || '0', 10);
+        let level = 1;
+        let targetScore = 5000;
+        let shufflePenaltyCount = 0;
+
+        const WORD_CATEGORIES = {
+            "Plants": ["VINE", "LEAF", "SEED", "STEM", "ROOT", "BUD", "TREE", "FERN", "BARK", "MOSS", "BUSH", "BULB", "PLANT", "GRASS", "FLORA", "BLOOM", "PETAL", "BRANCH", "BLOSSOM", "SAPLING"],
+            "Animals": ["BEAR", "LION", "WOLF", "DEER", "FROG", "DUCK", "BIRD", "FISH", "GOAT", "PIGS", "RABIT", "CATS", "TIGER", "ZEBRA", "HORSE", "SHEEP", "MOUSE", "MONKEY", "DOLPHIN", "ELEPHANT"],
+            "Vehicles": ["CAR", "BUS", "VAN", "BOAT", "SHIP", "CART", "JEEP", "TRAIN", "BIKE", "TAXI", "TRUCK", "WAGON", "PLANE", "SEDAN", "WHEEL", "SCOOTER", "TRAILER", "TRACTOR", "AIRPLANE", "HELICOPTER"],
+            "Jobs": ["CHEF", "COOK", "COP", "DOC", "NURSE", "CLERK", "GUARD", "JUDGE", "PILOT", "AGENT", "BAKER", "ARTIST", "ACTOR", "DESIGN", "MINER", "WRITER", "PAINTER", "TEACHER", "LAWYER", "DOCTOR"],
+            "Sports": ["GOLF", "POOL", "SURF", "YOGA", "JUDO", "RACE", "SKATE", "TRACK", "TEAM", "BALL", "GAME", "GOAL", "BOXING", "RUGBY", "TENNIS", "SOCCER", "HOCKEY", "BASEBALL", "FOOTBALL", "BASKETBALL"],
+            "Fruits": ["PEAR", "PLUM", "KIWI", "FIGS", "LIME", "DATE", "MANGO", "PEACH", "GRAPE", "BERRY", "MELON", "LEMON", "APPLE", "ORANGE", "CHERRY", "BANANA", "PAPAYA", "APRICOT", "COCONUT", "PINEAPPLE"],
+            "Vegetables": ["CORN", "PEAS", "BEAN", "BEET", "KALE", "YAM", "LEEK", "OKRA", "ONION", "GARLIC", "CARROT", "CELERY", "POTATO", "TOMATO", "PEPPER", "SPINACH", "CUCUMBER", "BROCCOLI", "ZUCCHINI", "ASPARAGUS"],
+            "Colors": ["BLUE", "PINK", "GOLD", "TEAL", "GREY", "ROSE", "RUBY", "LIME", "CYAN", "NAVY", "PLUM", "SAGE", "BLACK", "WHITE", "GREEN", "BROWN", "PURPLE", "ORANGE", "YELLOW", "MAGENTA"],
+            "Weather": ["RAIN", "WIND", "HAIL", "SNOW", "SUN", "DEW", "MIST", "FOG", "GALE", "STORM", "CLOUD", "HEAT", "FROST", "STORM", "FLOOD", "BREEZE", "THUNDER", "TORNADO", "BLIZZARD", "HURRICANE"],
+            "Space": ["STAR", "MOON", "MARS", "VOID", "ORBIT", "DUST", "NOVA", "RING", "SUNS", "ASTRO", "COMET", "PLUTO", "EARTH", "VENUS", "SATURN", "GALAXY", "NEBULA", "ECLIPSE", "METEOR", "UNIVERSE"],
+            "Ocean": ["WAVE", "FISH", "KELP", "CLAM", "CRAB", "REEF", "GULL", "TIDE", "SEAL", "SHARK", "WHALE", "CORAL", "OCEAN", "WATER", "BEACH", "ANCHOR", "CURRENT", "TSUNAMI", "SEASHELL", "PELICAN"],
+            "Music": ["BAND", "SONG", "TUNE", "BASS", "DRUM", "CHOIR", "NOTE", "ROCK", "JAZZ", "POP", "RAP", "HORN", "AUDIO", "CHORD", "PIANO", "GUITAR", "SINGER", "CONCERT", "MELODY", "SYMPHONY"],
+            "Tools": ["SAW", "AXE", "NAIL", "BOLT", "DRILL", "VISE", "HOE", "RAKE", "FILE", "PLIERS", "SCREW", "WRENCH", "HAMMER", "CHISEL", "SANDER", "CROWBAR", "HATCHET", "SCREWDRIVER", "RULER", "TORCH"],
+            "Clothing": ["SHIRT", "PANTS", "DRESS", "SKIRT", "SHOE", "BOOT", "SOCK", "HAT", "COAT", "VEST", "SCARF", "GLOVE", "JACKET", "SWEATER", "BLOUSE", "SHORTS", "PAJAMAS", "SLIPPERS", "SANDALS", "OVERALLS"],
+            "Building": ["WALL", "ROOF", "DOOR", "ARCH", "ROOM", "HALL", "BASE", "TOWER", "HOUSE", "STORE", "CABIN", "SHED", "BRIDGE", "CHURCH", "SCHOOL", "CASTLE", "OFFICE", "TEMPLE", "HOSPITAL", "APARTMENT"],
+            "Insects": ["ANT", "BEE", "WASP", "MOTH", "FLEA", "GNAT", "BUG", "FLY", "WORM", "LOUSE", "BEETLE", "SPIDER", "CICADA", "MANTIS", "LOCUST", "HORNET", "TERMITES", "BUTTERFLY", "DRAGONFLY", "CATERPILLAR"],
+            "Kitchen": ["POT", "PAN", "CUP", "MUG", "BOWL", "FORK", "SPOON", "KNIFE", "OVEN", "GRID", "PLATE", "GLASS", "MIXER", "SPATULA", "STRAINER", "CLEAVER", "SKILLET", "BLENDER", "TOASTER", "MICROWAVE"],
+            "Reptiles": ["TOAD", "FROG", "NEWT", "SNAKE", "GECKO", "SKINK", "AGAMA", "COBRA", "VIPER", "PYTHON", "LIZARD", "TURTLE", "ALLIGATOR", "CROCODILE", "IGUANA", "CHAMELEON", "TORTOISE", "RATTLESNAKE", "ANACONDA", "TERRAPIN"],
+            "Minerals": ["GOLD", "IRON", "COAL", "SALT", "TIN", "ZINC", "LEAD", "JADE", "RUBY", "OPAL", "GEM", "ROCK", "SILVER", "COPPER", "BRONZE", "QUARTZ", "MARBLE", "GRANITE", "DIAMOND", "PLATINUM"],
+            "Science": ["ATOM", "CELL", "GENE", "ION", "MASS", "VOLT", "WATT", "ACID", "BASE", "DATA", "TEST", "LABS", "LASER", "RADAR", "PHYSICS", "BIOLOGY", "CHEMISTRY", "GENETICS", "QUANTUM", "ELECTRON"]
+        };
+
+        let discoveredWords = JSON.parse(localStorage.getItem('bookley_discovered') || '{}');
+
+        let DICTIONARY_DB = {
+            "SIR": "A polite or formal title of address for a man.",
+            "SIRS": "Plural of sir.",
+            "GLAM": "Informal term for glamour or glamorous.",
+            "QUILL": "A feather used as a writing pen.",
+            "SLIMEY": "Variant spelling of slimy; covered with or resembling slime.",
+            "SLIMY": "Covered with or resembling slime.",
+            "SLIME": "A moist, soft, slippery substance.",
+            "SLIMING": "Present participle of slime.",
+            "SUS": "Short for suspicious or suspect.",
+            "YEET": "To throw something with force and enthusiasm.",
+            "CHONK": "An affectionately heavy or chubby animal.",
+            "BAE": "A term of endearment for a romantic partner.",
+            "MAAM": "A polite term of address for a woman.",
+            "POO": "Excrement; fecal matter.",
+            "POOP": "Excrement.",
+            "SEX": "Sexual activity or anatomical classification.",
+            "FUCK": "An expletive expressing anger, annoyance, or emphasis.",
+            "SHIT": "Fecal matter or an expression of dismay.",
+            "CUNT": "A vulgar term for genitalia or an obnoxious person.",
+            "DICK": "A vulgar term for a penis or an obnoxious person.",
+            "ASS": "The buttocks or a foolish person.",
+            "COCK": "A rooster or vulgar term for a penis.",
+            "BITCH": "A female dog or an offensive term for a person.",
+            "PISS": "Urine or to urinate.",
+            "CRAP": "Excrement or nonsense.",
+            "DAMN": "An expression of anger or frustration.",
+            "HELL": "A netherworld or expression of annoyance.",
+            "ZOO": "An establishment maintained for public exhibition of captive animals.",
+            "ZOOS": "Plural of zoo.",
+            "ZIP": "A zip fastener or a sound of movement.",
+            "ZAP": "To destroy or hit with a sudden force.",
+            "ZIT": "A pimple or skin blemish.",
+            "QUA": "In the capacity or character of.",
+            "QI": "The circulating life force in traditional Chinese philosophy.",
+            "QIS": "Plural of qi.",
+            "XI": "The fourteenth letter of the Greek alphabet.",
+            "XIS": "Plural of xi.",
+            "TAD": "A small amount or degree.",
+            "BEER": "An alcoholic drink brewed from malt and hops.",
+            "PORN": "Explicit sexually gratifying content."
+        };
+
+        for (let cat in WORD_CATEGORIES) {
+            WORD_CATEGORIES[cat].forEach(w => {
+                if (!DICTIONARY_DB[w]) DICTIONARY_DB[w] = `Common term in the ${cat} category.`;
+            });
+        }
+
+        function initAmbientDust() {
+            const container = document.getElementById('ambient-dust');
+            for (let i = 0; i < 15; i++) {
+                const p = document.createElement('div');
+                p.className = 'dust-particle';
+                const size = Math.random() * 6 + 3;
+                p.style.width = `${size}px`;
+                p.style.height = `${size}px`;
+                p.style.left = `${Math.random() * 100}vw`;
+                p.style.animationDuration = `${Math.random() * 10 + 8}s`;
+                p.style.animationDelay = `${Math.random() * 5}s`;
+                container.appendChild(p);
+            }
+        }
+
+        // Audio Effects
+        let audioCtx = null;
+        function initAudio() {
+            if (!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            }
+        }
+
+        function playSound(type) {
+            try {
+                initAudio();
+                if (!audioCtx) return;
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                const now = audioCtx.currentTime;
+
+                if (type === 'tap') {
+                    osc.type = 'triangle';
+                    osc.frequency.setValueAtTime(320, now);
+                    osc.frequency.exponentialRampToValueAtTime(520, now + 0.08);
+                    gain.gain.setValueAtTime(0.12, now);
+                    gain.gain.exponentialRampToValueAtTime(0.01, now + 0.08);
+                    osc.start(now);
+                    osc.stop(now + 0.08);
+                } else if (type === 'burn') {
+                    osc.type = 'sawtooth';
+                    osc.frequency.setValueAtTime(150, now);
+                    osc.frequency.linearRampToValueAtTime(300, now + 0.15);
+                    osc.frequency.linearRampToValueAtTime(60, now + 0.4);
+                    gain.gain.setValueAtTime(0.18, now);
+                    gain.gain.exponentialRampToValueAtTime(0.01, now + 0.4);
+                    osc.start(now);
+                    osc.stop(now + 0.4);
+                } else if (type === 'shuffle') {
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(300, now);
+                    osc.frequency.exponentialRampToValueAtTime(600, now + 0.15);
+                    gain.gain.setValueAtTime(0.1, now);
+                    gain.gain.exponentialRampToValueAtTime(0.01, now + 0.15);
+                    osc.start(now);
+                    osc.stop(now + 0.15);
+                } else if (type === 'submit') {
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(440, now);
+                    osc.frequency.setValueAtTime(659.25, now + 0.08);
+                    osc.frequency.setValueAtTime(880, now + 0.16);
+                    gain.gain.setValueAtTime(0.15, now);
+                    gain.gain.exponentialRampToValueAtTime(0.01, now + 0.3);
+                    osc.start(now);
+                    osc.stop(now + 0.3);
+                } else if (type === 'gameover') {
+                    osc.type = 'sawtooth';
+                    osc.frequency.setValueAtTime(250, now);
+                    osc.frequency.exponentialRampToValueAtTime(80, now + 0.6);
+                    gain.gain.setValueAtTime(0.2, now);
+                    gain.gain.exponentialRampToValueAtTime(0.01, now + 0.6);
+                    osc.start(now);
+                    osc.stop(now + 0.6);
+                } else if (type === 'levelup') {
+                    const notes = [523.25, 659.25, 783.99, 1046.50];
+                    notes.forEach((freq, idx) => {
+                        const o = audioCtx.createOscillator();
+                        const g = audioCtx.createGain();
+                        o.type = 'square';
+                        o.frequency.setValueAtTime(freq, now + idx * 0.1);
+                        o.connect(g);
+                        g.connect(audioCtx.destination);
+                        g.gain.setValueAtTime(0.08, now + idx * 0.1);
+                        g.gain.exponentialRampToValueAtTime(0.01, now + idx * 0.1 + 0.2);
+                        o.start(now + idx * 0.1);
+                        o.stop(now + idx * 0.1 + 0.2);
+                    });
+                }
+            } catch(e) {}
+        }
+
+        // Green Bookley SVG Mascot Generator
+        function renderMascot(expression = 'neutral') {
+            const container = document.getElementById('mascot-avatar');
+
+            let pupils = `<circle cx="43" cy="38" r="3.5" fill="#1c1917"/><circle cx="67" cy="38" r="3.5" fill="#1c1917"/>`;
+            let mouth = `<path d="M 47 52 Q 55 58 63 52" stroke="#1c1917" stroke-width="3.5" fill="none" stroke-linecap="round"/>`;
+            let eyebrows = `<path d="M 36 26 Q 43 23 50 27" stroke="#1c1917" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M 60 27 Q 67 23 74 26" stroke="#1c1917" stroke-width="3" fill="none" stroke-linecap="round"/>`;
+
+            if (expression === 'happy') {
+                pupils = `<path d="M 40 38 Q 43 33 46 38" stroke="#1c1917" stroke-width="3.5" fill="none" stroke-linecap="round"/><path d="M 64 38 Q 67 33 70 38" stroke="#1c1917" stroke-width="3.5" fill="none" stroke-linecap="round"/>`;
+                mouth = `<path d="M 45 50 Q 55 64 65 50 Z" fill="#0284c7" stroke="#1c1917" stroke-width="3" stroke-linejoin="round"/>`;
+            } else if (expression === 'celebrate') {
+                pupils = `<circle cx="43" cy="37" r="4" fill="#1c1917"/><circle cx="67" cy="37" r="4" fill="#1c1917"/><circle cx="45" cy="35" r="1.5" fill="white"/><circle cx="69" cy="35" r="1.5" fill="white"/>`;
+                mouth = `<circle cx="55" cy="53" r="7" fill="#0284c7" stroke="#1c1917" stroke-width="3"/>`;
+                eyebrows = `<path d="M 36 23 Q 43 18 50 23" stroke="#1c1917" stroke-width="3.5" fill="none" stroke-linecap="round"/><path d="M 60 23 Q 67 18 74 23" stroke="#1c1917" stroke-width="3.5" fill="none" stroke-linecap="round"/>`;
+            } else if (expression === 'error' || expression === 'scared') {
+                pupils = `<line x1="40" y1="35" x2="46" y2="41" stroke="#1c1917" stroke-width="3"/><line x1="46" y1="35" x2="40" y2="41" stroke="#1c1917" stroke-width="3"/><line x1="64" y1="35" x2="70" y2="41" stroke="#1c1917" stroke-width="3"/><line x1="70" y1="35" x2="64" y2="41" stroke="#1c1917" stroke-width="3"/>`;
+                mouth = `<path d="M 47 55 Q 55 48 63 55" stroke="#1c1917" stroke-width="3.5" fill="none" stroke-linecap="round"/>`;
+            }
+
+            container.innerHTML = `
+                <svg viewBox="0 0 110 110" width="100%" height="100%">
+                    <path d="M 25 82 Q 15 55 45 52 Q 70 50 68 82 Q 62 98 48 95 Q 32 92 28 82 Z" 
+                          fill="#84cc16" stroke="#1c1917" stroke-width="4" stroke-linejoin="round"/>
+                    <path d="M 32 68 Q 48 62 62 70" stroke="#1c1917" stroke-width="3" fill="none" stroke-linecap="round"/>
+                    <path d="M 30 80 Q 48 76 65 83" stroke="#1c1917" stroke-width="3" fill="none" stroke-linecap="round"/>
+
+                    <g transform="translate(55, 68)">
+                        <path d="M -12 -6 L 0 0 L -12 6 Z" fill="#0284c7" stroke="#1c1917" stroke-width="3" stroke-linejoin="round"/>
+                        <path d="M 12 -6 L 0 0 L 12 6 Z" fill="#0284c7" stroke="#1c1917" stroke-width="3" stroke-linejoin="round"/>
+                        <circle cx="0" cy="0" r="4" fill="#eab308" stroke="#1c1917" stroke-width="2.5"/>
+                    </g>
+
+                    <circle cx="55" cy="40" r="25" fill="#84cc16" stroke="#1c1917" stroke-width="4"/>
+                    <circle cx="38" cy="46" r="4.5" fill="#38bdf8" opacity="0.55"/>
+                    <circle cx="72" cy="46" r="4.5" fill="#38bdf8" opacity="0.55"/>
+
+                    ${eyebrows}
+
+                    <circle cx="43" cy="38" r="12" fill="white" stroke="#1c1917" stroke-width="4"/>
+                    <circle cx="67" cy="38" r="12" fill="white" stroke="#1c1917" stroke-width="4"/>
+                    <line x1="51" y1="38" x2="59" y2="38" stroke="#1c1917" stroke-width="4"/>
+
+                    ${pupils}
+                    ${mouth}
+                </svg>
+            `;
+        }
+
+        async function loadWebsterDictionary() {
+            try {
+                const res = await fetch("https://raw.githubusercontent.com/adambom/dictionary/master/dictionary.json");
+                if (res.ok) {
+                    const rawData = await res.json();
+                    for (let key in rawData) {
+                        DICTIONARY_DB[key.toUpperCase()] = rawData[key];
+                    }
+                }
+            } catch(e) {}
+
+            for (let cat in WORD_CATEGORIES) {
+                WORD_CATEGORIES[cat].forEach(w => {
+                    if (!DICTIONARY_DB[w]) DICTIONARY_DB[w] = `Common term in the ${cat} category.`;
+                });
+            }
+
+            setMascot("Ready! Tap any letter to start a fresh word anytime! 📚", "happy");
+        }
+
+        const gridEl = document.getElementById('grid');
+        const wordEl = document.getElementById('current-word');
+        const submitBtn = document.getElementById('submit-btn');
+        const scoreEl = document.getElementById('score');
+        const highScoreEl = document.getElementById('high-score');
+        const levelEl = document.getElementById('level');
+        const targetEl = document.getElementById('target');
+        const speechEl = document.getElementById('speech-text');
+
+        function getRandomLetter() {
+            if (Math.random() < 0.08) {
+                return CHALLENGING_LETTERS[Math.floor(Math.random() * CHALLENGING_LETTERS.length)];
+            }
+            return STANDARD_LETTERS[Math.floor(Math.random() * STANDARD_LETTERS.length)];
+        }
+
+        function createTileObject(letter = getRandomLetter(), bonus = null) {
+            return { letter, bonus };
+        }
+
+        function initGrid() {
+            gridState = [];
+            for (let i = 0; i < TOTAL_TILES; i++) {
+                gridState.push(createTileObject());
+            }
+            highScoreEl.textContent = highScore.toLocaleString();
+            renderGrid();
+        }
+
+        function shuffleGrid() {
+            if (isAnimating) return;
+            isAnimating = true;
+            playSound('shuffle');
+            clearSelection();
+
+            shufflePenaltyCount++;
+
+            let movableTiles = [];
+            let flamePositions = [];
+
+            gridState.forEach((tile, idx) => {
+                if (tile && tile.bonus === 'flame') {
+                    flamePositions.push({ index: idx, tile: tile });
+                } else {
+                    movableTiles.push(tile);
+                }
+            });
+
+            for (let i = movableTiles.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [movableTiles[i], movableTiles[j]] = [movableTiles[j], movableTiles[i]];
+            }
+
+            let newGridState = new Array(TOTAL_TILES);
+            flamePositions.forEach(item => {
+                newGridState[item.index] = item.tile;
+            });
+
+            for (let i = 0; i < TOTAL_TILES; i++) {
+                if (!newGridState[i]) {
+                    newGridState[i] = movableTiles.shift();
+                }
+            }
+
+            gridState = newGridState;
+
+            let topRowIndices = [];
+            for (let c = 0; c < GRID_SIZE; c++) {
+                topRowIndices.push(c);
+            }
+            topRowIndices.sort(() => Math.random() - 0.5);
+
+            let addedFlames = 0;
+            for (let i = 0; i < topRowIndices.length && addedFlames < shufflePenaltyCount; i++) {
+                let idx = topRowIndices[i];
+                gridState[idx] = { letter: getRandomLetter(), bonus: 'flame' };
+                addedFlames++;
+            }
+
+            renderGrid(new Map(), [], true);
+            setMascot(`Shuffle penalty applied! ${shufflePenaltyCount} flame tile(s) added to top row! 🔥🔀`, "scared");
+
+            setTimeout(() => {
+                isAnimating = false;
+            }, 360);
+        }
+
+        function renderGrid(fallingIndicesMap = new Map(), poppingIndices = [], isShuffling = false) {
+            gridEl.innerHTML = '';
+
+            for (let row = 0; row < GRID_SIZE; row++) {
+                const rowEl = document.createElement('div');
+                rowEl.classList.add('row');
+                if (row % 2 === 1) {
+                    rowEl.classList.add('offset');
+                }
+
+                for (let col = 0; col < GRID_SIZE; col++) {
+                    let index = row * GRID_SIZE + col;
+                    let tileData = gridState[index];
+
+                    const tile = document.createElement('div');
+                    tile.classList.add('tile');
+                    tile.dataset.index = index;
+                    
+                    if (tileData) {
+                        if (tileData.bonus === 'green') tile.classList.add('tier-green');
+                        else if (tileData.bonus === 'gold') tile.classList.add('tier-gold');
+                        else if (tileData.bonus === 'flame') tile.classList.add('hazard-flame');
+                    }
+
+                    if (isShuffling) {
+                        tile.classList.add('shuffling');
+                        tile.style.animationDelay = `${(index % GRID_SIZE) * 20}ms`;
+                    } else if (poppingIndices.includes(index)) {
+                        tile.classList.add('popping');
+                    } else if (fallingIndicesMap.has(index)) {
+                        const dropInfo = fallingIndicesMap.get(index);
+                        tile.classList.add('falling');
+                        tile.style.setProperty('--drop-distance', `-${dropInfo.distance * 45}px`);
+                        tile.style.animationDelay = `${dropInfo.delay}ms`;
+                    }
+
+                    if (selectedIndices.includes(index)) {
+                        tile.classList.add('selected');
+                        if (isCurrentWordValid) {
+                            tile.classList.add('valid-word');
+                        }
+                    }
+
+                    tile.textContent = tileData ? tileData.letter : '';
+                    
+                    tile.addEventListener('mousedown', (e) => startInteraction(index, 'down', e));
+                    tile.addEventListener('mouseenter', () => startInteraction(index, 'enter'));
+                    tile.addEventListener('touchstart', (e) => { e.preventDefault(); startInteraction(index, 'down', e); }, {passive: false});
+
+                    rowEl.appendChild(tile);
+                }
+
+                gridEl.appendChild(rowEl);
+            }
+
+            if (isCurrentWordValid) {
+                wordEl.classList.add('valid-word');
+                submitBtn.classList.add('valid-word');
+            } else {
+                wordEl.classList.remove('valid-word');
+                submitBtn.classList.remove('valid-word');
+            }
+        }
+
+        window.addEventListener('mouseup', endInteraction);
+        window.addEventListener('touchend', endInteraction);
+        window.addEventListener('touchmove', (e) => {
+            if (!isDragging) return;
+            e.preventDefault();
+            const touch = e.touches[0];
+            const target = document.elementFromPoint(touch.clientX, touch.clientY);
+            if (target && target.classList.contains('tile')) {
+                const idx = parseInt(target.dataset.index, 10);
+                if (!isNaN(idx)) {
+                    continueDrag(idx);
+                }
+            }
+        }, {passive: false});
+
+        function startInteraction(index, type, e) {
+            if (isAnimating) return;
+
+            if (type === 'down') {
+                isDragging = true;
+                dragMode = null;
+
+                const existingPos = selectedIndices.indexOf(index);
+                
+                // 1. If tapping the very last letter in the chain, toggle it off (shorten word)
+                if (existingPos > -1 && existingPos === selectedIndices.length - 1) {
+                    selectedIndices.pop();
+                    playSound('tap');
+                    updateCurrentWord();
+                    renderGrid();
+                    dragMode = 'tap';
+                    return;
+                }
+
+                // 2. If tapping a tile that is already part of the selection chain elsewhere, ignore
+                if (existingPos > -1) {
+                    return;
+                }
+
+                // 3. If there is NO active selection, or if the tapped tile is NOT adjacent to the last selected tile,
+                // discard the old selection and start a BRAND NEW word right here!
+                const lastIdx = selectedIndices.length > 0 ? selectedIndices[selectedIndices.length - 1] : null;
+                if (selectedIndices.length === 0 || !areTilesAdjacent(lastIdx, index)) {
+                    selectedIndices = [index];
+                    playSound('tap');
+                    updateCurrentWord();
+                    renderGrid();
+                    dragMode = 'slide';
+                } 
+                // 4. Otherwise, if it is adjacent, append it to the current word chain
+                else {
+                    selectedIndices.push(index);
+                    playSound('tap');
+                    updateCurrentWord();
+                    renderGrid();
+                    dragMode = 'slide';
+                }
+            } else if (type === 'enter' && isDragging && dragMode === 'slide') {
+                continueDrag(index);
+            }
+        }
+
+        function continueDrag(index) {
+            if (!isDragging || isAnimating || dragMode !== 'slide') return;
+
+            const lastIdx = selectedIndices[selectedIndices.length - 1];
+            if (lastIdx === index) return;
+
+            // Backtracking support: if dragging back to the previous tile, pop it
+            if (selectedIndices.length >= 2 && selectedIndices[selectedIndices.length - 2] === index) {
+                selectedIndices.pop();
+                playSound('tap');
+                updateCurrentWord();
+                renderGrid();
+                return;
+            }
+
+            // Cannot re-select an already selected tile in the current chain
+            if (selectedIndices.includes(index)) return;
+
+            // Must be adjacent to continue dragging
+            if (areTilesAdjacent(lastIdx, index)) {
+                selectedIndices.push(index);
+                playSound('tap');
+                updateCurrentWord();
+                renderGrid();
+            }
+        }
+
+        function endInteraction() {
+            isDragging = false;
+            dragMode = null;
+        }
+
+        function areTilesAdjacent(index1, index2) {
+            if (index1 === null || index2 === null) return false;
+            const row1 = Math.floor(index1 / GRID_SIZE);
+            const col1 = index1 % GRID_SIZE;
+            const row2 = Math.floor(index2 / GRID_SIZE);
+            const col2 = index2 % GRID_SIZE;
+
+            const rowDiff = Math.abs(row1 - row2);
+            const colDiff = Math.abs(col1 - col2);
+
+            if (rowDiff === 0 && colDiff === 0) return false;
+            if (rowDiff === 0) return colDiff === 1;
+
+            if (rowDiff === 1) {
+                if (row1 % 2 === 0) {
+                    return col2 === col1 || col2 === col1 - 1;
+                } else {
+                    return col2 === col1 || col2 === col1 + 1;
+                }
+            }
+
+            return false;
+        }
+
+        function updateCurrentWord() {
+            currentWordString = selectedIndices.map(i => gridState[i].letter).join('');
+            wordEl.textContent = currentWordString;
+            isCurrentWordValid = false;
+            validDefinitionText = "";
+
+            let minLength = 3;
+            if (currentWordString.length === 2 || currentWordString.length === 3) {
+                if (currentWordString.includes("Z") || currentWordString.includes("QU") || currentWordString.includes("X") || currentWordString.includes("Q")) {
+                    minLength = 2;
+                }
+            }
+
+            if (currentWordString.length >= minLength) {
+                const word = currentWordString.toUpperCase();
+
+                if (DICTIONARY_DB[word]) {
+                    isCurrentWordValid = true;
+                    validDefinitionText = DICTIONARY_DB[word];
+                } 
+                else if (word.length >= 4 && word.endsWith("S")) {
+                    const rootWord = word.slice(0, -1);
+                    if (DICTIONARY_DB[rootWord]) {
+                        isCurrentWordValid = true;
+                        validDefinitionText = `(Plural of ${rootWord}): ${DICTIONARY_DB[rootWord]}`;
+                    } else if (word.endsWith("ES") && word.length >= 5) {
+                        const rootEs = word.slice(0, -2);
+                        if (DICTIONARY_DB[rootEs]) {
+                            isCurrentWordValid = true;
+                            validDefinitionText = `(Plural of ${rootEs}): ${DICTIONARY_DB[rootEs]}`;
+                        }
+                    }
+                } 
+                else if (word.length >= 5 && word.endsWith("ING")) {
+                    const rootIng = word.slice(0, -3);
+                    const rootIngE = rootIng + "E";
+
+                    if (DICTIONARY_DB[rootIng]) {
+                        isCurrentWordValid = true;
+                        validDefinitionText = `(Present participle of ${rootIng}): ${DICTIONARY_DB[rootIng]}`;
+                    } else if (DICTIONARY_DB[rootIngE]) {
+                        isCurrentWordValid = true;
+                        validDefinitionText = `(Present participle of ${rootIngE}): ${DICTIONARY_DB[rootIngE]}`;
+                    } else if (rootIng.length >= 3 && rootIng[rootIng.length - 1] === rootIng[rootIng.length - 2]) {
+                        const rootIngSingle = rootIng.slice(0, -1);
+                        if (DICTIONARY_DB[rootIngSingle]) {
+                            isCurrentWordValid = true;
+                            validDefinitionText = `(Present participle of ${rootIngSingle}): ${DICTIONARY_DB[rootIngSingle]}`;
+                        }
+                    }
+                }
+            }
+        }
+
+        function clearSelection() {
+            selectedIndices = [];
+            isCurrentWordValid = false;
+            currentWordString = "";
+            wordEl.textContent = "";
+            renderGrid();
+        }
+
+        function spawnFloatingScore(points) {
+            const particle = document.createElement('div');
+            particle.className = 'score-particle';
+            particle.textContent = `+${points}`;
+            particle.style.left = `calc(50% - 25px)`;
+            particle.style.top = `36%`;
+            
+            document.getElementById('game-area').appendChild(particle);
+            setTimeout(() => particle.remove(), 850);
+        }
+
+        async function advanceFlamingHazards(usedFlameIndices) {
+            let gameOverTriggered = false;
+            let movesToAnimate = [];
+
+            for (let row = GRID_SIZE - 1; row >= 0; row--) {
+                for (let col = 0; col < GRID_SIZE; col++) {
+                    let idx = row * GRID_SIZE + col;
+                    let tile = gridState[idx];
+
+                    if (tile && tile.bonus === 'flame' && !usedFlameIndices.includes(idx)) {
+                        if (row === GRID_SIZE - 1) {
+                            gameOverTriggered = true;
+                        } else {
+                            let nextRow = row + 1;
+                            let possibleCols = [];
+                            if (row % 2 === 0) {
+                                possibleCols = [col, col - 1];
+                            } else {
+                                possibleCols = [col, col + 1];
+                            }
+
+                            let targetCol = col;
+                            for (let c of possibleCols) {
+                                if (c >= 0 && c < GRID_SIZE) {
+                                    let candidateIdx = nextRow * GRID_SIZE + c;
+                                    if (gridState[candidateIdx] !== null) {
+                                        targetCol = c;
+                                        break;
+                                    }
+                                }
+                            }
+
+                            let targetIdx = nextRow * GRID_SIZE + targetCol;
+                            movesToAnimate.push({ fromIdx: idx, targetIdx: targetIdx, fromRow: row, fromCol: col, targetRow: nextRow, targetCol: targetCol });
+                        }
+                    }
+                }
+            }
+
+            if (movesToAnimate.length > 0 && !gameOverTriggered) {
+                playSound('burn');
+
+                movesToAnimate.forEach(m => {
+                    const fromEl = document.querySelector(`.tile[data-index="${m.fromIdx}"]`);
+                    const targetEl = document.querySelector(`.tile[data-index="${m.targetIdx}"]`);
+                    
+                    if (targetEl) targetEl.classList.add('being-eaten');
+                    if (fromEl && targetEl) {
+                        const fromRect = fromEl.getBoundingClientRect();
+                        const targetRect = targetEl.getBoundingClientRect();
+                        const dx = targetRect.left - fromRect.left;
+                        const dy = targetRect.top - fromRect.top;
+
+                        fromEl.style.setProperty('--dx', `${dx}px`);
+                        fromEl.style.setProperty('--dy', `${dy}px`);
+                        fromEl.classList.add('descending-flame');
+                    }
+                });
+
+                setMascot("Watch out! The fire is burning the letter below! 🔥", "scared");
+
+                await new Promise(r => setTimeout(r, 600));
+
+                movesToAnimate.forEach(m => {
+                    gridState[m.targetIdx] = gridState[m.fromIdx];
+                    gridState[m.fromIdx] = createTileObject();
+                });
+            }
+
+            return gameOverTriggered;
+        }
+
+        async function submitWord() {
+            if (isAnimating) return;
+
+            if (!isCurrentWordValid) {
+                setMascot(`"${currentWordString}" isn't in the dictionary!`, "error");
+                return;
+            }
+
+            playSound('submit');
+            isAnimating = true;
+            const word = currentWordString.toUpperCase();
+            const definitionText = validDefinitionText || "A word.";
+            const savedIndices = [...selectedIndices];
+
+            let foundCategory = null;
+            let isNewDiscovery = false;
+
+            for (let cat in WORD_CATEGORIES) {
+                if (WORD_CATEGORIES[cat].includes(word)) {
+                    foundCategory = cat;
+                    if (!discoveredWords[cat]) discoveredWords[cat] = [];
+                    if (!discoveredWords[cat].includes(word)) {
+                        discoveredWords[cat].push(word);
+                        localStorage.setItem('bookley_discovered', JSON.stringify(discoveredWords));
+                        isNewDiscovery = true;
+                    }
+                    break;
+                }
+            }
+
+            let basePoints = word.length * word.length * 25;
+            let bonusPoints = 0;
+            let flamesExtinguished = 0;
+            let usedChallengingLetter = false;
+
+            savedIndices.forEach(idx => {
+                const tile = gridState[idx];
+                if (tile.bonus === 'green') bonusPoints += 500;
+                if (tile.bonus === 'gold') bonusPoints += 1000;
+                if (tile.bonus === 'flame') {
+                    bonusPoints += 300;
+                    flamesExtinguished++;
+                }
+                if (CHALLENGING_KEYS.includes(tile.letter)) {
+                    usedChallengingLetter = true;
+                }
+            });
+
+            let totalPointsEarned = basePoints + bonusPoints;
+            if (usedChallengingLetter) {
+                totalPointsEarned = Math.round(totalPointsEarned * 1.20);
+            }
+
+            score += totalPointsEarned;
+            scoreEl.textContent = score.toLocaleString();
+            
+            if (score > highScore) {
+                highScore = score;
+                localStorage.setItem('bookley_high_score', highScore);
+                highScoreEl.textContent = highScore.toLocaleString();
+            }
+
+            spawnFloatingScore(totalPointsEarned);
+
+            let bonusTileTypeToSpawn = null;
+            if (word.length >= 7) bonusTileTypeToSpawn = 'gold';
+            else if (word.length >= 5) bonusTileTypeToSpawn = 'green';
+
+            renderGrid(new Map(), savedIndices);
+
+            await new Promise(r => setTimeout(r, 350));
+
+            savedIndices.forEach(i => {
+                gridState[i] = null;
+            });
+
+            const isGameOver = await advanceFlamingHazards(savedIndices);
+
+            if (isGameOver) {
+                triggerGameOver("A flaming red letter reached the bottom and burned through your board!");
+                return;
+            }
+
+            const fallingIndicesMap = new Map();
+
+            for (let col = 0; col < GRID_SIZE; col++) {
+                let emptySpacesBelow = 0;
+                
+                for (let row = GRID_SIZE - 1; row >= 0; row--) {
+                    let idx = row * GRID_SIZE + col;
+                    
+                    if (gridState[idx] === null) {
+                        emptySpacesBelow++;
+                    } else if (emptySpacesBelow > 0) {
+                        const delay = (GRID_SIZE - row) * 35 + col * 20;
+                        fallingIndicesMap.set(idx, { distance: emptySpacesBelow, delay });
+                    }
+                }
+
+                for (let row = emptySpacesBelow - 1; row >= 0; row--) {
+                    let idx = row * GRID_SIZE + col;
+                    const delay = (emptySpacesBelow - row) * 45 + col * 25;
+                    fallingIndicesMap.set(idx, { distance: emptySpacesBelow + 1, delay });
+                }
+            }
+
+            let bonusInjected = false;
+
+            for (let col = 0; col < GRID_SIZE; col++) {
+                let columnLetters = [];
+                for (let row = GRID_SIZE - 1; row >= 0; row--) {
+                    let idx = row * GRID_SIZE + col;
+                    if (gridState[idx] !== null) {
+                        columnLetters.push(gridState[idx]);
+                    }
+                }
+
+                for (let row = GRID_SIZE - 1; row >= 0; row--) {
+                    let idx = row * GRID_SIZE + col;
+                    if (columnLetters.length > 0) {
+                        gridState[idx] = columnLetters.shift();
+                    } else {
+                        let bType = null;
+                        if (bonusTileTypeToSpawn && !bonusInjected) {
+                            bType = bonusTileTypeToSpawn;
+                            bonusInjected = true;
+                        } else if (Math.random() < 0.08) {
+                            bType = 'flame';
+                        }
+                        gridState[idx] = createTileObject(getRandomLetter(), bType);
+                    }
+                }
+            }
+
+            selectedIndices = [];
+            isCurrentWordValid = false;
+            currentWordString = "";
+            wordEl.textContent = "";
+            renderGrid(fallingIndicesMap);
+
+            let speechNote = `"${word}": ${definitionText}`;
+            let mascotExp = "happy";
+
+            if (foundCategory) {
+                speechNote += ` 🏆 (Added to ${foundCategory} Collection!)`;
+                mascotExp = "celebrate";
+                if (isNewDiscovery) {
+                    setTimeout(() => {
+                        openCollectionModal(foundCategory, word);
+                    }, 400);
+                }
+            } else if (usedChallengingLetter) {
+                speechNote += ` 🌟 (+20% bonus for challenging letter!)`;
+                mascotExp = "celebrate";
+            } else if (flamesExtinguished > 0) {
+                speechNote += ` 🔥 (Extinguished ${flamesExtinguished} flame tile!)`;
+                mascotExp = "celebrate";
+            } else if (bonusPoints > 0) {
+                speechNote += ` 🌟 (Bonus tile used!)`;
+                mascotExp = "celebrate";
+            }
+
+            setMascot(speechNote, mascotExp);
+
+            setTimeout(() => {
+                checkLevelProgress();
+            }, 2600);
+
+            setTimeout(() => {
+                isAnimating = false;
+            }, 550);
+        }
+
+        function openCollectionModal(highlightCategory = null, highlightWord = null) {
+            const container = document.getElementById('category-list-container');
+            container.innerHTML = '';
+            let totalDiscovered = 0;
+            let targetGroupEl = null;
+
+            for (let cat in WORD_CATEGORIES) {
+                const words = WORD_CATEGORIES[cat];
+                const found = discoveredWords[cat] || [];
+                totalDiscovered += found.length;
+
+                let tier34Done = words.slice(0, 12).every(w => found.includes(w));
+                let tier5Done = words.slice(12, 17).every(w => found.includes(w));
+                let tier67Done = words.slice(17, 20).every(w => found.includes(w));
+
+                let tierClass = "";
+                if (tier67Done) tierClass = "tier-gold";
+                else if (tier5Done) tierClass = "tier-silver";
+                else if (tier34Done) tierClass = "tier-blue";
+
+                const group = document.createElement('div');
+                group.className = 'category-group collapsed';
+                if (cat === highlightCategory) {
+                    group.classList.remove('collapsed');
+                    targetGroupEl = group;
+                }
+
+                const header = document.createElement('div');
+                header.className = `category-header ${tierClass}`;
+                header.innerHTML = `<span>${cat}</span><span>${found.length} / ${words.length} ▾</span>`;
+
+                const wordsContainer = document.createElement('div');
+                wordsContainer.className = 'category-words';
+
+                words.forEach((w, idx) => {
+                    const badge = document.createElement('span');
+                    badge.className = 'word-badge';
+                    
+                    let wordTierColorClass = "discovered";
+                    if (found.includes(w)) {
+                        if (idx < 12) wordTierColorClass = "tier-blue-word";
+                        else if (idx < 17) wordTierColorClass = "tier-silver-word";
+                        else wordTierColorClass = "tier-gold-word";
+                        badge.classList.add(wordTierColorClass);
+                    }
+
+                    if (cat === highlightCategory && w === highlightWord) {
+                        badge.classList.add('reveal-anim', wordTierColorClass);
+                    }
+
+                    badge.textContent = w;
+                    wordsContainer.appendChild(badge);
+                });
+
+                group.onclick = () => {
+                    group.classList.toggle('collapsed');
+                };
+
+                group.appendChild(header);
+                group.appendChild(wordsContainer);
+                container.appendChild(group);
+            }
+
+            document.getElementById('collection-count').textContent = totalDiscovered;
+            const modal = document.getElementById('collection-modal');
+            modal.classList.add('active');
+
+            modal.onclick = (e) => {
+                if (e.target === modal) {
+                    closeCollectionModal();
+                }
+            };
+
+            if (targetGroupEl) {
+                setTimeout(() => {
+                    targetGroupEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                }, 150);
+            }
+        }
+
+        function closeCollectionModal() {
+            document.getElementById('collection-modal').classList.remove('active');
+        }
+
+        function checkLevelProgress() {
+            if (score >= targetScore) {
+                level++;
+                targetScore += Math.round(5000 * Math.pow(1.6, level - 1));
+                levelEl.textContent = level;
+                targetEl.textContent = targetScore.toLocaleString();
+                playSound('levelup');
+                setMascot(`Level ${level} achieved! Brilliant work! 🎉`, "celebrate");
+            }
+        }
+
+        function triggerGameOver(reason) {
+            playSound('gameover');
+            document.getElementById('game-over-text').textContent = reason;
+            document.getElementById('game-over-modal').classList.add('active');
+            setMascot("Oh no! The fire reached the bottom! Game over! 😿", "scared");
+        }
+
+        function resetGame() {
+            document.getElementById('game-over-modal').classList.remove('active');
+            score = 0;
+            level = 1;
+            targetScore = 5000;
+            shufflePenaltyCount = 0;
+            scoreEl.textContent = "0";
+            levelEl.textContent = "1";
+            targetEl.textContent = "5,000";
+            isAnimating = false;
+            clearSelection();
+            initGrid();
+            setMascot("Fresh start! Keep an eye on those flaming letters! 🔥", "happy");
+        }
+
+        function setMascot(text, expression) {
+            speechEl.textContent = text;
+            renderMascot(expression);
+        }
+
+        // Initialize Game
+        renderMascot('neutral');
+        initAmbientDust();
+        loadWebsterDictionary();
+        initGrid();
+    </script>
+</body>
+</html>
