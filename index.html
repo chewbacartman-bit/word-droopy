@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1.0">
     <title>Bookley's Word Drop - Polished Edition</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@700;900&family=Quicksand:wght@600;700&display=swap');
@@ -17,7 +17,7 @@
             --gold: #d97706;
             --tile-green: #22c55e;
             --tile-gold: #f59e0b;
-            --tile-flame: #ef4444;       /* Flaming Hazard Red */
+            --tile-flame: #ef4444;
             --worm-green: #84cc16;
             --card-bg: #fffdf9;
             --tile-bg: #ece3d2;
@@ -30,6 +30,7 @@
             font-family: 'Quicksand', sans-serif;
             user-select: none;
             -webkit-user-select: none;
+            -webkit-touch-callout: none;
         }
 
         body {
@@ -41,7 +42,7 @@
             justify-content: space-between;
             min-height: 100vh;
             padding: 12px;
-            overflow-x: hidden;
+            overflow: hidden; /* Prevents whole-page scrolling/bouncing on iOS */
             background-image: 
                 radial-gradient(#d6cbbd 1px, transparent 1px),
                 radial-gradient(circle at 50% 30%, rgba(255,255,255,0.6) 0%, rgba(0,0,0,0.05) 100%);
@@ -86,16 +87,10 @@
             justify-content: space-between;
             align-items: center;
             background: var(--card-bg);
-            padding: 12px 14px;
+            padding: 10px 14px;
             border-radius: 18px;
             border: 3.5px solid var(--ink);
             box-shadow: 4px 4px 0px var(--ink);
-            animation: slideDown 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
-        }
-
-        @keyframes slideDown {
-            0% { transform: translateY(-30px); opacity: 0; }
-            100% { transform: translateY(0); opacity: 1; }
         }
 
         .stat-group {
@@ -123,53 +118,40 @@
             color: var(--mustard);
         }
 
-        /* Mascot Section with Organic Bobbing */
+        /* Mascot Section */
         .mascot-container {
             width: 100%;
             max-width: 420px;
             background: var(--card-bg);
             border-radius: 18px;
             border: 3.5px solid var(--ink);
-            padding: 10px 14px;
+            padding: 8px 14px;
             display: flex;
             align-items: center;
             gap: 12px;
             box-shadow: 4px 4px 0px var(--ink);
-            min-height: 98px;
-            animation: bounceIn 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) 0.1s both;
-        }
-
-        @keyframes bounceIn {
-            0% { transform: scale(0.9); opacity: 0; }
-            100% { transform: scale(1); opacity: 1; }
+            min-height: 90px;
         }
 
         .mascot-svg-wrapper {
-            width: 78px;
-            height: 78px;
+            width: 72px;
+            height: 72px;
             flex-shrink: 0;
             filter: drop-shadow(2px 3px 0px rgba(0,0,0,0.18));
-            animation: mascotIdle 3s infinite ease-in-out;
-        }
-
-        @keyframes mascotIdle {
-            0%, 100% { transform: translateY(0) rotate(0deg); }
-            50% { transform: translateY(-3px) rotate(1.5deg); }
         }
 
         .speech-bubble {
             background: #fef08a;
             border: 3px solid var(--ink);
-            padding: 9px 13px;
+            padding: 8px 12px;
             border-radius: 14px;
-            font-size: 0.82rem;
+            font-size: 0.8rem;
             font-weight: 700;
             flex-grow: 1;
             line-height: 1.35;
-            max-height: 78px;
+            max-height: 72px;
             overflow-y: auto;
             box-shadow: 2.5px 2.5px 0px var(--ink);
-            position: relative;
         }
 
         /* Game Board Area */
@@ -179,27 +161,25 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 8px;
+            gap: 6px;
             position: relative;
         }
 
         .word-display {
             font-family: 'Montserrat', sans-serif;
-            font-size: 1.6rem;
+            font-size: 1.5rem;
             font-weight: 900;
             letter-spacing: 0.14em;
             color: var(--teal);
-            height: 38px;
+            height: 34px;
             display: flex;
             align-items: center;
             justify-content: center;
             text-shadow: 2px 2px 0px rgba(0,0,0,0.12);
-            transition: transform 0.15s ease;
         }
 
         .word-display.valid-word {
             color: var(--blue);
-            transform: scale(1.04);
         }
 
         /* Staggered Grid Container */
@@ -209,13 +189,13 @@
             gap: 0px;
             width: 100%;
             background: var(--card-bg);
-            padding: 10px 8px;
+            padding: 8px;
             border-radius: 22px;
             border: 3.5px solid var(--ink);
             box-shadow: 6px 6px 0px var(--ink);
             position: relative;
             overflow: hidden;
-            touch-action: none;
+            touch-action: none; /* Crucial for preventing iOS gesture conflicts */
         }
 
         .row {
@@ -244,17 +224,9 @@
             font-weight: 900;
             color: var(--ink);
             cursor: pointer;
-            transition: transform 0.1s cubic-bezier(0.34, 1.56, 0.64, 1), background-color 0.15s, box-shadow 0.15s;
             position: relative;
-            will-change: transform, opacity;
             z-index: 1;
             box-shadow: inset 0 -3px 0 rgba(0,0,0,0.08);
-        }
-
-        .tile:hover {
-            transform: translateY(-2px);
-            z-index: 4;
-            box-shadow: 0 4px 0 var(--ink), inset 0 -3px 0 rgba(0,0,0,0.05);
         }
 
         /* Tier Special Tiles & Flame Hazard */
@@ -307,7 +279,6 @@
             top: -6px;
             right: -4px;
             font-size: 0.78rem;
-            filter: drop-shadow(0 2px 2px rgba(0,0,0,0.3));
         }
 
         @keyframes flamePulse {
@@ -375,11 +346,6 @@
             100% { transform: translateY(0) scale(1); opacity: 1; }
         }
 
-        .tile:active { 
-            transform: scale(0.92);
-            z-index: 8;
-        }
-
         .tile.selected {
             background: var(--teal);
             color: white;
@@ -427,7 +393,7 @@
 
         button.btn {
             flex: 1;
-            padding: 13px 6px;
+            padding: 12px 6px;
             border: 3.5px solid var(--ink);
             border-radius: 14px;
             font-family: 'Montserrat', sans-serif;
@@ -435,11 +401,6 @@
             font-weight: 900;
             cursor: pointer;
             box-shadow: 3px 3px 0px var(--ink);
-            transition: transform 0.08s, box-shadow 0.08s, filter 0.15s;
-        }
-
-        button.btn:hover {
-            filter: brightness(1.05);
         }
 
         button.btn:active {
@@ -468,16 +429,15 @@
             max-width: 420px;
             background: #84cc16;
             color: var(--ink);
-            padding: 10px;
+            padding: 9px;
             border: 3.5px solid var(--ink);
             border-radius: 14px;
             font-family: 'Montserrat', sans-serif;
-            font-size: 0.88rem;
+            font-size: 0.85rem;
             font-weight: 900;
             cursor: pointer;
             box-shadow: 3px 3px 0px var(--ink);
             text-align: center;
-            transition: transform 0.08s, box-shadow 0.08s;
         }
 
         .collection-btn:active {
@@ -523,12 +483,6 @@
             align-items: center;
             max-height: 85vh;
             overflow-y: auto;
-            transform: scale(0.9) translateY(20px);
-            transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-        }
-
-        .modal-overlay.active .modal-card {
-            transform: scale(1) translateY(0);
         }
 
         .modal-title {
@@ -556,11 +510,6 @@
             border-radius: 10px;
             padding: 8px 10px;
             cursor: pointer;
-            transition: background 0.15s;
-        }
-
-        .category-group:hover {
-            background: #eae2d5;
         }
 
         .category-header {
@@ -603,7 +552,6 @@
             border-radius: 4px;
             color: #78716c;
             border: 1px solid #d6cbbd;
-            transition: transform 0.3s ease, background-color 0.3s ease, color 0.3s ease;
         }
 
         .word-badge.discovered {
@@ -612,34 +560,9 @@
             border-color: var(--ink);
         }
 
-        .word-badge.tier-blue-word {
-            background: var(--blue);
-            color: white;
-            border-color: var(--ink);
-        }
-
-        .word-badge.tier-silver-word {
-            background: var(--silver);
-            color: white;
-            border-color: var(--ink);
-        }
-
-        .word-badge.tier-gold-word {
-            background: var(--gold);
-            color: white;
-            border-color: var(--ink);
-        }
-
-        .word-badge.reveal-anim {
-            animation: wordPopReveal 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
-            z-index: 10;
-        }
-
-        @keyframes wordPopReveal {
-            0% { transform: scale(1); filter: brightness(1); }
-            50% { transform: scale(1.4) rotate(5deg); filter: brightness(1.3); box-shadow: 0 0 12px rgba(2, 132, 199, 0.8); }
-            100% { transform: scale(1) rotate(0deg); filter: brightness(1); }
-        }
+        .word-badge.tier-blue-word { background: var(--blue); color: white; }
+        .word-badge.tier-silver-word { background: var(--silver); color: white; }
+        .word-badge.tier-gold-word { background: var(--gold); color: white; }
 
         .btn-restart {
             background: var(--mustard);
@@ -658,10 +581,8 @@
 </head>
 <body>
 
-    <!-- Ambient Floating Background Particles -->
     <div class="ambient-dust" id="ambient-dust"></div>
 
-    <!-- Header Stats -->
     <header>
         <div class="stat-group">
             <span class="stat-label">Score</span>
@@ -681,47 +602,37 @@
         </div>
     </header>
 
-    <!-- Mascot Section (Bookley the Green Worm) -->
     <div class="mascot-container">
-        <div class="mascot-svg-wrapper" id="mascot-avatar">
-            <!-- Dynamic Green Bookley SVG -->
-        </div>
+        <div class="mascot-svg-wrapper" id="mascot-avatar"></div>
         <div class="speech-bubble" id="speech-text">
-            Tap any letter to start or click an earlier letter in your word to jump back! 📚🐛
+            Glide your thumb smoothly across adjacent tiles! 📚🐛
         </div>
     </div>
 
-    <!-- Main Game Board -->
     <div class="game-area" id="game-area">
         <div class="word-display" id="current-word"></div>
         <div class="grid" id="grid"></div>
     </div>
 
-    <!-- Collection Drawer Button -->
     <button class="collection-btn" onclick="openCollectionModal()">📖 View Collection Categories</button>
 
-    <!-- Buttons -->
     <div class="controls">
         <button class="btn btn-clear" onclick="clearSelection()">Clear</button>
         <button class="btn btn-shuffle" onclick="shuffleGrid()">Shuffle</button>
         <button class="btn btn-submit" id="submit-btn" onclick="submitWord()">Submit</button>
     </div>
 
-    <!-- Collection Modal -->
     <div class="modal-overlay" id="collection-modal">
         <div class="modal-card" onclick="event.stopPropagation()">
             <div class="modal-title">Word Collection</div>
             <div style="font-size: 0.8rem; font-weight: 700; color: #78716c;">
                 Discovered: <span id="collection-count">0</span> / 400 words
             </div>
-            <div class="category-list" id="category-list-container">
-                <!-- Dynamically populated categories -->
-            </div>
+            <div class="category-list" id="category-list-container"></div>
             <button class="btn-restart" onclick="closeCollectionModal()">Close Drawer</button>
         </div>
     </div>
 
-    <!-- Game Over Modal -->
     <div class="modal-overlay" id="game-over-modal">
         <div class="modal-card">
             <div class="modal-title" style="color: var(--tile-flame);">Game Over! 🔥</div>
@@ -843,18 +754,7 @@
             }
         }
 
-        // Haptic Feedback Helper
-        function triggerHaptic(type = 'light') {
-            try {
-                if (navigator.vibrate) {
-                    if (type === 'light') navigator.vibrate(15);
-                    else if (type === 'medium') navigator.vibrate(35);
-                    else if (type === 'heavy') navigator.vibrate([40, 30, 40]);
-                }
-            } catch(e) {}
-        }
-
-        // Audio Effects
+        // Audio Effects (Synthesizer)
         let audioCtx = null;
         function initAudio() {
             if (!audioCtx) {
@@ -873,7 +773,6 @@
                 const now = audioCtx.currentTime;
 
                 if (type === 'tap') {
-                    triggerHaptic('light');
                     osc.type = 'triangle';
                     osc.frequency.setValueAtTime(320, now);
                     osc.frequency.exponentialRampToValueAtTime(520, now + 0.08);
@@ -882,7 +781,6 @@
                     osc.start(now);
                     osc.stop(now + 0.08);
                 } else if (type === 'burn') {
-                    triggerHaptic('heavy');
                     osc.type = 'sawtooth';
                     osc.frequency.setValueAtTime(150, now);
                     osc.frequency.linearRampToValueAtTime(300, now + 0.15);
@@ -892,7 +790,6 @@
                     osc.start(now);
                     osc.stop(now + 0.4);
                 } else if (type === 'shuffle') {
-                    triggerHaptic('medium');
                     osc.type = 'sine';
                     osc.frequency.setValueAtTime(300, now);
                     osc.frequency.exponentialRampToValueAtTime(600, now + 0.15);
@@ -901,7 +798,6 @@
                     osc.start(now);
                     osc.stop(now + 0.15);
                 } else if (type === 'submit') {
-                    triggerHaptic('medium');
                     osc.type = 'sine';
                     osc.frequency.setValueAtTime(440, now);
                     osc.frequency.setValueAtTime(659.25, now + 0.08);
@@ -911,7 +807,6 @@
                     osc.start(now);
                     osc.stop(now + 0.3);
                 } else if (type === 'gameover') {
-                    triggerHaptic('heavy');
                     osc.type = 'sawtooth';
                     osc.frequency.setValueAtTime(250, now);
                     osc.frequency.exponentialRampToValueAtTime(80, now + 0.6);
@@ -920,7 +815,6 @@
                     osc.start(now);
                     osc.stop(now + 0.6);
                 } else if (type === 'levelup') {
-                    triggerHaptic('heavy');
                     const notes = [523.25, 659.25, 783.99, 1046.50];
                     notes.forEach((freq, idx) => {
                         const o = audioCtx.createOscillator();
@@ -1004,7 +898,7 @@
                 });
             }
 
-            setMascot("Ready! Drag across letters or tap to build words! 📚", "happy");
+            setMascot("Ready! Swipe your finger smoothly across letters to build words! 📚", "happy");
         }
 
         const gridEl = document.getElementById('grid');
@@ -1138,15 +1032,6 @@
                     }
 
                     tile.textContent = tileData ? tileData.letter : '';
-                    
-                    // Mouse/Touch Listeners
-                    tile.addEventListener('mousedown', (e) => startInteraction(index, e));
-                    tile.addEventListener('mouseenter', () => continueDrag(index));
-                    tile.addEventListener('touchstart', (e) => {
-                        e.preventDefault();
-                        startInteraction(index, e);
-                    }, {passive: false});
-
                     rowEl.appendChild(tile);
                 }
 
@@ -1162,29 +1047,32 @@
             }
         }
 
-        // Global touchmove listener for smooth continuous mobile sliding
-        window.addEventListener('mouseup', endInteraction);
-        window.addEventListener('touchend', endInteraction);
-        window.addEventListener('touchmove', (e) => {
-            if (!isDragging) return;
-            e.preventDefault();
-            const touch = e.touches[0];
-            const target = document.elementFromPoint(touch.clientX, touch.clientY);
+        // Robust Touch & Mouse Coordinate Handlers for iOS
+        gridEl.addEventListener('pointerdown', handlePointerStart);
+        gridEl.addEventListener('pointermove', handlePointerMove);
+        window.addEventListener('pointerup', handlePointerEnd);
+        window.addEventListener('pointercancel', handlePointerEnd);
+
+        function getTileIndexFromEvent(e) {
+            const target = document.elementFromPoint(e.clientX, e.clientY);
             if (target && target.classList.contains('tile')) {
                 const idx = parseInt(target.dataset.index, 10);
-                if (!isNaN(idx)) {
-                    continueDrag(idx);
-                }
+                return isNaN(idx) ? null : idx;
             }
-        }, {passive: false});
+            return null;
+        }
 
-        function startInteraction(index, e) {
+        function handlePointerStart(e) {
             if (isAnimating) return;
+            const index = getTileIndexFromEvent(e);
+            if (index === null) return;
+
             isDragging = true;
+            try { e.target.setPointerCapture(e.pointerId); } catch(err) {}
 
             const existingPos = selectedIndices.indexOf(index);
             
-            // 1. If tapping a tile that is already part of the chain earlier, jump back to that point (truncate!)
+            // 1. Jump back / truncate if tapping an earlier letter in current chain
             if (existingPos > -1 && existingPos < selectedIndices.length - 1) {
                 selectedIndices = selectedIndices.slice(0, existingPos + 1);
                 playSound('tap');
@@ -1193,7 +1081,7 @@
                 return;
             }
 
-            // 2. If tapping the very last letter, toggle it off
+            // 2. Toggle off if tapping the very last letter
             if (existingPos > -1 && existingPos === selectedIndices.length - 1) {
                 selectedIndices.pop();
                 playSound('tap');
@@ -1202,16 +1090,14 @@
                 return;
             }
 
-            // 3. If no selection or not adjacent, start a fresh word chain
+            // 3. Start fresh chain or append if adjacent
             const lastIdx = selectedIndices.length > 0 ? selectedIndices[selectedIndices.length - 1] : null;
             if (selectedIndices.length === 0 || !areTilesAdjacent(lastIdx, index)) {
                 selectedIndices = [index];
                 playSound('tap');
                 updateCurrentWord();
                 renderGrid();
-            } 
-            // 4. Otherwise append if adjacent
-            else {
+            } else {
                 selectedIndices.push(index);
                 playSound('tap');
                 updateCurrentWord();
@@ -1219,13 +1105,15 @@
             }
         }
 
-        function continueDrag(index) {
+        function handlePointerMove(e) {
             if (!isDragging || isAnimating) return;
+            const index = getTileIndexFromEvent(e);
+            if (index === null) return;
 
             const lastIdx = selectedIndices[selectedIndices.length - 1];
             if (lastIdx === index) return;
 
-            // Backtracking / Truncation during drag
+            // Backtracking / Truncation during slide
             const existingPos = selectedIndices.indexOf(index);
             if (existingPos > -1 && existingPos < selectedIndices.length - 1) {
                 selectedIndices = selectedIndices.slice(0, existingPos + 1);
@@ -1237,7 +1125,7 @@
 
             if (selectedIndices.includes(index)) return;
 
-            // Must be adjacent to continue dragging
+            // Must be adjacent to continue sliding chain
             if (areTilesAdjacent(lastIdx, index)) {
                 selectedIndices.push(index);
                 playSound('tap');
@@ -1246,7 +1134,7 @@
             }
         }
 
-        function endInteraction() {
+        function handlePointerEnd() {
             isDragging = false;
         }
 
