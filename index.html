@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1.0">
-    <title>Bookley's Word Drop - v.0.0.078</title>
+    <title>Bookley's Word Drop - v.0.0.080</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@700;900&family=Quicksand:wght@600;700&display=swap');
 
@@ -844,7 +844,7 @@
     <div class="ambient-dust" id="ambient-dust"></div>
 
     <header>
-        <div class="version-badge">v.0.0.078</div>
+        <div class="version-badge">v.0.0.080</div>
         <div class="stat-group">
             <span class="stat-label">Score</span>
             <span id="score" class="stat-value">0</span>
@@ -868,7 +868,7 @@
             <div class="praise-bubble" id="praise-bubble">Nice!</div>
         </div>
         <div class="speech-bubble" id="speech-text">
-            v.0.0.078 Ready! Completely independent universal bounty database active! 🎯🐛✨
+            v.0.0.080 Ready! Red hazard tiles now keep the exact letter they replace! 🔥🔠✨
         </div>
     </div>
 
@@ -974,7 +974,6 @@
         let redTileSpawnChance = 0.08;
         let currentBountyWord = "";
 
-        // Huge, independent global dictionary pool for bounties (not tied to collection categories)
         const UNIVERSAL_BOUNTY_POOL = [
             "TIME", "YEAR", "PEOPLE", "WAY", "DAY", "MAN", "THING", "WOMAN", "LIFE", "CHILD",
             "WORLD", "SCHOOL", "STATE", "FAMILY", "STUDENT", "GROUP", "COUNTRY", "PROBLEM", "HAND", "PART",
@@ -1258,6 +1257,7 @@
                     let idx = topRowIndices[i];
                     if (gridState[idx].bonus !== 'flame') {
                         let currentTile = gridState[idx];
+                        // Preserve the exact letter it's replacing
                         gridState[idx] = {
                             id: currentTile.id,
                             letter: currentTile.letter,
