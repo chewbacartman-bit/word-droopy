@@ -588,6 +588,7 @@
         let validDefinitionText = "";
         let isAnimating = false;
         let isDragging = false;
+        let tileRects = []; // Cached bounding boxes for lightning-fast touch sliding
 
         let score = 0;
         let highScore = parseInt(localStorage.getItem('bookley_high_score') || '0', 10);
@@ -916,6 +917,16 @@
             }, 360);
         }
 
+        function cacheTileRects() {
+            tileRects = [];
+            const tileElements = gridEl.querySelectorAll('.tile');
+            tileElements.forEach(el => {
+                const idx = parseInt(el.dataset.index, 10);
+                const rect = el.getBoundingClientRect();
+                tileRects[idx] = { left: rect.left, right: rect.right, top: rect.top, bottom: rect.bottom };
+            });
+        }
+
         function renderGrid(fallingIndicesMap = new Map(), poppingIndices = [], isShuffling = false) {
             gridEl.innerHTML = '';
 
@@ -973,74 +984,67 @@
                 wordEl.classList.remove('valid-word');
                 submitBtn.classList.remove('valid-word');
             }
+
+            // Update bounding boxes cache after DOM is painted
+            setTimeout(cacheTileRects, 10);
         }
 
-        // Direct Touch & Mouse Move Listeners for iOS Safari compatibility
-        gridEl.addEventListener('touchstart', handleTouchStart, { passive: false });
-        gridEl.addEventListener('touchmove', handleTouchMove, { passive: false });
-        window.addEventListener('touchend', handleTouchEnd);
-        window.addEventListener('touchcancel', handleTouchEnd);
-
-        gridEl.addEventListener('mousedown', handleMouseDown);
-        window.addEventListener('mousemove', handleMouseMove);
-        window.addEventListener('mouseup', handleMouseUp);
-
-        function getTileIndexAtPoint(clientX, clientY) {
-            const elements = document.elementsFromPoint(clientX, clientY);
-            for (let el of elements) {
-                if (el && el.classList.contains('tile')) {
-                    const idx = parseInt(el.dataset.index, 10);
-                    return isNaN(idx) ? null : idx;
+        // Bounding-Box Coordinate Finder (Bypasses iOS elementFromPoint bug completely)
+        function getTileIndexAtCoords(clientX, clientY) {
+            for (let idx = 0; idx < tileRects.length; idx++) {
+                const r = tileRects[idx];
+                if (r && clientX >= r.left && clientX <= r.right && clientY >= r.top && clientY <= r.bottom) {
+                    return idx;
                 }
             }
             return null;
         }
 
-        function handleTouchStart(e) {
+        // Touch & Mouse Event Listeners
+        gridEl.addEventListener('touchstart', (e) => {
             if (isAnimating) return;
             e.preventDefault();
+            cacheTileRects();
             const touch = e.touches[0];
-            const index = getTileIndexAtPoint(touch.clientX, touch.clientY);
+            const index = getTileIndexAtCoords(touch.clientX, touch.clientY);
             if (index !== null) {
                 isDragging = true;
                 processTileSelection(index);
             }
-        }
+        }, { passive: false });
 
-        function handleTouchMove(e) {
+        gridEl.addEventListener('touchmove', (e) => {
             if (!isDragging || isAnimating) return;
             e.preventDefault();
             const touch = e.touches[0];
-            const index = getTileIndexAtPoint(touch.clientX, touch.clientY);
+            const index = getTileIndexAtCoords(touch.clientX, touch.clientY);
             if (index !== null) {
                 processTileSelection(index);
             }
-        }
+        }, { passive: false });
 
-        function handleTouchEnd(e) {
-            isDragging = false;
-        }
+        window.addEventListener('touchend', () => { isDragging = false; });
+        window.addEventListener('touchcancel', () => { isDragging = false; });
 
-        function handleMouseDown(e) {
+        gridEl.addEventListener('mousedown', (e) => {
             if (isAnimating) return;
-            const index = getTileIndexAtPoint(e.clientX, e.clientY);
+            cacheTileRects();
+            const index = getTileIndexAtCoords(e.clientX, e.clientY);
             if (index !== null) {
                 isDragging = true;
                 processTileSelection(index);
             }
-        }
+        });
 
-        function handleMouseMove(e) {
+        window.addEventListener('mousemove', (e) => {
             if (!isDragging || isAnimating) return;
-            const index = getTileIndexAtPoint(e.clientX, e.clientY);
+            const index = getTileIndexAtCoords(e.clientX, e.clientY);
             if (index !== null) {
                 processTileSelection(index);
             }
-        }
+        });
 
-        function handleMouseUp(e) {
-            isDragging = false;
-        }
+        window.addEventListener('mouseup', () => { isDragging = false; });
 
         function processTileSelection(index) {
             const lastIdx = selectedIndices.length > 0 ? selectedIndices[selectedIndices.length - 1] : null;
@@ -1048,7 +1052,7 @@
 
             const existingPos = selectedIndices.indexOf(index);
 
-            // 1. If tapping an earlier letter in the chain, truncate back to it
+            // 1. If sliding back to an earlier letter in the chain, truncate back to it
             if (existingPos > -1 && existingPos < selectedIndices.length - 1) {
                 selectedIndices = selectedIndices.slice(0, existingPos + 1);
                 playSound('tap');
@@ -1057,7 +1061,7 @@
                 return;
             }
 
-            // 2. If tapping the exact last letter, toggle it off
+            // 2. If sliding back to the exact last letter, toggle it off
             if (existingPos > -1 && existingPos === selectedIndices.length - 1) {
                 selectedIndices.pop();
                 playSound('tap');
@@ -1066,7 +1070,7 @@
                 return;
             }
 
-            // 3. If already selected elsewhere, ignore
+            // 3. If already selected elsewhere in the path, ignore
             if (existingPos > -1) return;
 
             // 4. Start fresh chain or append if adjacent
