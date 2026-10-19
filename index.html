@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1.0">
-    <title>Bookley's Word Drop - v.0.0.074</title>
+    <title>Bookley's Word Drop - v.0.0.076</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@700;900&family=Quicksand:wght@600;700&display=swap');
 
@@ -332,13 +332,66 @@
             position: relative;
         }
 
+        .bounty-banner {
+            width: 100%;
+            background: var(--card-bg);
+            border: 2.5px solid var(--ink);
+            border-radius: 12px;
+            padding: 6px 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.78rem;
+            font-weight: 900;
+            box-shadow: 3px 3px 0px var(--ink);
+            transition: background 0.4s ease, border-color 0.4s ease;
+        }
+
+        .bounty-letters {
+            display: flex;
+            gap: 4px;
+        }
+
+        .bounty-letter-slot {
+            width: 22px;
+            height: 24px;
+            background: var(--tile-bg);
+            border: 2px solid var(--ink);
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            color: var(--silver);
+            transition: all 0.2s ease;
+        }
+
+        .bounty-letter-slot.lit {
+            background: var(--mustard);
+            color: var(--ink);
+            transform: translateY(-2px);
+            box-shadow: 0 2px 0 var(--ink);
+        }
+
+        .bounty-letter-slot.completed {
+            background: var(--teal);
+            color: white;
+            animation: pulseSlot 0.8s infinite alternate ease-in-out;
+        }
+
+        @keyframes pulseSlot {
+            0% { transform: scale(1); }
+            100% { transform: scale(1.1); }
+        }
+
         .word-display {
             font-family: 'Montserrat', sans-serif;
-            font-size: 1.5rem;
+            font-size: 1.4rem;
             font-weight: 900;
             letter-spacing: 0.14em;
             color: var(--teal);
-            height: 34px;
+            height: 30px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -389,7 +442,7 @@
             align-items: center;
             justify-content: center;
             font-family: 'Montserrat', sans-serif;
-            font-size: 1.2rem;
+            font-size: 1.15rem;
             font-weight: 900;
             color: var(--ink);
             cursor: pointer;
@@ -791,7 +844,7 @@
     <div class="ambient-dust" id="ambient-dust"></div>
 
     <header>
-        <div class="version-badge">v.0.0.074</div>
+        <div class="version-badge">v.0.0.076</div>
         <div class="stat-group">
             <span class="stat-label">Score</span>
             <span id="score" class="stat-value">0</span>
@@ -815,11 +868,15 @@
             <div class="praise-bubble" id="praise-bubble">Nice!</div>
         </div>
         <div class="speech-bubble" id="speech-text">
-            v.0.0.074 Ready! Each level beaten increases red tile spawn chance by +2%! 🔥🐛✨
+            v.0.0.076 Ready! Watch bounty letters light up as you spell them! 🎯🐛✨
         </div>
     </div>
 
     <div class="game-area" id="game-area">
+        <div class="bounty-banner">
+            <span>🎯 Find:</span>
+            <div class="bounty-letters" id="bounty-letters-container"></div>
+        </div>
         <div class="word-display" id="current-word"></div>
         <div class="grid" id="grid"></div>
     </div>
@@ -914,7 +971,8 @@
         let level = 1;
         let targetScore = 5000;
         let shufflePenaltyCount = 0;
-        let redTileSpawnChance = 0.08; // Base 8% spawn rate
+        let redTileSpawnChance = 0.08;
+        let currentBountyWord = "";
 
         const WORD_CATEGORIES = {
             "Plants": ["VINE", "LEAF", "SEED", "STEM", "ROOT", "BUD", "TREE", "FERN", "BARK", "MOSS", "BUSH", "BULB", "PLANT", "GRASS", "FLORA", "BLOOM", "PETAL", "BRANCH", "BLOSSOM", "SAPLING"],
@@ -1024,6 +1082,20 @@
                     gain.gain.exponentialRampToValueAtTime(0.01, now + 0.3);
                     osc.start(now);
                     osc.stop(now + 0.3);
+                } else if (type === 'bounty') {
+                    const notes = [440, 554.37, 659.25, 880];
+                    notes.forEach((freq, idx) => {
+                        const o = audioCtx.createOscillator();
+                        const g = audioCtx.createGain();
+                        o.type = 'triangle';
+                        o.frequency.setValueAtTime(freq, now + idx * 0.08);
+                        o.connect(g);
+                        g.connect(audioCtx.destination);
+                        g.gain.setValueAtTime(0.12, now + idx * 0.08);
+                        g.gain.exponentialRampToValueAtTime(0.01, now + idx * 0.08 + 0.15);
+                        o.start(now + idx * 0.08);
+                        o.stop(now + idx * 0.08 + 0.15);
+                    });
                 } else if (type === 'gameover') {
                     osc.type = 'sawtooth';
                     osc.frequency.setValueAtTime(250, now);
@@ -1067,6 +1139,30 @@
         const levelEl = document.getElementById('level');
         const targetEl = document.getElementById('target');
         const speechEl = document.getElementById('speech-text');
+        const bountyContainerEl = document.getElementById('bounty-letters-container');
+
+        function pickNewBountyWord() {
+            const categories = Object.keys(WORD_CATEGORIES);
+            const randomCat = categories[Math.floor(Math.random() * categories.length)];
+            const words = WORD_CATEGORIES[randomCat];
+            currentBountyWord = words[Math.floor(Math.random() * words.length)];
+            renderBountySlots("");
+        }
+
+        function renderBountySlots(activeMatchCount = 0, isCompleteMatch = false) {
+            bountyContainerEl.innerHTML = '';
+            for (let i = 0; i < currentBountyWord.length; i++) {
+                const slot = document.createElement('div');
+                slot.className = 'bounty-letter-slot';
+                slot.textContent = currentBountyWord[i];
+                if (isCompleteMatch) {
+                    slot.classList.add('completed');
+                } else if (i < activeMatchCount) {
+                    slot.classList.add('lit');
+                }
+                bountyContainerEl.appendChild(slot);
+            }
+        }
 
         function getRandomLetter() {
             const roll = Math.random();
@@ -1089,6 +1185,7 @@
                 gridState.push(createTileObject());
             }
             highScoreEl.textContent = highScore.toLocaleString();
+            pickNewBountyWord();
             renderGridInitial();
         }
 
@@ -1529,12 +1626,31 @@
                     if (tile.bonus === 'flame') points += 300;
                 }
             });
+            if (currentWordString.toUpperCase() === currentBountyWord) {
+                points += 3000;
+            }
             return points;
+        }
+
+        function updateBountyLighting() {
+            const upWord = currentWordString.toUpperCase();
+            let matchCount = 0;
+            for (let i = 0; i < upWord.length && i < currentBountyWord.length; i++) {
+                if (upWord[i] === currentBountyWord[i]) {
+                    matchCount++;
+                } else {
+                    break;
+                }
+            }
+            const isComplete = (upWord === currentBountyWord);
+            renderBountySlots(matchCount, isComplete);
         }
 
         async function updateCurrentWord() {
             currentWordString = selectedIndices.map(i => gridState[i].letter).join('');
             
+            updateBountyLighting();
+
             isCurrentWordValid = false;
             validDefinitionText = "";
 
@@ -1683,6 +1799,7 @@
             isCurrentWordValid = false;
             currentWordString = "";
             wordEl.textContent = "";
+            renderBountySlots(0);
             playSound('tap');
             triggerHaptic(15);
             renderGridInitial();
@@ -1693,7 +1810,7 @@
             particle.className = 'score-particle';
             particle.textContent = `+${points}`;
             particle.style.left = `calc(50% - 25px)`;
-            particle.style.top = `36%`;
+            particle.style.top = `42%`;
             
             document.getElementById('game-area').appendChild(particle);
             setTimeout(() => particle.remove(), 850);
@@ -1788,10 +1905,18 @@
                 return;
             }
 
-            playSound('submit');
-            triggerHaptic(45);
-            isAnimating = true;
             const word = currentWordString.toUpperCase();
+            const isBountyHit = (word === currentBountyWord);
+
+            if (isBountyHit) {
+                playSound('bounty');
+                triggerHaptic([75, 50, 75]);
+            } else {
+                playSound('submit');
+                triggerHaptic(45);
+            }
+
+            isAnimating = true;
             const definitionText = validDefinitionText || "A word.";
             const savedIndices = [...selectedIndices];
 
@@ -1824,6 +1949,9 @@
             });
 
             let totalPointsEarned = basePoints + bonusPoints;
+            if (isBountyHit) {
+                totalPointsEarned += 3000;
+            }
 
             let oldScore = score;
             score += totalPointsEarned;
@@ -1881,6 +2009,7 @@
             isCurrentWordValid = false;
             currentWordString = "";
             wordEl.textContent = "";
+            renderBountySlots(0);
 
             await renderGridFLIP('0.38s');
 
@@ -1892,6 +2021,11 @@
             }
 
             let speechNote = `"${word}": ${definitionText}`;
+            if (isBountyHit) {
+                speechNote = `🎯 BOUNTY FOUND! "${word}" cleared for +3,000 bonus points! 🎉`;
+                pickNewBountyWord();
+            }
+
             if (foundCategory) {
                 speechNote += ` 🏆 (${foundCategory})`;
                 if (isNewDiscovery) {
@@ -1904,8 +2038,8 @@
             setMascot(speechNote, "neutral");
 
             const praiseBubble = document.getElementById('praise-bubble');
-            if (word.length >= 6 && praiseBubble) {
-                const praises = ["Nice!", "Well done!", "Good work!", "Amazing!"];
+            if ((word.length >= 6 || isBountyHit) && praiseBubble) {
+                const praises = isBountyHit ? ["Bounty!", "Jackpot!", "Amazing!"] : ["Nice!", "Well done!", "Good work!"];
                 praiseBubble.textContent = praises[Math.floor(Math.random() * praises.length)];
                 praiseBubble.classList.add('active');
                 setTimeout(() => {
@@ -2051,8 +2185,6 @@
             if (score >= targetScore) {
                 level++;
                 targetScore += Math.round(5000 * Math.pow(1.6, level - 1));
-                
-                // Increase red tile spawn chance by +2% (capped at 50% max so it doesn't become impossible)
                 redTileSpawnChance = Math.min(0.50, redTileSpawnChance + 0.02);
 
                 levelEl.textContent = level;
@@ -2076,7 +2208,7 @@
             level = 1;
             targetScore = 5000;
             shufflePenaltyCount = 0;
-            redTileSpawnChance = 0.08; // Reset back to base 8%
+            redTileSpawnChance = 0.08;
             scoreEl.textContent = "0";
             levelEl.textContent = "1";
             targetEl.textContent = "5,000";
