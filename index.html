@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1.0">
-    <title>Bookley's Word Drop - v.0.0.076</title>
+    <title>Bookley's Word Drop - v.0.0.078</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@700;900&family=Quicksand:wght@600;700&display=swap');
 
@@ -844,7 +844,7 @@
     <div class="ambient-dust" id="ambient-dust"></div>
 
     <header>
-        <div class="version-badge">v.0.0.076</div>
+        <div class="version-badge">v.0.0.078</div>
         <div class="stat-group">
             <span class="stat-label">Score</span>
             <span id="score" class="stat-value">0</span>
@@ -868,7 +868,7 @@
             <div class="praise-bubble" id="praise-bubble">Nice!</div>
         </div>
         <div class="speech-bubble" id="speech-text">
-            v.0.0.076 Ready! Watch bounty letters light up as you spell them! 🎯🐛✨
+            v.0.0.078 Ready! Completely independent universal bounty database active! 🎯🐛✨
         </div>
     </div>
 
@@ -973,6 +973,23 @@
         let shufflePenaltyCount = 0;
         let redTileSpawnChance = 0.08;
         let currentBountyWord = "";
+
+        // Huge, independent global dictionary pool for bounties (not tied to collection categories)
+        const UNIVERSAL_BOUNTY_POOL = [
+            "TIME", "YEAR", "PEOPLE", "WAY", "DAY", "MAN", "THING", "WOMAN", "LIFE", "CHILD",
+            "WORLD", "SCHOOL", "STATE", "FAMILY", "STUDENT", "GROUP", "COUNTRY", "PROBLEM", "HAND", "PART",
+            "PLACE", "CASE", "WEEK", "COMPANY", "SYSTEM", "PROGRAM", "QUESTION", "WORK", "GOVERNMENT", "NUMBER",
+            "NIGHT", "POINT", "HOME", "WATER", "ROOM", "MOTHER", "AREA", "MONEY", "STORY", "FACT",
+            "MONTH", "LOT", "RIGHT", "STUDY", "BOOK", "EYE", "JOB", "WORD", "BUSINESS", "ISSUE",
+            "SIDE", "KIND", "HEAD", "HOUSE", "SERVICE", "FRIEND", "FATHER", "POWER", "HOUR", "GAME",
+            "LINE", "END", "MEMBER", "LAW", "CAR", "CITY", "COMMUNITY", "NAME", "PRESIDENT", "TEAM",
+            "MINUTE", "IDEA", "KID", "BODY", "INFORMATION", "BACK", "PARENT", "FACE", "OTHERS", "LEVEL",
+            "OFFICE", "DOOR", "HEALTH", "PERSON", "ART", "WAR", "HISTORY", "PARTY", "RESULT", "CHANGE",
+            "MORNING", "REASON", "RESEARCH", "GIRL", "GUY", "MOM", "DAD", "AIR", "DAY", "PIECE",
+            "SHIRT", "TABLE", "PLANT", "LIGHT", "SOUND", "MUSIC", "VOICE", "PAPER", "ANIMAL", "HOUSE",
+            "OCEAN", "SPACE", "STONE", "FLOOR", "WINDOW", "CLOCK", "TRAIN", "MONKEY", "TIGER", "RIVER",
+            "OCEAN", "CLOUD", "STORM", "WIND", "FIRE", "EARTH", "METAL", "PIANO", "GUITAR", "SMILE"
+        ];
 
         const WORD_CATEGORIES = {
             "Plants": ["VINE", "LEAF", "SEED", "STEM", "ROOT", "BUD", "TREE", "FERN", "BARK", "MOSS", "BUSH", "BULB", "PLANT", "GRASS", "FLORA", "BLOOM", "PETAL", "BRANCH", "BLOSSOM", "SAPLING"],
@@ -1142,10 +1159,7 @@
         const bountyContainerEl = document.getElementById('bounty-letters-container');
 
         function pickNewBountyWord() {
-            const categories = Object.keys(WORD_CATEGORIES);
-            const randomCat = categories[Math.floor(Math.random() * categories.length)];
-            const words = WORD_CATEGORIES[randomCat];
-            currentBountyWord = words[Math.floor(Math.random() * words.length)];
+            currentBountyWord = UNIVERSAL_BOUNTY_POOL[Math.floor(Math.random() * UNIVERSAL_BOUNTY_POOL.length)];
             renderBountySlots("");
         }
 
