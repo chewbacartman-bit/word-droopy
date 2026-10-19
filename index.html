@@ -687,7 +687,7 @@
             <!-- Dynamic Green Bookley SVG -->
         </div>
         <div class="speech-bubble" id="speech-text">
-            Tap any letter to start a fresh word anytime! 📚🐛
+            Tap any letter to start or click an earlier letter in your word to jump back! 📚🐛
         </div>
     </div>
 
@@ -747,7 +747,6 @@
         let validDefinitionText = "";
         let isAnimating = false;
         let isDragging = false;
-        let dragMode = null;
 
         let score = 0;
         let highScore = parseInt(localStorage.getItem('bookley_high_score') || '0', 10);
@@ -844,6 +843,17 @@
             }
         }
 
+        // Haptic Feedback Helper
+        function triggerHaptic(type = 'light') {
+            try {
+                if (navigator.vibrate) {
+                    if (type === 'light') navigator.vibrate(15);
+                    else if (type === 'medium') navigator.vibrate(35);
+                    else if (type === 'heavy') navigator.vibrate([40, 30, 40]);
+                }
+            } catch(e) {}
+        }
+
         // Audio Effects
         let audioCtx = null;
         function initAudio() {
@@ -863,6 +873,7 @@
                 const now = audioCtx.currentTime;
 
                 if (type === 'tap') {
+                    triggerHaptic('light');
                     osc.type = 'triangle';
                     osc.frequency.setValueAtTime(320, now);
                     osc.frequency.exponentialRampToValueAtTime(520, now + 0.08);
@@ -871,6 +882,7 @@
                     osc.start(now);
                     osc.stop(now + 0.08);
                 } else if (type === 'burn') {
+                    triggerHaptic('heavy');
                     osc.type = 'sawtooth';
                     osc.frequency.setValueAtTime(150, now);
                     osc.frequency.linearRampToValueAtTime(300, now + 0.15);
@@ -880,6 +892,7 @@
                     osc.start(now);
                     osc.stop(now + 0.4);
                 } else if (type === 'shuffle') {
+                    triggerHaptic('medium');
                     osc.type = 'sine';
                     osc.frequency.setValueAtTime(300, now);
                     osc.frequency.exponentialRampToValueAtTime(600, now + 0.15);
@@ -888,6 +901,7 @@
                     osc.start(now);
                     osc.stop(now + 0.15);
                 } else if (type === 'submit') {
+                    triggerHaptic('medium');
                     osc.type = 'sine';
                     osc.frequency.setValueAtTime(440, now);
                     osc.frequency.setValueAtTime(659.25, now + 0.08);
@@ -897,6 +911,7 @@
                     osc.start(now);
                     osc.stop(now + 0.3);
                 } else if (type === 'gameover') {
+                    triggerHaptic('heavy');
                     osc.type = 'sawtooth';
                     osc.frequency.setValueAtTime(250, now);
                     osc.frequency.exponentialRampToValueAtTime(80, now + 0.6);
@@ -905,6 +920,7 @@
                     osc.start(now);
                     osc.stop(now + 0.6);
                 } else if (type === 'levelup') {
+                    triggerHaptic('heavy');
                     const notes = [523.25, 659.25, 783.99, 1046.50];
                     notes.forEach((freq, idx) => {
                         const o = audioCtx.createOscillator();
@@ -988,7 +1004,7 @@
                 });
             }
 
-            setMascot("Ready! Tap any letter to start a fresh word anytime! 📚", "happy");
+            setMascot("Ready! Drag across letters or tap to build words! 📚", "happy");
         }
 
         const gridEl = document.getElementById('grid');
@@ -1123,9 +1139,13 @@
 
                     tile.textContent = tileData ? tileData.letter : '';
                     
-                    tile.addEventListener('mousedown', (e) => startInteraction(index, 'down', e));
-                    tile.addEventListener('mouseenter', () => startInteraction(index, 'enter'));
-                    tile.addEventListener('touchstart', (e) => { e.preventDefault(); startInteraction(index, 'down', e); }, {passive: false});
+                    // Mouse/Touch Listeners
+                    tile.addEventListener('mousedown', (e) => startInteraction(index, e));
+                    tile.addEventListener('mouseenter', () => continueDrag(index));
+                    tile.addEventListener('touchstart', (e) => {
+                        e.preventDefault();
+                        startInteraction(index, e);
+                    }, {passive: false});
 
                     rowEl.appendChild(tile);
                 }
@@ -1142,6 +1162,7 @@
             }
         }
 
+        // Global touchmove listener for smooth continuous mobile sliding
         window.addEventListener('mouseup', endInteraction);
         window.addEventListener('touchend', endInteraction);
         window.addEventListener('touchmove', (e) => {
@@ -1157,61 +1178,23 @@
             }
         }, {passive: false});
 
-        function startInteraction(index, type, e) {
+        function startInteraction(index, e) {
             if (isAnimating) return;
+            isDragging = true;
 
-            if (type === 'down') {
-                isDragging = true;
-                dragMode = null;
-
-                const existingPos = selectedIndices.indexOf(index);
-                
-                // 1. If tapping the very last letter in the chain, toggle it off (shorten word)
-                if (existingPos > -1 && existingPos === selectedIndices.length - 1) {
-                    selectedIndices.pop();
-                    playSound('tap');
-                    updateCurrentWord();
-                    renderGrid();
-                    dragMode = 'tap';
-                    return;
-                }
-
-                // 2. If tapping a tile that is already part of the selection chain elsewhere, ignore
-                if (existingPos > -1) {
-                    return;
-                }
-
-                // 3. If there is NO active selection, or if the tapped tile is NOT adjacent to the last selected tile,
-                // discard the old selection and start a BRAND NEW word right here!
-                const lastIdx = selectedIndices.length > 0 ? selectedIndices[selectedIndices.length - 1] : null;
-                if (selectedIndices.length === 0 || !areTilesAdjacent(lastIdx, index)) {
-                    selectedIndices = [index];
-                    playSound('tap');
-                    updateCurrentWord();
-                    renderGrid();
-                    dragMode = 'slide';
-                } 
-                // 4. Otherwise, if it is adjacent, append it to the current word chain
-                else {
-                    selectedIndices.push(index);
-                    playSound('tap');
-                    updateCurrentWord();
-                    renderGrid();
-                    dragMode = 'slide';
-                }
-            } else if (type === 'enter' && isDragging && dragMode === 'slide') {
-                continueDrag(index);
+            const existingPos = selectedIndices.indexOf(index);
+            
+            // 1. If tapping a tile that is already part of the chain earlier, jump back to that point (truncate!)
+            if (existingPos > -1 && existingPos < selectedIndices.length - 1) {
+                selectedIndices = selectedIndices.slice(0, existingPos + 1);
+                playSound('tap');
+                updateCurrentWord();
+                renderGrid();
+                return;
             }
-        }
 
-        function continueDrag(index) {
-            if (!isDragging || isAnimating || dragMode !== 'slide') return;
-
-            const lastIdx = selectedIndices[selectedIndices.length - 1];
-            if (lastIdx === index) return;
-
-            // Backtracking support: if dragging back to the previous tile, pop it
-            if (selectedIndices.length >= 2 && selectedIndices[selectedIndices.length - 2] === index) {
+            // 2. If tapping the very last letter, toggle it off
+            if (existingPos > -1 && existingPos === selectedIndices.length - 1) {
                 selectedIndices.pop();
                 playSound('tap');
                 updateCurrentWord();
@@ -1219,7 +1202,39 @@
                 return;
             }
 
-            // Cannot re-select an already selected tile in the current chain
+            // 3. If no selection or not adjacent, start a fresh word chain
+            const lastIdx = selectedIndices.length > 0 ? selectedIndices[selectedIndices.length - 1] : null;
+            if (selectedIndices.length === 0 || !areTilesAdjacent(lastIdx, index)) {
+                selectedIndices = [index];
+                playSound('tap');
+                updateCurrentWord();
+                renderGrid();
+            } 
+            // 4. Otherwise append if adjacent
+            else {
+                selectedIndices.push(index);
+                playSound('tap');
+                updateCurrentWord();
+                renderGrid();
+            }
+        }
+
+        function continueDrag(index) {
+            if (!isDragging || isAnimating) return;
+
+            const lastIdx = selectedIndices[selectedIndices.length - 1];
+            if (lastIdx === index) return;
+
+            // Backtracking / Truncation during drag
+            const existingPos = selectedIndices.indexOf(index);
+            if (existingPos > -1 && existingPos < selectedIndices.length - 1) {
+                selectedIndices = selectedIndices.slice(0, existingPos + 1);
+                playSound('tap');
+                updateCurrentWord();
+                renderGrid();
+                return;
+            }
+
             if (selectedIndices.includes(index)) return;
 
             // Must be adjacent to continue dragging
@@ -1233,7 +1248,6 @@
 
         function endInteraction() {
             isDragging = false;
-            dragMode = null;
         }
 
         function areTilesAdjacent(index1, index2) {
