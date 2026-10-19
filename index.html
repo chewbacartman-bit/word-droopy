@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1.0">
-    <title>Bookley's Word Drop - Polished Edition</title>
+    <title>Bookley's Word Drop - v.0.0.001</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@700;900&family=Quicksand:wght@600;700&display=swap');
 
@@ -90,6 +90,20 @@
             border-radius: 18px;
             border: 3.5px solid var(--ink);
             box-shadow: 4px 4px 0px var(--ink);
+            position: relative;
+        }
+
+        .version-badge {
+            position: absolute;
+            top: -10px;
+            right: 14px;
+            background: var(--ink);
+            color: var(--bg-paper);
+            font-size: 0.55rem;
+            font-weight: 900;
+            padding: 2px 6px;
+            border-radius: 6px;
+            font-family: 'Montserrat', sans-serif;
         }
 
         .stat-group {
@@ -223,6 +237,7 @@
             position: relative;
             z-index: 1;
             box-shadow: inset 0 -3px 0 rgba(0,0,0,0.08);
+            touch-action: none;
         }
 
         .tile.tier-green {
@@ -514,6 +529,7 @@
     <div class="ambient-dust" id="ambient-dust"></div>
 
     <header>
+        <div class="version-badge">v.0.0.001</div>
         <div class="stat-group">
             <span class="stat-label">Score</span>
             <span id="score" class="stat-value">0</span>
@@ -535,7 +551,7 @@
     <div class="mascot-container">
         <div class="mascot-svg-wrapper" id="mascot-avatar"></div>
         <div class="speech-bubble" id="speech-text">
-            Swipe smoothly across letters to build words! 📚🐛
+            v.0.0.001 Loaded! Swipe smoothly across letters to build words! 📚🐛
         </div>
     </div>
 
@@ -588,7 +604,7 @@
         let validDefinitionText = "";
         let isAnimating = false;
         let isDragging = false;
-        let tileRects = []; // Cached bounding boxes for lightning-fast touch sliding
+        let tileRects = [];
 
         let score = 0;
         let highScore = parseInt(localStorage.getItem('bookley_high_score') || '0', 10);
@@ -827,7 +843,7 @@
                 });
             }
 
-            setMascot("Ready! Swipe smoothly across letters to build words! 📚", "happy");
+            setMascot("v.0.0.001 Ready! Swipe smoothly across letters to build words! 📚", "happy");
         }
 
         const gridEl = document.getElementById('grid');
@@ -985,11 +1001,9 @@
                 submitBtn.classList.remove('valid-word');
             }
 
-            // Update bounding boxes cache after DOM is painted
             setTimeout(cacheTileRects, 10);
         }
 
-        // Bounding-Box Coordinate Finder (Bypasses iOS elementFromPoint bug completely)
         function getTileIndexAtCoords(clientX, clientY) {
             for (let idx = 0; idx < tileRects.length; idx++) {
                 const r = tileRects[idx];
@@ -1000,43 +1014,18 @@
             return null;
         }
 
-        // Touch & Mouse Event Listeners
-        gridEl.addEventListener('touchstart', (e) => {
-            if (isAnimating) return;
-            e.preventDefault();
-            cacheTileRects();
-            const touch = e.touches[0];
-            const index = getTileIndexAtCoords(touch.clientX, touch.clientY);
-            if (index !== null) {
-                isDragging = true;
-                processTileSelection(index);
-            }
-        }, { passive: false });
-
-        gridEl.addEventListener('touchmove', (e) => {
-            if (!isDragging || isAnimating) return;
-            e.preventDefault();
-            const touch = e.touches[0];
-            const index = getTileIndexAtCoords(touch.clientX, touch.clientY);
-            if (index !== null) {
-                processTileSelection(index);
-            }
-        }, { passive: false });
-
-        window.addEventListener('touchend', () => { isDragging = false; });
-        window.addEventListener('touchcancel', () => { isDragging = false; });
-
-        gridEl.addEventListener('mousedown', (e) => {
+        gridEl.addEventListener('pointerdown', (e) => {
             if (isAnimating) return;
             cacheTileRects();
             const index = getTileIndexAtCoords(e.clientX, e.clientY);
             if (index !== null) {
                 isDragging = true;
+                try { e.target.setPointerCapture(e.pointerId); } catch(err) {}
                 processTileSelection(index);
             }
         });
 
-        window.addEventListener('mousemove', (e) => {
+        gridEl.addEventListener('pointermove', (e) => {
             if (!isDragging || isAnimating) return;
             const index = getTileIndexAtCoords(e.clientX, e.clientY);
             if (index !== null) {
@@ -1044,7 +1033,8 @@
             }
         });
 
-        window.addEventListener('mouseup', () => { isDragging = false; });
+        window.addEventListener('pointerup', () => { isDragging = false; });
+        window.addEventListener('pointercancel', () => { isDragging = false; });
 
         function processTileSelection(index) {
             const lastIdx = selectedIndices.length > 0 ? selectedIndices[selectedIndices.length - 1] : null;
@@ -1052,7 +1042,6 @@
 
             const existingPos = selectedIndices.indexOf(index);
 
-            // 1. If sliding back to an earlier letter in the chain, truncate back to it
             if (existingPos > -1 && existingPos < selectedIndices.length - 1) {
                 selectedIndices = selectedIndices.slice(0, existingPos + 1);
                 playSound('tap');
@@ -1061,7 +1050,6 @@
                 return;
             }
 
-            // 2. If sliding back to the exact last letter, toggle it off
             if (existingPos > -1 && existingPos === selectedIndices.length - 1) {
                 selectedIndices.pop();
                 playSound('tap');
@@ -1070,10 +1058,8 @@
                 return;
             }
 
-            // 3. If already selected elsewhere in the path, ignore
             if (existingPos > -1) return;
 
-            // 4. Start fresh chain or append if adjacent
             if (selectedIndices.length === 0 || !areTilesAdjacent(lastIdx, index)) {
                 selectedIndices = [index];
                 playSound('tap');
@@ -1551,7 +1537,6 @@
             renderMascot(expression);
         }
 
-        // Initialize Game
         renderMascot('neutral');
         initAmbientDust();
         loadWebsterDictionary();
