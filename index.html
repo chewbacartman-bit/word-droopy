@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1.0">
-    <title>Bookley's Word Drop - v.0.0.080</title>
+    <title>Bookley's Word Drop - v.0.0.086</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@700;900&family=Quicksand:wght@600;700&display=swap');
 
@@ -29,100 +29,39 @@
 
         /* Cute & Girly Themes */
         [data-theme="strawberry"] {
-            --bg-paper: #fff1f2;
-            --ink: #881337;
-            --mustard: #f43f5e;
-            --teal: #db2777;
-            --blue: #e11d48;
-            --silver: #fda4af;
-            --gold: #f43f5e;
-            --tile-green: #fb7185;
-            --tile-gold: #f43f5e;
-            --tile-flame: #be123c;
-            --worm-green: #fda4af;
-            --card-bg: #ffe4e6;
-            --tile-bg: #fecdd3;
-            --dust-particle: rgba(244, 63, 94, 0.1);
-            --bg-image: radial-gradient(#fecdd3 1.5px, transparent 1.5px);
-            --bg-size: 20px 20px;
+            --bg-paper: #fff1f2; --ink: #881337; --mustard: #f43f5e; --teal: #db2777; --blue: #e11d48; --silver: #fda4af; --gold: #f43f5e; --tile-green: #fb7185; --tile-gold: #f43f5e; --tile-flame: #be123c; --worm-green: #fda4af; --card-bg: #ffe4e6; --tile-bg: #fecdd3; --dust-particle: rgba(244, 63, 94, 0.1); --bg-image: radial-gradient(#fecdd3 1.5px, transparent 1.5px); --bg-size: 20px 20px;
         }
-
         [data-theme="lavender"] {
-            --bg-paper: #faf5ff;
-            --ink: #581c87;
-            --mustard: #c084fc;
-            --teal: #9333ea;
-            --blue: #7e22ce;
-            --silver: #d8b4fe;
-            --gold: #a855f7;
-            --tile-green: #c084fc;
-            --tile-gold: #a855f7;
-            --tile-flame: #dc2626;
-            --worm-green: #e9d5ff;
-            --card-bg: #f3e8ff;
-            --tile-bg: #e9d5ff;
-            --dust-particle: rgba(147, 51, 234, 0.08);
-            --bg-image: radial-gradient(#e9d5ff 1.5px, transparent 1.5px);
-            --bg-size: 20px 20px;
+            --bg-paper: #faf5ff; --ink: #581c87; --mustard: #c084fc; --teal: #9333ea; --blue: #7e22ce; --silver: #d8b4fe; --gold: #a855f7; --tile-green: #c084fc; --tile-gold: #a855f7; --tile-flame: #dc2626; --worm-green: #e9d5ff; --card-bg: #f3e8ff; --tile-bg: #e9d5ff; --dust-particle: rgba(147, 51, 234, 0.08); --bg-image: radial-gradient(#e9d5ff 1.5px, transparent 1.5px); --bg-size: 20px 20px;
         }
-
         [data-theme="peach"] {
-            --bg-paper: #fffbeb;
-            --ink: #78350f;
-            --mustard: #f59e0b;
-            --teal: #ea580c;
-            --blue: #c2410c;
-            --silver: #fde68a;
-            --gold: #d97706;
-            --tile-green: #fbbf24;
-            --tile-gold: #f59e0b;
-            --tile-flame: #dc2626;
-            --worm-green: #fde68a;
-            --card-bg: #fef3c7;
-            --tile-bg: #fde68a;
-            --dust-particle: rgba(234, 88, 12, 0.08);
-            --bg-image: radial-gradient(#fde68a 1.5px, transparent 1.5px);
-            --bg-size: 20px 20px;
+            --bg-paper: #fffbeb; --ink: #78350f; --mustard: #f59e0b; --teal: #ea580c; --blue: #c2410c; --silver: #fde68a; --gold: #d97706; --tile-green: #fbbf24; --tile-gold: #f59e0b; --tile-flame: #dc2626; --worm-green: #fde68a; --card-bg: #fef3c7; --tile-bg: #fde68a; --dust-particle: rgba(234, 88, 12, 0.08); --bg-image: radial-gradient(#fde68a 1.5px, transparent 1.5px); --bg-size: 20px 20px;
         }
-
         [data-theme="matcha"] {
-            --bg-paper: #f7fee7;
-            --ink: #365314;
-            --mustard: #65a30d;
-            --teal: #16a34a;
-            --blue: #15803d;
-            --silver: #bef264;
-            --gold: #4d7c0f;
-            --tile-green: #84cc16;
-            --tile-gold: #65a30d;
-            --tile-flame: #dc2626;
-            --worm-green: #d9f99d;
-            --card-bg: #ecfccb;
-            --tile-bg: #d9f99d;
-            --dust-particle: rgba(101, 163, 13, 0.08);
-            --bg-image: radial-gradient(#d9f99d 1.5px, transparent 1.5px);
-            --bg-size: 20px 20px;
+            --bg-paper: #f7fee7; --ink: #365314; --mustard: #65a30d; --teal: #16a34a; --blue: #15803d; --silver: #bef264; --gold: #4d7c0f; --tile-green: #84cc16; --tile-gold: #65a30d; --tile-flame: #dc2626; --worm-green: #d9f99d; --card-bg: #ecfccb; --tile-bg: #d9f99d; --dust-particle: rgba(101, 163, 13, 0.08); --bg-image: radial-gradient(#d9f99d 1.5px, transparent 1.5px); --bg-size: 20px 20px;
         }
-
         [data-theme="magical"] {
-            --bg-paper: #fdf4ff;
-            --ink: #701a75;
-            --mustard: #f472b6;
-            --teal: #ec4899;
-            --blue: #db2777;
-            --silver: #f5d0fe;
-            --gold: #fb7185;
-            --tile-green: #f472b6;
-            --tile-gold: #fb7185;
-            --tile-flame: #e11d48;
-            --worm-green: #f5d0fe;
-            --card-bg: #fae8ff;
-            --tile-bg: #f5d0fe;
-            --dust-particle: rgba(236, 72, 153, 0.09);
-            --bg-image: radial-gradient(#f5d0fe 1.5px, transparent 1.5px);
-            --bg-size: 20px 20px;
+            --bg-paper: #fdf4ff; --ink: #701a75; --mustard: #f472b6; --teal: #ec4899; --blue: #db2777; --silver: #f5d0fe; --gold: #fb7185; --tile-green: #f472b6; --tile-gold: #fb7185; --tile-flame: #e11d48; --worm-green: #f5d0fe; --card-bg: #fae8ff; --tile-bg: #f5d0fe; --dust-particle: rgba(236, 72, 153, 0.09); --bg-image: radial-gradient(#f5d0fe 1.5px, transparent 1.5px); --bg-size: 20px 20px;
         }
 
+        /* Nintendo Console Themes */
+        [data-theme="nes"] {
+            --bg-paper: #d1d5db; --ink: #111827; --mustard: #dc2626; --teal: #4b5563; --blue: #1d4ed8; --silver: #9ca3af; --gold: #b91c1c; --tile-green: #ef4444; --tile-gold: #dc2626; --tile-flame: #991b1b; --worm-green: #e5e7eb; --card-bg: #e5e7eb; --tile-bg: #f3f4f6; --dust-particle: rgba(17, 24, 39, 0.08); --bg-image: linear-gradient(0deg, rgba(0,0,0,0.03) 1px, transparent 1px); --bg-size: 20px 20px;
+        }
+        [data-theme="snes"] {
+            --bg-paper: #e2e8f0; --ink: #334155; --mustard: #6366f1; --teal: #475569; --blue: #2563eb; --silver: #94a3b8; --gold: #4f46e5; --tile-green: #818cf8; --tile-gold: #6366f1; --tile-flame: #dc2626; --worm-green: #cbd5e1; --card-bg: #f8fafc; --tile-bg: #cbd5e1; --dust-particle: rgba(71, 85, 105, 0.08); --bg-image: radial-gradient(#cbd5e1 1.5px, transparent 1.5px); --bg-size: 22px 22px;
+        }
+        [data-theme="n64"] {
+            --bg-paper: #0c1a2e; --ink: #e0f2fe; --mustard: #eab308; --teal: #22c55e; --blue: #3b82f6; --silver: #7dd3fc; --gold: #ca8a04; --tile-green: #16a34a; --tile-gold: #eab308; --tile-flame: #ef4444; --worm-green: #1e3a8a; --card-bg: #1e3a8a; --tile-bg: #1d4ed8; --dust-particle: rgba(34, 197, 94, 0.08); --bg-image: radial-gradient(#2563eb 1.5px, transparent 1.5px); --bg-size: 20px 20px;
+        }
+        [data-theme="gamecube"] {
+            --bg-paper: #2e1065; --ink: #f3e8ff; --mustard: #f97316; --teal: #c084fc; --blue: #a855f7; --silver: #7e22ce; --gold: #ea580c; --tile-green: #fb923c; --tile-gold: #f97316; --tile-flame: #dc2626; --worm-green: #581c87; --card-bg: #3b0764; --tile-bg: #581c87; --dust-particle: rgba(192, 132, 252, 0.08); --bg-image: radial-gradient(#4c1d95 1.5px, transparent 1.5px); --bg-size: 20px 20px;
+        }
+        [data-theme="wii"] {
+            --bg-paper: #f8fafc; --ink: #0f172a; --mustard: #0ea5e9; --teal: #38bdf8; --blue: #0284c7; --silver: #94a3b8; --gold: #0284c7; --tile-green: #38bdf8; --tile-gold: #0284c7; --tile-flame: #f43f5e; --worm-green: #e2e8f0; --card-bg: #ffffff; --tile-bg: #f1f5f9; --dust-particle: rgba(14, 165, 233, 0.08); --bg-image: radial-gradient(#e2e8f0 1.5px, transparent 1.5px); --bg-size: 20px 20px;
+        }
+
+        /* Legacy themes retained */
         [data-theme="classic"] {
             --bg-paper: #f4efe6; --ink: #1c1917; --mustard: #eab308; --teal: #0d9488; --blue: #0284c7; --silver: #64748b; --gold: #d97706; --tile-green: #22c55e; --tile-gold: #f59e0b; --tile-flame: #ef4444; --worm-green: #84cc16; --card-bg: #fffdf9; --tile-bg: #ece3d2; --dust-particle: radial-gradient(#d6cbbd 1px, transparent 1px), radial-gradient(circle at 50% 30%, rgba(255,255,255,0.6) 0%, rgba(0,0,0,0.05) 100%); --bg-size: 20px 20px, 100% 100%;
         }
@@ -810,10 +749,6 @@
             border-color: var(--ink);
         }
 
-        .word-badge.tier-blue-word { background: var(--blue); color: white; border-color: var(--ink); }
-        .word-badge.tier-silver-word { background: var(--silver); color: white; border-color: var(--ink); }
-        .word-badge.tier-gold-word { background: var(--gold); color: white; border-color: var(--ink); }
-
         .word-badge.reveal-anim {
             animation: pulseReveal 0.8s ease-in-out;
         }
@@ -839,12 +774,12 @@
         }
     </style>
 </head>
-<body data-theme="strawberry">
+<body data-theme="n64">
 
     <div class="ambient-dust" id="ambient-dust"></div>
 
     <header>
-        <div class="version-badge">v.0.0.080</div>
+        <div class="version-badge">v.0.0.086</div>
         <div class="stat-group">
             <span class="stat-label">Score</span>
             <span id="score" class="stat-value">0</span>
@@ -868,7 +803,7 @@
             <div class="praise-bubble" id="praise-bubble">Nice!</div>
         </div>
         <div class="speech-bubble" id="speech-text">
-            v.0.0.080 Ready! Red hazard tiles now keep the exact letter they replace! 🔥🔠✨
+            v.0.0.086 Ready! Collections drawer now trimmed to exactly 20 famous Pokémon while database retains 400+! 🎮✨
         </div>
     </div>
 
@@ -897,7 +832,7 @@
         <div class="modal-card" onclick="event.stopPropagation()">
             <div class="modal-title">Word Collection</div>
             <div style="font-size: 0.8rem; font-weight: 700; color: var(--silver);">
-                Discovered: <span id="collection-count">0</span> / 400 words
+                Discovered: <span id="collection-count">0</span> words
             </div>
             <div class="category-list" id="category-list-container"></div>
             <button class="btn-restart" onclick="closeCollectionModal()">Close Drawer</button>
@@ -929,6 +864,11 @@
 
     <script>
         const THEMES = [
+            { id: 'n64', name: 'N64 Ultra 🟢', bg: '#0c1a2e', primary: '#22c55e', tile: '#1d4ed8' },
+            { id: 'nes', name: 'NES Classic 🕹️', bg: '#d1d5db', primary: '#dc2626', tile: '#f3f4f6' },
+            { id: 'snes', name: 'SNES Super 🎮', bg: '#e2e8f0', primary: '#6366f1', tile: '#cbd5e1' },
+            { id: 'gamecube', name: 'GameCube 💿', bg: '#2e1065', primary: '#f97316', tile: '#581c87' },
+            { id: 'wii', name: 'Wii Sports 🎾', bg: '#f8fafc', primary: '#0ea5e9', tile: '#f1f5f9' },
             { id: 'strawberry', name: 'Strawberry Milk 🍓', bg: '#fff1f2', primary: '#db2777', tile: '#fecdd3' },
             { id: 'lavender', name: 'Lavender Dream 💜', bg: '#faf5ff', primary: '#9333ea', tile: '#e9d5ff' },
             { id: 'peach', name: 'Peach Punch 🍑', bg: '#fffbeb', primary: '#ea580c', tile: '#fde68a' },
@@ -944,12 +884,32 @@
             { id: 'solarized', name: 'Solarized Gold ☀️', bg: '#eee8d5', primary: '#073642', tile: '#eee8d5' }
         ];
 
-        let currentTheme = localStorage.getItem('bookley_theme') || 'strawberry';
+        let currentTheme = localStorage.getItem('bookley_theme') || 'n64';
         document.body.setAttribute('data-theme', currentTheme);
 
-        const VOWELS = ["E", "E", "E", "E", "E", "E", "A", "A", "A", "A", "O", "O", "O", "I", "I", "I", "U", "U"];
-        const CONSONANTS = ["L", "L", "L", "R", "R", "R", "T", "T", "T", "N", "N", "N", "S", "S", "S", "D", "D", "F", "F", "G", "G", "H", "H", "M", "M", "P", "P", "B", "B", "W", "W", "Y", "Y", "V", "V", "J"];
-        const CHALLENGING_LETTERS = ["K", "QU", "X", "Z"];
+        const BALANCED_LETTER_POOL = [
+            "A", "A", "A", "A", "A",
+            "E", "E", "E", "E", "E", "E", "E",
+            "I", "I", "I", "I",
+            "O", "O", "O", "O", "O",
+            "U", "U", "U",
+            "R", "R", "R", "R", "R",
+            "S", "S", "S", "S", "S", "S",
+            "T", "T", "T", "T", "T", "T",
+            "N", "N", "N", "N", "N",
+            "L", "L", "L", "L",
+            "D", "D", "D", "D",
+            "C", "C", "C",
+            "M", "M", "M",
+            "P", "P", "P",
+            "H", "H", "H",
+            "G", "G",
+            "B", "B",
+            "F", "F",
+            "Y", "Y",
+            "W", "W",
+            "V", "K", "J", "QU", "X", "Z"
+        ];
 
         const GRID_SIZE = 7;
         const TOTAL_TILES = GRID_SIZE * GRID_SIZE;
@@ -965,6 +925,7 @@
         let tileRects = [];
         let nextTileId = 1;
         let apiDebounceTimer = null;
+        let currentFetchController = null;
 
         let score = 0;
         let highScore = parseInt(localStorage.getItem('bookley_high_score') || '0', 10);
@@ -978,28 +939,100 @@
             "TIME", "YEAR", "PEOPLE", "WAY", "DAY", "MAN", "THING", "WOMAN", "LIFE", "CHILD",
             "WORLD", "SCHOOL", "STATE", "FAMILY", "STUDENT", "GROUP", "COUNTRY", "PROBLEM", "HAND", "PART",
             "PLACE", "CASE", "WEEK", "COMPANY", "SYSTEM", "PROGRAM", "QUESTION", "WORK", "GOVERNMENT", "NUMBER",
-            "NIGHT", "POINT", "HOME", "WATER", "ROOM", "MOTHER", "AREA", "MONEY", "STORY", "FACT",
-            "MONTH", "LOT", "RIGHT", "STUDY", "BOOK", "EYE", "JOB", "WORD", "BUSINESS", "ISSUE",
-            "SIDE", "KIND", "HEAD", "HOUSE", "SERVICE", "FRIEND", "FATHER", "POWER", "HOUR", "GAME",
-            "LINE", "END", "MEMBER", "LAW", "CAR", "CITY", "COMMUNITY", "NAME", "PRESIDENT", "TEAM",
-            "MINUTE", "IDEA", "KID", "BODY", "INFORMATION", "BACK", "PARENT", "FACE", "OTHERS", "LEVEL",
-            "OFFICE", "DOOR", "HEALTH", "PERSON", "ART", "WAR", "HISTORY", "PARTY", "RESULT", "CHANGE",
-            "MORNING", "REASON", "RESEARCH", "GIRL", "GUY", "MOM", "DAD", "AIR", "DAY", "PIECE",
-            "SHIRT", "TABLE", "PLANT", "LIGHT", "SOUND", "MUSIC", "VOICE", "PAPER", "ANIMAL", "HOUSE",
-            "OCEAN", "SPACE", "STONE", "FLOOR", "WINDOW", "CLOCK", "TRAIN", "MONKEY", "TIGER", "RIVER",
-            "OCEAN", "CLOUD", "STORM", "WIND", "FIRE", "EARTH", "METAL", "PIANO", "GUITAR", "SMILE"
+            "PIKACHU", "CHARIZARD", "EEVEE", "SNORLAX", "MEWTW", "GENGAR", "LUGIA", "TOKYO", "PARIS", "LONDON"
+        ];
+
+        // Exactly 20 Famous Pokémon for the Collection Drawer
+        const COLLECTION_POKEMON = [
+            "PIKACHU", "CHARIZARD", "EEVEE", "SNORLAX", "MEWTW", 
+            "GENGAR", "BULBASAUR", "SQUIRTLE", "JIGGLYPUFF", "MEW", 
+            "LUGIA", "LUCARIO", "DRAGONITE", "ARCANINE", "GYARADOS", 
+            "TOGEPI", "RAICHU", "TORCHIC", "ONIX", "PSYDUCK"
+        ];
+
+        // 20 Featured Places for the Collection Drawer
+        const COLLECTION_PLACES = [
+            "TOKYO", "PARIS", "LONDON", "CHINA", "MEXICO", 
+            "ROME", "SYDNEY", "BERLIN", "MADRID", "CANADA", 
+            "BRAZIL", "ITALY", "SPAIN", "FRANCE", "DUBAI", 
+            "VENICE", "OSAKA", "SEOUL", "KYOTO", "JAPAN"
         ];
 
         const WORD_CATEGORIES = {
+            "Pokemon": [
+                "MEW", "MUK", "ONIX", "JYNX", "DITTO", "EKANS", "ARBOK", "PICHU", "RAICHU", "EEVEE", 
+                "SNORLAX", "LUGIA", "CELEBI", "LATIAS", "LATIOS", "PIKACHU", "UMBREON", "SYLVEON", "VAPOREON", 
+                "ESPEON", "LEAFEON", "MUDKIP", "LAPRAS", "GENGAR", "LUXRAY", "ROWLET", "GARDEVOIR", "JOLTEON", 
+                "FLYGON", "GLACEON", "BLASTOISE", "GRENINJA", "WOOPER", "ZORUA", "SCIZOR", "DIALGA", "ARCEUS", 
+                "SWAMPERT", "ABSOL", "FLAREON", "ARCANINE", "GYARADOS", "MILOTIC", "ALTARIA", "ROTOM", "GALLADE", 
+                "ZEKROM", "DRATINI", "SHINX", "VULPIX", "PORYGON", "SPHEAL", "TYRANITAR", "CHARIZARD", "GROUDON", 
+                "HAUNTER", "MAREEP", "SCYTHER", "NOIVERN", "ZAPDOS", "SNIVY", "TORCHIC", "TOGEPI", "ENTEI", "RAIKOU", 
+                "WEAVILE", "BRELOOM", "GLISCOR", "KROOKODILE", "HERACROSS", "CUBONE", "ALAKAZAM", "AGGRON", "CROBAT", 
+                "RALTS", "MAWILE", "DEWOTT", "HAXORUS", "FROAKIE", "PALKIA", "MEWTW", "CLEFAIRY", "JIGGLYPUFF", 
+                "MEOWTH", "PSYDUCK", "MACHAMP", "GOLEM", "GASTLY", "STARMIE", "MAGIKARP", "ARTICUNO", "MOLTRES", 
+                "DRAGONITE", "CHIKORITA", "CYNDAQUIL", "TOTODILE", "BELLOSSOM", "MARILL", "SLOWKING", "STEELIX", 
+                "HOUNDOOM", "KINGDRA", "PHANPY", "HOOH", "TREECKO", "SLAKOTH", "SABLEYE", "MEDITITE", "PLUSLE", 
+                "MINUN", "WAILORD", "SPINDA", "SALAMENCE", "BELDUM", "KYOGRE", "RAYQUAZA", "JIRACHI", "TURTWIG", 
+                "CHIMCHAR", "PIPLUP", "ROSERADE", "RAMPARDOS", "GASTRODON", "LOPUNNY", "LUCARIO", "GARCHOMP", 
+                "HIPPOWDON", "CROAGUNK", "FROSLASS", "UXIE", "MESPRIT", "AZELF", "HEATRAN", "REGIGIGAS", "GIRATINA", 
+                "CRESSELIA", "MANAPHY", "DARKRAI", "SHAYMIN", "VICTINI", "TEPIG", "OSHAWOTT", "LILLIPUP", "ZOROARK", 
+                "MINCCINO", "SOLOSIS", "CHANDELURE", "AXEW", "DRUDDIGON", "LARVESTA", "VOLCARONA", "RESHIRAM", "KYUREM", 
+                "KELDEO", "MELOETTA", "GENESECT", "CHESPIN", "FENNEKIN", "BUNNELBY", "FLETCHLING", "PANCHAM", "MEOWSTIC", 
+                "HONEDGE", "SLIGGOO", "GOODRA", "TREVENANT", "PUMPKABOO", "XERNEAS", "YVELTAL", "ZYGARDE", "DIANCIE", 
+                "HOOPA", "VOLCANION", "LITTEN", "POPPLIO", "PIKIPEK", "YUNGOOS", "GRUBBIN", "ROCKRUFF", "MAREANIE", 
+                "MUDSDALE", "SALANDIT", "STUFFUL", "BOUNSWEET", "WIMPOD", "SANDYGAST", "PYUKUMUKU", "ORICORIO", "KOMALA", 
+                "MINIOR", "TURTONATOR", "TOGEDEMARU", "MIMIKYU", "BRUXISH", "DHELMISE", "JANGMOO", "SOLGALEO", "LUNALA", 
+                "NIHILEGO", "BUZZWOLE", "PHEROMOSA", "XURKITREE", "CELESTEELA", "KARTANA", "GUZZLORD", "NECROZMA", "MAGEARNA", 
+                "MARSHADOW", "POIPOLE", "NAGANADEL", "STAKATAKA", "BLACEPHALON", "ZERAORA", "MELTAN", "MELMETAL", "GROOKEY", 
+                "SCORBUNNY", "SOBBLE", "ROOKIDEE", "BLIPBUG", "DOTTLER", "ORBEETLE", "NICKIT", "THIEVUL", "GOSSIFLEUR", 
+                "ELDEGOSS", "WOOLOO", "DUBOOL", "CORVIKNIGHT", "DREADNAW", "BOLTUND", "ROLYCOLY", "CARKOL", "COALOSSAL", 
+                "FLAPPLE", "APPLETUN", "SILICOBRA", "SANDACONDA", "CRAMORANT", "ARROKUDA", "BARRASKEWDA", "TOXEL", "TOXTRICITY", 
+                "SIZZLIPEDE", "CENTISKORCH", "CLOBBOPUS", "GRAPPLOCT", "SINISTEA", "POLTEAGEIST", "HATENNA", "HATREM", "HATTERENE", 
+                "IMPIDIMP", "MORGREM", "GRIMMSNARL", "OBSTAGOON", "PERRSERKER", "CURSOLA", "SIRFETCHD", "RUNERIGUS", "MILCERY", 
+                "ALCREMIE", "FALINKS", "PINCURCHIN", "SNOWRUN", "MORPEKO", "CUFANT", "COPPERAJAH", "DRACOZOLT", "ARCTOZOLT", 
+                "DRACOVISH", "ARCTOVISH", "DURALUDON", "DRAGAPULT", "ZACIAN", "ZAMAZENTA", "ETERNATUS", "URSHIFU", "ZARUDE", 
+                "REGIELEKI", "REGIDRAGO", "GLASTRIER", "SPECTRIER", "CALYREX", "WYRDEER", "KLEAVOR", "BASCULEGION", "SNEASLER", 
+                "OVERQWIL", "ENAMORUS", "SPRIGATITO", "FLORAGATO", "MEOWSCARADA", "FUECOCO", "CROCALOR", "SKELEDIRGE", "QUAXLY", 
+                "QUAXWELL", "QUAQUAVAL", "PAWMI", "PAWMO", "PAWMOT", "TANDEMAUS", "MAUSHOLD", "FIDOUGH", "DACHSBUN", "SMOLIV", 
+                "DOLLIV", "ARBOLIVA", "SQUAWKABIRD", "NACLI", "NACLSTACK", "GARGANACL", "CHARCADET", "ARMAROUGE", "CERULEDGE", 
+                "TADBULB", "BELLIBOLT", "WATTREL", "KILOWATTREL", "MASCHIFF", "MABOSSTIFF", "SHROODLE", "GRAFAIAI", "BRAMBLIN", 
+                "BRAMBLEGHAST", "TOEDSCOOL", "TOEDSCRUEL", "KLAWF", "SPIDOPS", "RELLOR", "ESPATHRA", "TINKATINK", "TINKATUFF", 
+                "TINKATON", "WIGLETT", "DUGTRIO", "BOMBIRDIER", "FINIZEN", "PALAFIN", "VAROOM", "REVAVROOM", "CYCLIZAR", "ORTHWORM", 
+                "GLIMMET", "GLIMMORA", "GREAVARD", "HOUNDSTONE", "FLAMIGO", "CETITAN", "VELUZA", "DONDOZO", "TATSUGIRI", "ANNIHILAPE", 
+                "CLODSIRE", "FARIGIRAF", "DUDUNSPARCE", "KINGAMBIT", "SCREAM", "BRUTE", "FLUTTER", "SLITHER", "SANDY", "IRON", 
+                "ROAR", "KORAIDON", "MIRAIDON", "WALKING", "DIPPLIN", "POLTCHAGEIST", "SINISTCHA", "OKIDOGI", "MUNKIDORI", 
+                "FEZANDIPITI", "OGERPON", "ARCHALUDON", "HYDRAPPLE", "GOLDUCK", "POLIWRATH", "MACHOKE", "GEODUDE", "GRAVELER", 
+                "SLOWBRO", "ELECTRODE", "EXEGGCUTE", "MAROWAK", "HITMONLEE", "HITMONCHAN", "LICKITUNG", "KOFFING", "WEEZING", 
+                "RHYHORN", "TANGELA", "KANGASKHAN", "HORSEA", "SEADRA", "GOLDEEN", "SEAKING", "PINSIR", "TAUROS", "OMANYTE", 
+                "OMASTAR", "KABUTO", "KABUTOPS", "AERODACTYL", "BULBASAUR", "SQUIRTLE"
+            ],
+            "Places": [
+                "CHINA", "MEXICO", "TOKYO", "PARIS", "LONDON", "ROME", "SYDNEY", "BERLIN", "MADRID", "CANADA", 
+                "BRAZIL", "ITALY", "SPAIN", "FRANCE", "DUBAI", "VENICE", "OSAKA", "SEOUL", "KYOTO", "JAPAN",
+                "INDIA", "CHILE", "KENYA", "GHANA", "DUBLIN", "VIENNA", "PRAGUE", "ATHENS", "LISBON", "WARSAW",
+                "BOGOTA", "HAVANA", "LIMA", "QUITO", "TAIPEI", "HANOI", "MANILA", "JAKARTA", "BANGKOK", "MUMBAI",
+                "RIYADH", "BAGHDAD", "TEHRAN", "ANKARA", "MOSCOW", "BUDAPEST", "ZURICH", "GENEVA", "MUNICH", "MILAN",
+                "FLORENCE", "NAPLES", "NICE", "LYON", "MARSEILLE", "BORDEAUX", "PORTO", "SEVILLE", "VALENCIA", "BILBAO",
+                "MALAGA", "BARCELONA", "MELBOURNE", "BRISBANE", "PERTH", "ADELAIDE", "AUCKLAND", "WELLINGTON", "TORONTO", "VANCOUVER",
+                "MONTREAL", "OTTAWA", "QUEBEC", "CALGARY", "CHICAGO", "BOSTON", "DENVER", "DALLAS", "MIAMI", "ATLANTA",
+                "SEATTLE", "HOUSTON", "PHOENIX", "AUSTIN", "DETROIT", "ORLANDO", "LASVEGAS", "NEVADA", "TEXAS", "FLORIDA",
+                "ALASKA", "HAWAII", "OREGON", "KANSAS", "NEBRASKA", "VERMONT", "INDIANA", "OHIO", "MAINE", "IDAHO",
+                "UTAH", "ENGLAND", "SCOTLAND", "WALES", "SWEDEN", "NORWAY", "FINLAND", "DENMARK", "ICELAND", "BELGIUM",
+                "MONACO", "POLAND", "UKRAINE", "ROMANIA", "HUNGARY", "AUSTRIA", "CROATIA", "SERBIA", "GREECE", "TURKEY",
+                "CYPRUS", "ISRAEL", "JORDAN", "EGYPT", "MOROCCO", "TUNISIA", "SENEGAL", "NIGERIA", "UGANDA", "RWANDA",
+                "ANGOLA", "ZAMBIA", "ZIMBABWE", "NAMIBIA", "BOTSWANA", "SUDAN", "SOMALIA", "ETHIOPIA", "TANZANIA", "PANAMA",
+                "BELIZE", "HONDURAS", "JAMAICA", "BAHAMAS", "HAITI", "BARBADOS", "URUGUAY", "PARAGUAY", "BOLIVIA", "ECUADOR",
+                "SURINAME", "QATAR", "KUWAIT", "BAHRAIN", "OMAN", "YEMEN", "SYRIA", "LEBANON", "ARMENIA", "GEORGIA", "MONGOLIA"
+            ],
             "Plants": ["VINE", "LEAF", "SEED", "STEM", "ROOT", "BUD", "TREE", "FERN", "BARK", "MOSS", "BUSH", "BULB", "PLANT", "GRASS", "FLORA", "BLOOM", "PETAL", "BRANCH", "BLOSSOM", "SAPLING"],
-            "Animals": ["BEAR", "LION", "WOLF", "DEER", "FROG", "DUCK", "BIRD", "FISH", "GOAT", "PIGS", "RABIT", "CATS", "TIGER", "ZEBRA", "HORSE", "SHEEP", "MOUSE", "MONKEY", "DOLPHIN", "ELEPHANT"],
+            "Animals": ["BEAR", "LION", "WOLF", "DEER", "FROG", "DUCK", "BIRD", "FISH", "GOAT", "PIGS", "RABBIT", "CATS", "TIGER", "ZEBRA", "HORSE", "SHEEP", "MOUSE", "MONKEY", "DOLPHIN", "ELEPHANT"],
             "Vehicles": ["CAR", "BUS", "VAN", "BOAT", "SHIP", "CART", "JEEP", "TRAIN", "BIKE", "TAXI", "TRUCK", "WAGON", "PLANE", "SEDAN", "WHEEL", "SCOOTER", "TRAILER", "TRACTOR", "AIRPLANE", "HELICOPTER"],
             "Jobs": ["CHEF", "COOK", "COP", "DOC", "NURSE", "CLERK", "GUARD", "JUDGE", "PILOT", "AGENT", "BAKER", "ARTIST", "ACTOR", "DESIGN", "MINER", "WRITER", "PAINTER", "TEACHER", "LAWYER", "DOCTOR"],
             "Sports": ["GOLF", "POOL", "SURF", "YOGA", "JUDO", "RACE", "SKATE", "TRACK", "TEAM", "BALL", "GAME", "GOAL", "BOXING", "RUGBY", "TENNIS", "SOCCER", "HOCKEY", "BASEBALL", "FOOTBALL", "BASKETBALL"],
             "Fruits": ["PEAR", "PLUM", "KIWI", "FIGS", "LIME", "DATE", "MANGO", "PEACH", "GRAPE", "BERRY", "MELON", "LEMON", "APPLE", "ORANGE", "CHERRY", "BANANA", "PAPAYA", "APRICOT", "COCONUT", "PINEAPPLE"],
             "Vegetables": ["CORN", "PEAS", "BEAN", "BEET", "KALE", "YAM", "LEEK", "OKRA", "ONION", "GARLIC", "CARROT", "CELERY", "POTATO", "TOMATO", "PEPPER", "SPINACH", "CUCUMBER", "BROCCOLI", "ZUCCHINI", "ASPARAGUS"],
             "Colors": ["BLUE", "PINK", "GOLD", "TEAL", "GREY", "ROSE", "RUBY", "LIME", "CYAN", "NAVY", "PLUM", "SAGE", "BLACK", "WHITE", "GREEN", "BROWN", "PURPLE", "ORANGE", "YELLOW", "MAGENTA"],
-            "Weather": ["RAIN", "WIND", "HAIL", "SNOW", "SUN", "DEW", "MIST", "FOG", "GALE", "STORM", "CLOUD", "HEAT", "FROST", "STORM", "FLOOD", "BREEZE", "THUNDER", "TORNADO", "BLIZZARD", "HURRICANE"],
+            "Weather": ["RAIN", "WIND", "HAIL", "SNOW", "SUN", "DEW", "MIST", "FOG", "GALE", "STORM", "CLOUD", "HEAT", "FROST", "FLOOD", "BREEZE", "THUNDER", "TORNADO", "BLIZZARD", "HURRICANE"],
             "Space": ["STAR", "MOON", "MARS", "VOID", "ORBIT", "DUST", "NOVA", "RING", "SUNS", "ASTRO", "COMET", "PLUTO", "EARTH", "VENUS", "SATURN", "GALAXY", "NEBULA", "ECLIPSE", "METEOR", "UNIVERSE"],
             "Ocean": ["WAVE", "FISH", "KELP", "CLAM", "CRAB", "REEF", "GULL", "TIDE", "SEAL", "SHARK", "WHALE", "CORAL", "OCEAN", "WATER", "BEACH", "ANCHOR", "CURRENT", "TSUNAMI", "SEASHELL", "PELICAN"],
             "Music": ["BAND", "SONG", "TUNE", "BASS", "DRUM", "CHOIR", "NOTE", "ROCK", "JAZZ", "POP", "RAP", "HORN", "AUDIO", "CHORD", "PIANO", "GUITAR", "SINGER", "CONCERT", "MELODY", "SYMPHONY"],
@@ -1010,15 +1043,484 @@
             "Kitchen": ["POT", "PAN", "CUP", "MUG", "BOWL", "FORK", "SPOON", "KNIFE", "OVEN", "GRID", "PLATE", "GLASS", "MIXER", "SPATULA", "STRAINER", "CLEAVER", "SKILLET", "BLENDER", "TOASTER", "MICROWAVE"],
             "Reptiles": ["TOAD", "FROG", "NEWT", "SNAKE", "GECKO", "SKINK", "AGAMA", "COBRA", "VIPER", "PYTHON", "LIZARD", "TURTLE", "ALLIGATOR", "CROCODILE", "IGUANA", "CHAMELEON", "TORTOISE", "RATTLESNAKE", "ANACONDA", "TERRAPIN"],
             "Minerals": ["GOLD", "IRON", "COAL", "SALT", "TIN", "ZINC", "LEAD", "JADE", "RUBY", "OPAL", "GEM", "ROCK", "SILVER", "COPPER", "BRONZE", "QUARTZ", "MARBLE", "GRANITE", "DIAMOND", "PLATINUM"],
-            "Science": ["ATOM", "CELL", "GENE", "ION", "MASS", "VOLT", "WATT", "ACID", "BASE", "DATA", "TEST", "LABS", "LASER", "RADAR", "PHYSICS", "BIOLOGY", "CHEMISTRY", "GENETICS", "QUANTUM", "ELECTRON"]
+            "Science": ["ATOM", "CELL", "GENE", "ION", "MASS", "VOLT", "WATT", "ACID", "BASE", "DATA", "TEST", "LABS", "LASER", "RADAR", "PHYSICS", "BIOLOGY", "CHEMISTRY", "GENETICS", "QUANTUM", "ELECTRON"],
+            "Body": ["EYE", "EAR", "ARM", "LEG", "FOOT", "HAND", "NOSE", "LIP", "TOE", "JAW", "NECK", "KNEE", "SKIN", "HAIR", "BONE", "CHEST", "HEART", "BLOOD", "MUSCLE", "FINGER"],
+            "Numbers": ["ONE", "TWO", "SIX", "TEN", "ZERO", "FOUR", "FIVE", "NINE", "SIXTH", "SEVEN", "EIGHT", "THIRD", "FIFTH", "TENTH", "TWENTY", "THIRTY", "FORTY", "FIFTY", "HUNDRED", "THOUSAND"],
+            "Dates": ["DAY", "WEEK", "YEAR", "JUNE", "JULY", "MAY", "MARCH", "APRIL", "MONDAY", "TUESDAY", "FRIDAY", "SUNDAY", "JANUARY", "FEBRUARY", "AUGUST", "OCTOBER", "NOVEMBER", "DECEMBER", "WEEKEND", "CALENDAR"]
         };
 
-        const OVERRIDE_WORDS = new Set([
-            "PEE", "POO", "FART", "CRAP", "DAMN", "HELL", "SHIT", "BITCH", "BASTARD", 
-            "ASS", "COCK", "PUSSY", "DICKS", "CUNT", "SLUT", "WHORE", "TITS", "BOOB", 
-            "SEX", "CUM", "JIZZ", "PISS", "TURD", "BUTT", "BALLS", "BONER", "SNATCH",
-            "BEEP", "BUZZ", "ZOOM", "BANG", "BOOM", "ZAP", "HISS", "CLICK", "SNAP", "CRASH"
-        ]);
+        const POKEMON_DEFINITIONS = {
+            "MEW": "A rare, mythical psychic-type Pokémon said to contain the genetic codes of all Pokémon.",
+            "MUK": "A sticky, sludge-type Pokémon that emits a toxic fluid which makes plants wither instantly.",
+            "ONIX": "A giant rock-snake Pokémon that burrows through the ground at high speeds.",
+            "JYNX": "An ice and psychic-type Pokémon that speaks in a language humans cannot understand.",
+            "DITTO": "A transforming normal-type Pokémon that can reconstitute its cellular structure.",
+            "EKANS": "A stealthy snake Pokémon that coils up to rest and strikes silently.",
+            "ARBOK": "A hooded cobra Pokémon featuring terrifying patterns on its belly.",
+            "PICHU": "A small electric baby Pokémon that is not yet skilled at storing electricity.",
+            "RAICHU": "The evolved form of Pikachu that discharges weak electricity when stressed.",
+            "EEVEE": "A versatile normal-type Pokémon with an irregular genetic code that allows multiple evolutions.",
+            "SNORLAX": "A large, sleepy normal-type Pokémon that eats constantly and sleeps the rest of the day.",
+            "LUGIA": "A legendary psychic and flying-type guardian of the deep ocean storms.",
+            "CELEBI": "A time-traveling mythical green forest sprite Pokémon.",
+            "LATIAS": "A dragon and psychic-type Pokémon that can make itself invisible using light refraction.",
+            "LATIOS": "A swift soaring dragon and psychic-type Pokémon that understands human speech.",
+            "PIKACHU": "The iconic electric mouse Pokémon that stores electricity in its cheek sacs.",
+            "UMBREON": "A dark-type evolutionary form of Eevee that awakens when bathed in moonlight.",
+            "SYLVEON": "A fairy-type evolution of Eevee that wraps ribbon-like feelers around its trainer.",
+            "VAPOREON": "A water-type evolution of Eevee whose cellular structure resembles water molecules.",
+            "ESPEON": "A psychic-type evolution of Eevee that predicts weather changes using its sensitive tail fur.",
+            "LEAFEON": "A grass-type evolution of Eevee that cleans the air around it through photosynthesis.",
+            "MUDKIP": "A water-type starter Pokémon that uses the sensitive fin on its head to detect surroundings.",
+            "LAPRAS": "A gentle giant water and transport Pokémon that loves ferrying people across seas.",
+            "GENGAR": "A mischievous ghost-type Pokémon that hides in shadows and drains body warmth.",
+            "LUXRAY": "An electric-type gleam-eyed Pokémon that can see through solid walls.",
+            "ROWLET": "A grass and flying-type owl Pokémon that can rotate its neck 180 degrees.",
+            "GARDEVOIR": "A psychic and fairy-type Pokémon that will risk its life to protect its trainer.",
+            "JOLTEON": "An electric-type evolution of Eevee that bristles its fur when ready to strike.",
+            "FLYGON": "A ground and dragon-type desert spirit known as the Desert Spirit.",
+            "GLACEON": "An ice-type evolution of Eevee that can freeze the moisture in the air into diamond dust.",
+            "BLASTOISE": "A massive water-type turtle Pokémon equipped with high-pressure hydro water cannons.",
+            "GRENINJA": "A water and dark-type ninja frog Pokémon that moves with incredible stealth.",
+            "WOOPER": "A water and ground-type amphibian Pokémon protected by a slimy, toxic film.",
+            "ZORUA": "A dark-type illusion fox Pokémon that disguises itself to look like others.",
+            "SCIZOR": "A bug and steel-type Pokémon with steel-pincer claws bearing eye-like patterns.",
+            "DIALGA": "A legendary steel and dragon-type deity of time.",
+            "ARCEUS": "A mythical normal-type deity Pokémon said to have shaped the universe with its 1000 arms.",
+            "SWAMPERT": "A powerful water and ground-type mud fish Pokémon that can tow boulders with ease.",
+            "ABSOL": "A dark-type disaster-warning Pokémon that appears before natural calamities.",
+            "FLAREON": "A fire-type evolution of Eevee that stores thermal energy in its fluffy fur coat.",
+            "ARCANINE": "A legendary fire-type loyal canine Pokémon known for its brave and majestic stride.",
+            "GYARADOS": "A ferocious water and flying-type dragon Pokémon notorious for destroying entire cities.",
+            "MILOTIC": "A majestic water-type serpent Pokémon known as the most beautiful creature in existence.",
+            "ALTARIA": "A dragon and flying-type bird Pokémon whose wings look like fluffy white cotton clouds.",
+            "ROTOM": "An electric and ghost-type plasma Pokémon that can inhabit electronic appliances.",
+            "GALLADE": "A psychic and fighting-type blade-master Pokémon with extendable elbow swords.",
+            "ZEKROM": "A legendary dragon and electric-type idealist ideal Pokémon.",
+            "DRATINI": "A gentle dragon-type snake Pokémon that sheds its skin continuously.",
+            "SHINX": "A cute electric-type spark Pokémon that generates electricity by flexing its muscles.",
+            "VULPIX": "A fire-type fox Pokémon with six gorgeous tails that grow warmer as it ages.",
+            "PORYGON": "An artificial digital normal-type Pokémon created through advanced programming.",
+            "SPHEAL": "A round ice and water-type seal Pokémon that rolls around playfully on ice floes.",
+            "TYRANITAR": "A rock and dark-type powerhouse Pokémon whose movements can alter surrounding landscapes.",
+            "CHARIZARD": "A legendary fire and flying-type dragon Pokémon that breathes intense, melting fire.",
+            "GROUDON": "A legendary ground-type titan Pokémon said to have expanded landmasses.",
+            "HAUNTER": "A ghost-type gas Pokémon that licks targets with gaseous tongues to induce paralysis.",
+            "MAREEP": "An electric-type sheep Pokémon that stores static electricity in its fluffy wool.",
+            "SCYTHER": "A swift bug and flying-type mantis Pokémon with razor-sharp scythe arms.",
+            "NOIVERN": "A flying and dragon-type bat Pokémon that emits ultrasonic waves strong enough to smash boulders.",
+            "ZAPDOS": "A legendary electric and flying-type bird Pokémon that controls thunderbolts.",
+            "SNIVY": "A grass-type vine snake starter Pokémon that bathes in sunlight to boost its agility.",
+            "TORCHIC": "A fire-type chick starter Pokémon that keeps a small internal fire burning constantly.",
+            "TOGEPI": "A fairy-type spike-ball happiness Pokémon that shares positive energy from its shell.",
+            "ENTEI": "A legendary fire-type beast Pokémon born alongside volcanic eruptions.",
+            "RAIKOU": "A legendary electric-type beast Pokémon that dashes across fields like lightning.",
+            "WEAVILE": "A dark and ice-type sharp-clawed predator Pokémon that communicates using claw scratches.",
+            "BRELOOM": "A grass and fighting-type mushroom Pokémon that throws swift, boxer-like punches.",
+            "GLISCOR": "A ground and flying-type scorpion bat Pokémon that glides silently on wind currents.",
+            "KROOKODILE": "A ground and dark-type alligator Pokémon with sharp eyes that can zoom in like binoculars.",
+            "HERACROSS": "A bug and fighting-type beetle Pokémon with immense horn strength.",
+            "CUBONE": "A lonely ground-type Pokémon that wears the skull of its deceased mother.",
+            "ALAKAZAM": "A psychic-type master Pokémon with an IQ exceeding 5,000 and telekinetic powers.",
+            "AGGRON": "A steel and rock-type iron armor Pokémon that claims entire mountain ranges as its territory.",
+            "CROBAT": "A poison and flying-type bat Pokémon with additional wings on its hind legs for silent flight.",
+            "RALTS": "A psychic and fairy-type emotion-sensing Pokémon that hides when it senses hostility.",
+            "MAWILE": "A steel and fairy-type deceiver Pokémon featuring massive iron jaws formed from transformed horns.",
+            "DEWOTT": "A water-type sea otter Pokémon that practices shell-swordsmanship daily.",
+            "HAXORUS": "A dragon-type axe-jawed Pokémon with unbreakable tusks used for slashing.",
+            "FROAKIE": "A water-type bubble frog Pokémon that protects its skin with a flexible bubble cloak.",
+            "PALKIA": "A legendary water and dragon-type spatial deity Pokémon.",
+            "MEWTW": "A genetically engineered psychic-type clone of Mew.",
+            "CLEFAIRY": "A fairy-type moonlight-dancing Pokémon often said to come from outer space.",
+            "JIGGLYPUFF": "A normal and fairy-type balloon Pokémon that sings lullabies to put foes to sleep.",
+            "MEOWTH": "A normal-type scratch-happy cat Pokémon that loves collecting shiny coins.",
+            "PSYDUCK": "A water-type duck Pokémon plagued by perpetual tension headaches that unlock psychic power.",
+            "MACHAMP": "A fighting-type four-armed powerhouse Pokémon capable of delivering 1,000 punches in two seconds.",
+            "GOLEM": "A rock and ground-type boulder Pokémon that rolls down mountainsides to travel.",
+            "GASTLY": "A ghost and poison-type gaseous orb Pokémon that can envelop opponents to cause fainting.",
+            "STARMIE": "A water and psychic-type starfish Pokémon that emits mysterious radio waves into space.",
+            "MAGIKARP": "A notoriously weak water-type fish Pokémon known only for leaping pathetically.",
+            "ARTICUNO": "A legendary ice and flying-type bird Pokémon that commands freezing blizzards.",
+            "MOLTRES": "A legendary fire and flying-type bird Pokémon that bathes in magma to heal wounds.",
+            "DRAGONITE": "A kind-hearted dragon and flying-type guardian Pokémon that rescues drowning sailors.",
+            "CHIKORITA": "A grass-type leaf starter Pokémon that loves sunbathing and emits a soothing aroma from its leaf.",
+            "CYNDAQUIL": "A fire-type mouse starter Pokémon that flares flames from its back when startled.",
+            "TOTODILE": "A water-type jaw-snapping crocodile starter Pokémon with a playful yet dangerous bite.",
+            "BELLOSSOM": "A grass-type flower-dancing Pokémon that gathers in sunny fields to perform harmonious dances.",
+            "MARILL": "A water and fairy-type aquatic mouse Pokémon with a buoyant, oil-filled tail.",
+            "SLOWKING": "A water and psychic-type royal Pokémon that gained supreme intelligence after a Shellder bite.",
+            "STEELIX": "A steel and ground-type iron snake evolution created from compressed underground rocks.",
+            "HOUNDOOM": "A dark and fire-type hound Pokémon whose fiery breath emits a toxic, painful odor.",
+            "KINGDRA": "A water and dragon-type seahorse Pokémon that sleeps peacefully on deep ocean floors.",
+            "PHANPY": "A ground-type long-nosed elephant calf Pokémon that loves swinging people around playfully.",
+            "HOOH": "A legendary fire and flying-type rainbow phoenix Pokémon that brings eternal happiness.",
+            "TREECKO": "A grass-type gecko starter Pokémon that scales vertical walls effortlessly using tiny pads.",
+            "SLAKOTH": "A normal-type lazy sloth Pokémon that sleeps 20 hours a day and barely moves.",
+            "SABLEYE": "A dark and ghost-type gem-eating goblin Pokémon with jewel-like glowing eyes.",
+            "MEDITITE": "A fighting and psychic-type meditative Pokémon that floats while practicing yoga poses.",
+            "PLUSLE": "An electric-type cheerleader cheering rodent that absorbs electricity to spark fireworks.",
+            "MINUN": "An electric-type cheering rodent that supports partners with showers of glowing sparks.",
+            "WAILORD": "A colossal water-type whale Pokémon known as the gentle giant of the open seas.",
+            "SPINDA": "A normal-type dizzy panda Pokémon; no two specimens have identical spot patterns.",
+            "SALAMENCE": "A dragon and flying-type powerhouse that finally achieved its lifelong dream of growing wings to fly.",
+            "BELDUM": "A steel and psychic-type magnetic iron-ball Pokémon that communicates via brainwaves.",
+            "KYOGRE": "A legendary water-type titan Pokémon said to have expanded the oceans.",
+            "RAYQUAZA": "A legendary dragon and flying-type ozone layer guardian that neutralizes earthly threats.",
+            "JIRACHI": "A mythical steel and psychic-type wishing star Pokémon that awakens once every thousand years.",
+            "TURTWIG": "A grass-type seedling turtle starter Pokémon that performs photosynthesis through its shell leaf.",
+            "CHIMCHAR": "A fire-type chimp starter Pokémon whose tail flame burns brighter when it rests.",
+            "PIPLUP": "A water-type penguin starter Pokémon with a proud stride and thick waterproof down.",
+            "ROSERADE": "A grass and poison-type bouquet Pokémon wielding venomous thorn bouquets in both hands.",
+            "RAMPARDOS": "A rock-type fossil dinosaur Pokémon with a thick skull capable of ramming down steel towers.",
+            "GASTRODON": "A water and ground-type sea slug Pokémon with colors varying depending on its habitat region.",
+            "LOPUNNY": "A normal-type rabbit Pokémon that sheds its fluffy winter coat for sleek spring fur.",
+            "LUCARIO": "A fighting and steel-type aura-reading martial arts jackal Pokémon.",
+            "GARCHOMP": "A dragon and ground-type jet fighter shark Pokémon that flies at supersonic speeds.",
+            "HIPPOWDON": "A ground-type heavy-load hippo Pokémon that stores massive quantities of sand inside its body.",
+            "CROAGUNK": "A poison and fighting-type toxic frog Pokémon that puffs its poison sacs to intimidate rivals.",
+            "FROSLASS": "An ice and ghost-type snow spirit Pokémon that freezes lost travelers in blizzards.",
+            "UXIE": "A legendary psychic-type pixie of knowledge that wiped memories if looked in the eyes.",
+            "MESPRIT": "A legendary psychic-type pixie of emotion that taught humans sorrow, joy, and pain.",
+            "AZELF": "A legendary psychic-type pixie of willpower that bestowed determination upon humanity.",
+            "HEATRAN": "A fire and steel-type volcano dweller Pokémon with molten steel boiling in its veins.",
+            "REGIGIGAS": "A legendary normal-type colossal titan Pokémon said to have towed continents with ropes.",
+            "GIRATINA": "A legendary ghost and dragon-type ruler of the distorted reverse dimension.",
+            "CRESSELIA": "A psychic-type lunar crescent moon Pokémon that dispels nightmares and brings sweet dreams.",
+            "MANAPHY": "A mythical water-type seafaring prince Pokémon born with a miraculous power to bond with all species.",
+            "DARKRAI": "A legendary dark-type nightmare-inducing pitch-black phantom Pokémon.",
+            "SHAYMIN": "A mythical grass-type gratitude hedgehog Pokémon that blooms gracidea flowers across fields.",
+            "VICTINI": "A mythical psychic and fire-type victory bringer Pokémon that never loses a battle.",
+            "TEPIG": "A fire-type pig starter Pokémon that roasts berries to perfection before eating them.",
+            "OSHAWOTT": "A water-type sea otter starter Pokémon that uses the scalchop shell on its belly for battle.",
+            "LILLIPUP": "A normal-type puppy Pokémon with brave courage and intelligent fur sensing abilities.",
+            "ZOROARK": "A dark-type illusion master fox Pokémon that protects its pack with collective illusions.",
+            "MINCCINO": "A normal-type chinchilla Pokémon that grooms itself and others meticulously with its tail brush.",
+            "SOLOSIS": "A psychic-type cell-like green blob Pokémon protected by a thick fluid membrane.",
+            "CHANDELURE": "A ghost and fire-type chandelier Pokémon that absorbs souls and burns them away in eerie flames.",
+            "AXEW": "A dragon-type tusked axe lizard Pokémon that sharpens its tusks against hard river rocks.",
+            "DRUDDIGON": "A dragon-type cave dragon Pokémon that absorbs solar energy through its crimson wings.",
+            "LARVESTA": "A bug and fire-type volcanic moth larva Pokémon that spits blazing fireballs from its horns.",
+            "VOLCARONA": "A bug and fire-type sun-god moth Pokémon whose fiery scales replace dark skies with blazing daylight.",
+            "RESHIRAM": "A legendary dragon and fire-type truth-seeking pristine white dragon Pokémon.",
+            "KYUREM": "A legendary dragon and ice-type boundary Pokémon that generates freezing energy inside its hollow body.",
+            "KELDEO": "A mythical water and fighting-type pony foal Pokémon that crosses the world training with sacred swords.",
+            "MELOETTA": "A mythical normal and psychic or fighting-type melody Pokémon that changes forms using ancient songs.",
+            "GENESECT": "An ancient bug-type cybernetic cyborg Pokémon modified by Team Plasma with a powerful cannon.",
+            "CHESPIN": "A grass-type spiny urchin starter Pokémon with a hard shell on its head that deflects attacks.",
+            "FENNEKIN": "A fire-type fennec fox starter Pokémon that loves munching on twigs for an energy boost.",
+            "BUNNELBY": "A normal-type digging rabbit Pokémon with shovel-shaped ears strong enough to slice asphalt roots.",
+            "FLETCHLING": "A normal and flying-type robin sparrow Pokémon known for its sharp chirps and fearless attitude.",
+            "PANCHAM": "A fighting-type playful panda cub Pokémon that tries to glare fiercely but looks adorable instead.",
+            "MEOWSTIC": "A psychic-type dual-gender cat Pokémon whose ear pouches pack psychic blast energy.",
+            "HONEDGE": "A steel and ghost-type floating sword Pokémon born from a human spirit possessing an antique blade.",
+            "SLIGGOO": "A dragon-type soft-bodied snail Pokémon that dissolves everything it touches with potent mucus.",
+            "GOODRA": "A dragon-type gooey benevolent dragon Pokémon that loves hugging its trainer until they're covered in slime.",
+            "TREVENANT": "A ghost and grass-type forest tree guardian Pokémon that controls lesser trees at will.",
+            "PUMPKABOO": "A ghost and grass-type pumpkin spirit Pokémon that houses wandering souls inside its hollow shell.",
+            "XERNEAS": "A legendary fairy-type life deer deity Pokémon that shares eternal life through its glowing horns.",
+            "YVELTAL": "A legendary dark and flying-type destruction bird Pokémon that absorbs life energy when it awakens.",
+            "ZYGARDE": "A legendary dragon and ground-type ecosystem monitor Pokémon composed of numerous cell cores.",
+            "DIANCIE": "A mythical rock and fairy-type jewel princess Pokémon that compresses carbon into dazzling pink diamonds.",
+            "HOOPA": "A mythical psychic and ghost or dark-type ring-bearer Pokémon that warps objects through magical dimensions.",
+            "VOLCANION": "A mythical fire and water-type steam-spewing beast Pokémon whose internal steam generator can blast mountains.",
+            "LITTEN": "A fire-type kitten starter Pokémon that grooms its fur to collect flammable oils for fireballs.",
+            "POPPLIO": "A water-type sea lion starter Pokémon that blows bursting water balloons for acrobatic shows.",
+            "PIKIPEK": "A normal and flying-type woodpecker Pokémon that drills holes in trees 16 times per second.",
+            "YUNGOOS": "A normal-type relentless mongoose Pokémon with an insatiable appetite for wandering prey.",
+            "GRUBBIN": "A bug-type larva grub Pokémon that burrows underground using its sturdy mandibles.",
+            "ROCKRUFF": "A rock-type puppy Pokémon that rubs the rocks around its neck against people to show affection.",
+            "MAREANIE": "A poison and water-type sea urchin star Pokémon that feeds on Corsola branches.",
+            "MUDSDALE": "A ground-type draft horse Pokémon whose mud-coated hooves can smash heavy cars to dust.",
+            "SALANDIT": "A poison and fire-type toxic lizard Pokémon that emits sweet-smelling, poisonous gas fumes.",
+            "STUFFUL": "A normal and fighting-type flailing bear cub Pokémon that hates being hugged despite its cute appearance.",
+            "BOUNSWEET": "A grass-type fruit bulb Pokémon that emits a delicious, sweet scent to attract allies.",
+            "WIMPOD": "A bug and water-type cowardly scavenger Pokémon that scuttles away immediately when startled.",
+            "SANDYGAST": "A ghost and ground-type sandcastle Pokémon possessed by the grudges of fallen children.",
+            "PYUKUMUKU": "A water-type sea cucumber Pokémon that expels its internal organs as a fist to punch enemies.",
+            "ORICORIO": "A fire, electric, psychic, or ghost-type dancing bird Pokémon that changes styles sipping nectar.",
+            "KOMALA": "A normal-type drowsy log-hugger koala Pokémon that spends its entire life fast asleep.",
+            "MINIOR": "A rock and flying-type meteor core Pokémon protected by a colorful outer rock shell.",
+            "TURTONATOR": "A fire and dragon-type turtle bomb Pokémon that triggers explosive traps on its armored shell.",
+            "TOGEDEMARU": "An electric and steel-type spiky round mouse Pokémon that gathers lightning bolts on its back quill.",
+            "MIMIKYU": "A ghost and fairy-type lonely disguise Pokémon that dresses like Pikachu to make friends.",
+            "BRUXISH": "A water and psychic-type gnashing fish Pokémon that emits powerful psychic waves from its head.",
+            "DHELMISE": "A ghost and grass-type seaweed anchor Pokémon that possesses marine debris to fight.",
+            "JANGMOO": "A dragon-type scaly squama Pokémon that clangs its head scales together to signal allies.",
+            "SOLGALEO": "A legendary psychic and steel-type sun-emissary lion Pokémon glowing with stellar power.",
+            "LUNALA": "A legendary psychic and ghost-type moon-emissary bat Pokémon carrying cosmic night skies.",
+            "NIHILEGO": "A rock and poison-type parasite ultra beast Pokémon that resembles a translucent jellyfish.",
+            "BUZZWOLE": "A bug and fighting-type muscular ultra beast Pokémon that flexes constantly to show off power.",
+            "PHEROMOSA": "A bug and fighting-type lithe ultra beast Pokémon that detests being touched by anything filthy.",
+            "XURKITREE": "An electric-type wired cable ultra beast Pokémon that absorbs electricity from electrical power plants.",
+            "CELESTEELA": "A steel and flying-type colossal rocket ultra beast Pokémon that stores volatile gas in its bamboo body.",
+            "KARTANA": "A grass and steel-type paper-thin razor-sharp ultra beast Pokémon that slices steel pillars effortlessly.",
+            "GUZZLORD": "A dark and dragon-type voracious gluttony ultra beast Pokémon that devours entire mountains.",
+            "NECROZMA": "A legendary psychic-type prism prismatic beast Pokémon that shoots laser beams from its body.",
+            "MAGEARNA": "A mythical steel and fairy-type artificial gear-heart soul-heart maiden robot Pokémon.",
+            "MARSHADOW": "A mythical fighting and ghost-type shadow-stealing martial arts spirit Pokémon.",
+            "POIPOLE": "A poison-type sticky-needle ultra beast Pokémon that communicates via joyful laughing sounds.",
+            "NAGANADEL": "A poison and dragon-type needle-dragon ultra beast Pokémon with massive venomous stingers.",
+            "STAKATAKA": "A rock and steel-type wall-stacking ultra beast Pokémon composed of numerous living stone bricks.",
+            "BLACEPHALON": "A fire and ghost-type fireworks clown ultra beast Pokémon that detonates its own head for fun.",
+            "ZERAORA": "A mythical electric-type swift clawed lightning beast Pokémon.",
+            "MELTAN": "A mythical steel-type liquid metal nut Pokémon that dissolves and eats metallic objects.",
+            "MELMETAL": "A massive steel-type liquid metal titan Pokémon forged from numerous melted Meltan.",
+            "GROOKEY": "A grass-type stick-drumming chimp starter Pokémon that restores withered plants with rhythmic beats.",
+            "SCORBUNNY": "A fire-type energetic rabbit starter Pokémon that runs constantly to heat up its paw pads.",
+            "SOBBLE": "A water-type tearful lizard starter Pokémon that turns invisible when hiding its body in water.",
+            "ROOKIDEE": "A flying-type spunky bird Pokémon that challenges large foes fearlessly without backing down.",
+            "BLIPBUG": "A bug-type observant larva Pokémon that studies everything around it with intelligent eyes.",
+            "DOTTLER": "A bug and psychic-type shelled pupa Pokémon that psychic-scans its environment while resting.",
+            "ORBEETLE": "A bug and psychic-type brainy ladybug Pokémon with a massive brain capable of telekinesis.",
+            "NICKIT": "A dark-type sly fox Pokémon that steals food and items smoothly using padded footpads.",
+            "THIEVUL": "A dark-type cunning fox Pokémon that marks its stolen treasures with scent trails.",
+            "GOSSIFLEUR": "A grass-type flowering pollen plant Pokémon that floats gently on wind currents using petals.",
+            "ELDEGOSS": "A grass-type fluffy cotton-puff Pokémon whose silky down heals injuries and feeds soil.",
+            "WOOLOO": "A normal-type fluffy sheep Pokémon that bounces softly when rolling down grassy hills.",
+            "DUBOOL": "A normal-type sturdy ram Pokémon with spiral horns capable of smashing thick steel barriers.",
+            "CORVIKNIGHT": "A flying and steel-type raven knight Pokémon that rules the skies of Galar as an air taxi.",
+            "DREADNAW": "A water and rock-type vicious snapping turtle Pokémon with bone-crushing jaw power.",
+            "BOLTUND": "An electric-type swift hound Pokémon that generates rapid electricity in its legs while sprinting.",
+            "ROLYCOLY": "A rock-type coal-lump wheel Pokémon that rolls smoothly through coal mine tunnels.",
+            "CARKOL": "A rock and fire-type coal-cart Pokémon that burns coal inside its body to reach high speeds.",
+            "COALOSSAL": "A rock and fire-type colossal furnace mountain Pokémon that incinerates enemies in white-hot flames.",
+            "FLAPPLE": "A grass and dragon-type apple-wyrm Pokémon hiding inside a hollowed-out sweet apple shell.",
+            "APPLETUN": "A grass and dragon-type apple-pie dragon Pokémon covered in sweet, sticky, fragrant nectar.",
+            "SILICOBRA": "A ground-type sand snake Pokémon that stores sand inside its neck pouch to use as a shield.",
+            "SANDACONDA": "A ground-type coiled sand boa Pokémon that sprays up to 100 kilograms of abrasive sand.",
+            "CRAMORANT": "A water and flying-type gulping bird Pokémon that swallows whole prey and spits them out.",
+            "ARROKUDA": "A water-type torpedo pike Pokémon that darts through crystal-clear waters at blinding speeds.",
+            "BARRASKEWDA": "A water-type razor-toothed barracuda Pokémon that swims like a missile through the sea.",
+            "TOXEL": "Electric and poison-type baby punk Pokémon that generates electricity from internal toxic fluids.",
+            "TOXTRICITY": "Electric and poison-type rockstar punk lizard Pokémon that plays guitar using chest chords.",
+            "SIZZLIPEDE": "Fire and bug-type centipede hot-coil Pokémon that cooks its prey using internal body heat.",
+            "CENTISKORCH": "Fire and bug-type giant centipede Pokémon that incinerates enemies in 1,000-degree flame coils.",
+            "CLOBBOPUS": "A fighting-type punch-happy octopus Pokémon that tackles every moving object with boxing gloves.",
+            "GRAPPLOCT": "A fighting-type grappling octopus wrestling Pokémon that pins opponents with eight muscular arms.",
+            "SINISTEA": "A ghost-type black tea spirit Pokémon that lives inside cracked antique teacups.",
+            "POLTEAGEIST": "A ghost-type refined tea-pot spirit Pokémon that pours its delicious essence into cups for allies.",
+            "HATENNA": "A psychic-type calm emotion-sensing witch hat Pokémon that dislikes harsh environments.",
+            "HATREM": "A psychic-type violent mood-silencing witch Pokémon that knocks out loud people with blunt force.",
+            "HATTERENE": "A psychic and fairy-type forest witch Pokémon that silences surrounding creatures with telepathy.",
+            "IMPIDIMP": "A dark and fairy-type mischievous imp Pokémon that absorbs negative human emotions.",
+            "MORGREM": "A dark and fairy-type tricky goblin Pokémon that tricks foes into traps with fake politeness.",
+            "GRIMMSNARL": "A dark and fairy-type snarling ogre Pokémon that wraps hair around its body like muscle armor.",
+            "OBSTAGOON": "A dark and normal-type marching badger Pokémon that bellows defiant war cries at enemies.",
+            "PERRSERKER": "A steel-type viking cat Pokémon with a hardened helmet-like head structure.",
+            "CURSOLA": "A ghost-type brittle coral spirit Pokémon that drifts away when touched.",
+            "SIRFETCHD": "A fighting-type gallant duck knight Pokémon wielding a heavy leek lance and shield.",
+            "MILCERY": "A fairy-type cream-swirl sweet Pokémon born from sweet-smelling dairy kitchen air.",
+            "ALCREMIE": "A fairy-type whipped cream dessert sprite Pokémon that decorates pastries with sweet berries.",
+            "FALINKS": "A fighting-type platoon of six mini brass-helmeted trooper Pokémon marching in lockstep.",
+            "PINCURCHIN": "An electric-type sea urchin pin Pokémon that channels electricity through sharp toxic spines.",
+            "MORPEKO": "Electric and dark-type two-sided hamster Pokémon that turns aggressive when hungry.",
+            "CUFANT": "A steel-type copper baby elephant Pokémon that uses its strong trunk to haul heavy boulders.",
+            "COPPERAJAH": "A steel-type copper titan elephant Pokémon with enough strength to level concrete buildings.",
+            "DRACOZOLT": "Electric and dragon-type ancient fossil chimera Pokémon revived with mismatched body parts.",
+            "ARCTOZOLT": "Electric and ice-type ancient fossil chimera Pokémon that shivers constantly to generate power.",
+            "DRACOVISH": "Water and dragon-type ancient fossil chimera Pokémon with a powerful bite that ignores armor.",
+            "ARCTOVISH": "Water and ice-type ancient fossil chimera Pokémon that breathes freezing air from its head snout.",
+            "DURALUDON": "Steel and dragon-type skyscraper metal dragon Pokémon with lightweight, durable alloy skin.",
+            "DRAGAPULT": "Dragon and ghost-type stealth bomber dragon Pokémon that launches Dreepy babies at supersonic speeds.",
+            "ZACIAN": "Legendary fairy and steel-type sword hero wolf Pokémon that cuts down any opponent with a blade.",
+            "ZAMAZENTA": "Legendary fighting and steel-type shield hero wolf Pokémon that repels all attacks with a shield.",
+            "ETERNATUS": "Legendary poison and dragon-type alien core dragon Pokémon that powers the Dynamax phenomenon.",
+            "URSHIFU": "Fighting and dark or water-type legendary martial arts bear Pokémon with devastating striking styles.",
+            "ZARUDE": "Mythical dark and grass-type rogue jungle ape Pokémon that swings through trees using vines.",
+            "REGIELEKI": "Legendary electric-type titan Pokémon bound by electromagnetic rings to contain its power.",
+            "REGIDRAGO": "Legendary dragon-type titan Pokémon formed from crystallized dragon energy spheres.",
+            "GLASTRIER": "Legendary ice-type high-stature horse Pokémon whose legs are encased in thick diamond-hard frost.",
+            "SPECTRIER": "Legendary ghost-type swift steed horse Pokémon that absorbs life force from passing foes.",
+            "CALYREX": "Legendary psychic and grass-type king harvest ruler Pokémon that brings bountiful crop harvests.",
+            "WYRDEER": "Normal and psychic-type majestic horned stag Pokémon revered in ancient Hisui history.",
+            "KLEAVOR": "Bug and rock-type stone-axe woodsman Pokémon that slashes down trees with razor-sharp arms.",
+            "BASCULEGION": "Water and ghost-type school fish Pokémon possessed by the souls of fallen river companions.",
+            "SNEASLER": "Fighting and poison-type climbing ninja weasel Pokémon that scales cliffs with toxic claws.",
+            "OVERQWIL": "Dark and poison-type sea urchin spiked sphere Pokémon covered in venomous cluster spikes.",
+            "ENAMORUS": "Fairy and flying-type spring-deity genie Pokémon that flies across lands bringing warm spring winds.",
+            "SPRIGATITO": "Grass-type feline cat starter Pokémon that releases a sweet aroma soothing nearby friends.",
+            "FLORAGATO": "Grass-type acrobatic cat vine Pokémon that handles thorny flower buds with surgical precision.",
+            "MEOWSCARADA": "Grass and dark-type illusionist magician cat Pokémon that dazzles foes with explosive flower tricks.",
+            "FUECOCO": "Fire-type lazy croc starter Pokémon that relaxes near warm boulders absorbing thermal energy.",
+            "CROCALOR": "Fire-type fiery head-flame crocodile Pokémon that hatches fireballs inside its singing mouth.",
+            "SKELEDIRGE": "Fire and ghost-type singer alligator Pokémon that unleashes fiery bird spirits from its snout.",
+            "QUAXLY": "Water-type neat duck starter Pokémon that preens its blue feathered cap to prevent dust accumulation.",
+            "QUAXWELL": "Water-type martial arts duck trainer Pokémon that kicks with elegance and fluid balance.",
+            "QUAQUAVAL": "Water and fighting-type dancer peacock duck Pokémon that slashes foes with water-blade feathers.",
+            "PAWMI": "Electric-type fluffy mouse Pokémon that discharges static electricity stored in its paw pads.",
+            "PAWMO": "Electric and fighting-type martial arts rodent Pokémon that strikes enemies with rapid paw combos.",
+            "PAWMOT": "Electric and fighting-type thunder-punching evolution Pokémon that revives exhausted allies.",
+            "TANDEMAUS": "Normal-type cooperative mouse couple Pokémon that live together and share all food gathered.",
+            "MAUSHOLD": "Normal-type tight-knit family mouse Pokémon that work together seamlessly to clean nests.",
+            "FIDOUGH": "Fairy-type yeast-scented puppy dog Pokémon whose bread-like body feels springy and warm.",
+            "DACHSBUN": "Fairy-type baked bread hound Pokémon whose fragrant body repels enemies and bakes treats.",
+            "SMOLIV": "Grass and normal-type olive fruit Pokémon that shoots bitter oil from its head to blind foes.",
+            "DOLLIV": "Grass and normal-type oil-bearing plant Pokémon that shares nutritious oil with travelers.",
+            "ARBOLIVA": "Grass and normal-type olive tree guardian Pokémon that protects vulnerable creatures with rich oil.",
+            "SQUAWKABIRD": "Normal and flying-type colorful parrot Pokémon with distinct feather plumage colors.",
+            "NACLI": "Rock-type salt rock crystal Pokémon that can cure food preservation using pure mineral salt.",
+            "NACLSTACK": "Rock-type stacked salt cube Pokémon that compresses rock minerals into hard fortress blocks.",
+            "GARGANACL": "Rock-type giant salt giant Pokémon that rubs therapeutic salt over injured wandering creatures.",
+            "CHARCADET": "Fire-type fiery armor child Pokémon born from glowing embers inside ancient charcoal.",
+            "ARMAROUGE": "Fire and psychic-type loyal knight armor Pokémon wielding canon arms forged from justice.",
+            "CERULEDGE": "Fire and ghost-type vengeful blade knight Pokémon wielding dual energy swords of regret.",
+            "TADBULB": "Electric-type tadpole shock-bulb Pokémon that bobs its head to generate electric currents.",
+            "BELLIBOLT": "Electric-type plump frog dynamo Pokémon that expands its stretchy skin to discharge lightning.",
+            "WATTREL": "Electric and flying-type storm petrel seabird Pokémon that skims across ocean waves catching sparks.",
+            "KILOWATTREL": "Electric and flying-type soaring frigatebird Pokémon that stores electricity inside throat pouches.",
+            "MASCHIFF": "Dark-type grumpy guard hound Pokémon that glares fiercely while remaining loyal to family.",
+            "MABOSSTIFF": "Dark-type gentle giant hound Pokémon that fiercely protects loved ones with immense bite strength.",
+            "SHROODLE": "Poison and normal-type toxic mouse Pokémon that paints venomous graffiti on tree trunks.",
+            "GRAFAIAI": "Poison and normal-type graffiti artist aye-aye Pokémon that sprays colorful toxic paint.",
+            "BRAMBLIN": "Grass and ghost-type tumbleweed spirit Pokémon born from wandering souls trapped in dry fields.",
+            "BRAMBLEGHAST": "Grass and ghost-type tumbling ghost bush Pokémon that absorbs life energy from passing prey.",
+            "TOEDSCOOL": "Ground and grass-type mushroom jelly Pokémon that resembles a terrestrial tentacled jellyfish.",
+            "TOEDSCRUEL": "Ground and grass-type long-tentacled mushroom tree Pokémon that sweeps through damp forest floors.",
+            "KLAWF": "Rock-type hanging crab Pokémon that clings sideways to sunny cliffs scanning for prey.",
+            "SPIDOPS": "Bug-type trap weaver spider Pokémon that spins durable silk ropes to guard its territory.",
+            "RELLOR": "Bug-type rolling dung beetle Pokémon that pushes a mud-and-sand ball containing its cherished treasure.",
+            "ESPATHRA": "Psychic-type dazzling ostrich bird Pokémon that releases psychic glare from its large glowing eyes.",
+            "TINKATINK": "Fairy and steel-type metal-smithing pixie Pokémon that hammers scrap iron into weapons.",
+            "TINKATUFF": "Fairy and steel-type energetic hammer pixie Pokémon that scours rocky mountains for iron ore.",
+            "TINKATON": "Fairy and steel-type giant hammer witch Pokémon that swings a 220-pound iron hammer with ease.",
+            "WIGLETT": "Water-type garden eel mimic Pokémon that pokes its head out of sandy shores to feed.",
+            "DUGTRIO": "Normal and ground-type mole trio triplet Pokémon that dig cooperative underground tunnels.",
+            "BOMBIRDIER": "Flying and dark-type delivery stork Pokémon that drops heavy boulders from high altitude skies.",
+            "FINIZEN": "Water-type dolphin buddy Pokémon that loves jumping high above coastal waves to play.",
+            "PALAFIN": "Water-type heroic dolphin superhero Pokémon that reveals its true power when allies are in danger.",
+            "VAROOM": "Steel and poison-type engine-block gear Pokémon born inside scrapped vehicle junkyards.",
+            "REVAVROOM": "Steel and poison-type multicipital engine titan Pokémon that burns toxic sludge inside eight cylinders.",
+            "CYCLIZAR": "Dragon and normal-type riding lizard Pokémon that has lived alongside human riders for centuries.",
+            "ORTHWORM": "Steel-type long metal earthworm Pokémon that tunnels through iron ore veins using heavy drills.",
+            "GLIMMET": "Rock and poison-type crystal flower Pokémon that absorbs toxic minerals through glowing petals.",
+            "GLIMMORA": "Rock and poison-type cavern crystal blossom Pokémon that shoots sharp crystalline poison spikes.",
+            "GREAVARD": "Ghost-type candle dog puppy Pokémon that inadvertently absorbs life force from nearby friends.",
+            "HOUNDSTONE": "Ghost-type graveyard tombstone hound Pokémon that guards ancient burial grounds with fierce loyalty.",
+            "FLAMIGO": "Flying and fighting-type pink flamingo Pokémon that ties its neck into a knot to build up power.",
+            "CETITAN": "Ice-type colossal land whale Pokémon protected by thick insulating layers of blubber.",
+            "VELUZA": "Water and dark-type filefish assassin Pokémon that sheds unnecessary muscle flesh to gain speed.",
+            "DONDOZO": "Water-type giant catfish lord Pokémon that works together with Tatsugiri to catch prey.",
+            "TATSUGIRI": "Dragon and water-type mimicking sushi dragon Pokémon that plays dead inside coral beds.",
+            "ANNIHILAPE": "Fighting and ghost-type enraged monkey ghost evolution driven past the breaking point of anger.",
+            "CLODSIRE": "Poison and ground-type armored amphibian Pokémon that deploys heavy toxic spikes when threatened.",
+            "FARIGIRAF": "Normal and psychic-type long-necked twin-brain giraffe evolution with an armored head skin.",
+            "DUDUNSPARCE": "Normal-type serpentine drill-tailed snake Pokémon that tunnels long underground sleeping nests.",
+            "KINGAMBIT": "Dark and steel-type commander general warlord Pokémon that commands vast armies of Pawniard.",
+            "KORAIDON": "Fighting and dragon-type legendary ancient wing-glide lizard Pokémon revered as a winged king.",
+            "MIRAIDON": "Electric and dragon-type legendary futuristic hover-drive lizard Pokémon powered by plasma engines.",
+            "DIPPLIN": "Grass and dragon-type double-wyrm candy apple Pokémon that houses two cooperative wyrm partners.",
+            "SINISTCHA": "Grass and ghost-type refined matcha tea host Pokémon that restores flagging energy in friends.",
+            "OKIDOGI": "Poison and fighting-type loyal canine hero Pokémon of Kitakami enhanced by toxic medicinal mochi.",
+            "MUNKIDORI": "Poison and psychic-type clever monkey hero Pokémon of Kitakami featuring a psychic crystal brain.",
+            "FEZANDIPITI": "Poison and flying-type gorgeous bird hero Pokémon of Kitakami that enchants foes with glittering feathers.",
+            "OGERPON": "Grass-type masked ogre sprite Pokémon that dons mystical masks to channel elemental powers.",
+            "ARCHALUDON": "Steel and dragon-type bridge fortress dragon Pokémon that anchors heavy structures against storms.",
+            "HYDRAPPLE": "Grass and dragon-type multi-wyrm apple dragon evolution with seven coordinated dragon heads.",
+            "GOLDUCK": "Water-type sleek duck swimmer Pokémon that swims effortlessly through rough storm tides.",
+            "POLIWRATH": "Water and fighting-type muscular tadpole boxer Pokémon that can swim across vast ocean expanses.",
+            "MACHOKE": "Fighting-type powerhouse muscle worker Pokémon that never tires when lifting heavy cargo loads.",
+            "GEODUDE": "Rock and ground-type boulder rock Pokémon that tumbles down mountain slopes to travel.",
+            "GRAVELER": "Rock and ground-type rolling boulder Pokémon that crashes down paths without slowing down.",
+            "SLOWBRO": "Water and psychic-type hermit crab evolution formed when a Shellder clamps onto its tail.",
+            "ELECTRODE": "Electric-type spherical ball Pokémon that stores volatile electrical energy prone to sudden blasts.",
+            "EXEGGCUTE": "Grass and psychic-type seed-cluster egg Pokémon that communicate with telepathic signals.",
+            "MAROWAK": "Ground-type bone-wielding guardian spirit Pokémon that battles fiercely with its tribal weapon.",
+            "HITMONLEE": "Fighting-type elastic leg kicking expert Pokémon that stretches its legs to deliver strikes.",
+            "HITMONCHAN": "Fighting-type punching master Pokémon that throws lightning-fast jabs faster than a bullet.",
+            "LICKITUNG": "Normal-type long-tongued gluttonous Pokémon with an adhesive tongue two meters in length.",
+            "KOFFING": "Poison-type thin-skinned gas ball Pokémon that floats on toxic internal fumes.",
+            "WEEZING": "Poison-type twin-headed toxic gas factory Pokémon that purifies dirty air inside its body.",
+            "RHYHORN": "Ground and rock-type armored rhino Pokémon with a skull so hard it shatters concrete.",
+            "TANGELA": "Grass-type vine-tangled mystery Pokémon whose blue vines keep growing without stopping.",
+            "KANGASKHAN": "Normal-type parent nursery Pokémon that safely cradles its baby inside its pouch.",
+            "HORSEA": "Water-type gentle seahorse Pokémon that shoots accurate ink bubbles to strike insect prey.",
+            "SEADRA": "Water-type sharp-spined seahorse Pokémon that defends its territory with poisonous dorsal spines.",
+            "GOLDEEN": "Water-type goldfish fin-dancer Pokémon that swims gracefully upstream against fierce currents.",
+            "SEAKING": "Water-type horn-spear fish Pokémon that digs nesting holes inside riverbed boulders.",
+            "PINSIR": "Bug-type stag beetle pincer Pokémon that clamps enemies tightly between powerful horns.",
+            "TAUROS": "Normal-type wild bull charge Pokémon that rampages furiously across open prairie grasslands.",
+            "OMANYTE": "Rock and water-type ancient spiral fossil shell Pokémon revived from prehistoric ocean floors.",
+            "OMASTAR": "Rock and water-type ancient shelled predator Pokémon with sharp spiral fangs.",
+            "KABUTO": "Rock and water-type ancient horseshoe crab fossil Pokémon protected by a sturdy shell.",
+            "KABUTOPS": "Rock and water-type ancient reaper fossil Pokémon with razor-sharp scythe forelegs.",
+            "AERODACTYL": "Rock and flying-type ancient pterosaur fossil predator Pokémon with jagged razor fangs."
+        };
+
+        const SLANG_PACK = {
+            "GOON": "A silly, foolish, or eccentric person.",
+            "RIZZ": "Charisma or charm in romantic or social situations.",
+            "GYATT": "An exclamation expressing surprise or amazement.",
+            "SIGMA": "An independent, self-reliant individual.",
+            "SKIBIDI": "Internet meme culture term.",
+            "MOG": "To visually overshadow or outshine someone in style.",
+            "FANUM": "Popular gaming and internet stream reference.",
+            "BUSSIN": "Extremely good, flavorful, or delicious.",
+            "MID": "Mediocre, unremarkable, or average quality.",
+            "SIMP": "Someone who goes overboard showing affection.",
+            "YEET": "To throw or hurl something with force.",
+            "SUS": "Short for suspicious or untrustworthy.",
+            "FLEX": "To show off accomplishments, style, or wealth.",
+            "CAP": "A lie, falsehood, or exaggeration.",
+            "NOCAP": "Telling the complete truth; no lie.",
+            "VIBE": "A distinct emotional aura, mood, or feeling.",
+            "GOAT": "Acronym for Greatest Of All Time.",
+            "SLAY": "To perform exceptionally well or look amazing.",
+            "BET": "Expression of agreement or affirmation.",
+            "GHOST": "To suddenly cut off communication with someone.",
+            "DRIP": "Stylish clothing, jewelry, or fashion.",
+            "SESH": "Short for session; a social activity.",
+            "STAN": "An over-the-top, highly devoted fan.",
+            "SALTY": "Bitter, annoyed, or upset over a minor detail.",
+            "CLOUT": "Influence, fame, or social media popularity.",
+            "SQUAD": "A close group of friends or team members.",
+            "BOP": "A catchy, energetic song.",
+            "FIRE": "Outstanding, amazing, or exceptionally cool.",
+            "SHADE": "Subtle, indirect insult or disrespect.",
+            "TEA": "Gossip, news, or insider information.",
+            "GLOWUP": "A dramatic positive transformation in style.",
+            "DANK": "High quality, quirky internet humor.",
+            "CHAD": "Confident, popular individual.",
+            "NOOB": "A beginner or inexperienced gamer.",
+            "PWN": "To decisively dominate or defeat an opponent.",
+            "AFK": "Away From Keyboard; temporarily inactive.",
+            "GG": "Good Game; expression of sportsmanship.",
+            "OP": "Overpowered or dominant element.",
+            "NERF": "To reduce the effectiveness of something.",
+            "BUFF": "To enhance or strengthen a feature.",
+            "POG": "Expression of excitement or celebration.",
+            "RATIO": "When replies heavily outnumber likes on a post.",
+            "CANCEL": "To withdraw support from someone.",
+            "BASIC": "Unoriginal, conventional, or mainstream.",
+            "EXTRA": "Over-the-top, dramatic, or excessively flashy.",
+            "SHEESH": "Exclamation expressing shock or admiration.",
+            "CHEUGY": "Outdated or trying too hard to be trendy.",
+            "NPC": "Non-player character; slang for robotic behavior.",
+            "SITUATIONSHIP": "A romantic relationship lacking formal status.",
+            "ICK": "A sudden feeling of distaste or turn-off.",
+            "FOMO": "Fear Of Missing Out.",
+            "YOLO": "You Only Live Once.",
+            "CHILL": "Relaxed, easygoing, or calm.",
+            "DOPE": "Very cool, excellent, or impressive.",
+            "HYPED": "Excited, enthusiastic, or full of energy.",
+            "SAVAGE": "Bold, ruthless, or unflinchingly honest.",
+            "STEEZ": "Effortless style, flair, or ease.",
+            "SWAG": "Stylish confidence or distinct aura.",
+            "LIT": "Exciting, vibrant, or full of energy.",
+            "TURNT": "Hyped up or wildly energetic.",
+            "SNACK": "An attractive or stylish person.",
+            "CRINGE": "Embarrassing, awkward, or uncomfortable.",
+            "LOWKEY": "Subtle, quiet, or kept on the down-low.",
+            "HIGHKEY": "Outspoken, obvious, or highly prominent.",
+            "PERIODT": "Emphatic variant of period.",
+            "MOOD": "Relatable feeling or emotional vibe.",
+            "SHOOK": "Deeply surprised, shocked, or startled.",
+            "DEAD": "Overcome with laughter or amazement.",
+            "WOKE": "Aware of important social or cultural issues.",
+            "BASED": "Unapologetically true to oneself.",
+            "COOKED": "Exhausted, overwhelmed, or defeated.",
+            "FITS": "Outfits or stylish clothing combinations.",
+            "OOF": "Exclamation of sympathy or mild pain."
+        };
 
         let discoveredWords = JSON.parse(localStorage.getItem('bookley_discovered') || '{}');
         let onlineSessionCache = {};
@@ -1178,14 +1680,7 @@
         }
 
         function getRandomLetter() {
-            const roll = Math.random();
-            if (roll < 0.08) {
-                return CHALLENGING_LETTERS[Math.floor(Math.random() * CHALLENGING_LETTERS.length)];
-            } else if (roll < 0.46) {
-                return VOWELS[Math.floor(Math.random() * VOWELS.length)];
-            } else {
-                return CONSONANTS[Math.floor(Math.random() * CONSONANTS.length)];
-            }
+            return BALANCED_LETTER_POOL[Math.floor(Math.random() * BALANCED_LETTER_POOL.length)];
         }
 
         function createTileObject(letter = getRandomLetter(), bonus = null) {
@@ -1257,7 +1752,6 @@
                     let idx = topRowIndices[i];
                     if (gridState[idx].bonus !== 'flame') {
                         let currentTile = gridState[idx];
-                        // Preserve the exact letter it's replacing
                         gridState[idx] = {
                             id: currentTile.id,
                             letter: currentTile.letter,
@@ -1498,6 +1992,7 @@
 
         gridEl.addEventListener('pointermove', (e) => {
             if (!isDragging || isAnimating) return;
+            e.preventDefault();
             const index = getTileIndexAtCoords(e.clientX, e.clientY);
             if (index !== null) {
                 processTileSelection(index);
@@ -1588,8 +2083,15 @@
         }
 
         async function checkApiWord(word) {
+            if (currentFetchController) {
+                currentFetchController.abort();
+            }
+            currentFetchController = new AbortController();
+
             try {
-                const res = await fetch(`https://api.datamuse.com/words?sp=${word.toLowerCase()}&qe=1&md=df&max=1`);
+                const res = await fetch(`https://api.datamuse.com/words?sp=${word.toLowerCase()}&qe=1&md=df&max=1`, {
+                    signal: currentFetchController.signal
+                });
                 if (res.ok) {
                     const data = await res.json();
                     if (data.length > 0 && data[0].word.toUpperCase() === word) {
@@ -1625,7 +2127,11 @@
                         }
                     }
                 }
-            } catch (e) {}
+            } catch (e) {
+                if (e.name === 'AbortError') {
+                    // Safe to ignore aborted requests
+                }
+            }
             return { valid: false, def: "" };
         }
 
@@ -1692,8 +2198,22 @@
                     return;
                 }
 
-                if (OVERRIDE_WORDS.has(word)) {
-                    let def = `Valid colloquial/slang term (${word.length} letters).`;
+                if (POKEMON_DEFINITIONS[word]) {
+                    let def = `(${word.length} letters) Pokédex: ${POKEMON_DEFINITIONS[word]}`;
+                    onlineSessionCache[word] = { valid: true, def: def };
+                    isCurrentWordValid = true;
+                    validDefinitionText = def;
+
+                    let livePoints = calculateCurrentWordScore();
+                    wordEl.innerHTML = `${currentWordString} <span style="font-size: 0.85rem; color: var(--mustard); font-weight: 900; margin-left: 6px;">(+${livePoints.toLocaleString()})</span>`;
+
+                    updateButtonStates();
+                    renderGridInitial();
+                    return;
+                }
+
+                if (SLANG_PACK[word]) {
+                    let def = `(${word.length} letters) Slang: ${SLANG_PACK[word]}`;
                     onlineSessionCache[word] = { valid: true, def: def };
                     isCurrentWordValid = true;
                     validDefinitionText = def;
@@ -1902,7 +2422,8 @@
 
                 movesToAdvance.forEach(m => {
                     gridState[m.targetIdx] = m.tileObj;
-                    gridState[m.fromIdx] = { id: nextTileId++, letter: getRandomLetter(), isNewSpawn: true };
+                    gridState[m.fromIdx] = createTileObject();
+                    gridState[m.fromIdx].isNewSpawn = true;
                 });
 
                 await renderGridFLIP('0.85s', eatenTileIds);
@@ -2014,7 +2535,9 @@
                         } else if (Math.random() < redTileSpawnChance) {
                             bType = 'flame';
                         }
-                        gridState[idx] = { id: nextTileId++, letter: getRandomLetter(), bonus: bType, isNewSpawn: true };
+                        let newTile = createTileObject(undefined, bType);
+                        newTile.isNewSpawn = true;
+                        gridState[idx] = newTile;
                     }
                 }
             }
@@ -2042,7 +2565,12 @@
 
             if (foundCategory) {
                 speechNote += ` 🏆 (${foundCategory})`;
-                if (isNewDiscovery) {
+                // Only trigger highlight in drawer if it's one of the top 20 featured collection items
+                const isFeaturedCollectionItem = (foundCategory === 'Pokemon' && COLLECTION_POKEMON.includes(word)) ||
+                                                 (foundCategory === 'Places' && COLLECTION_PLACES.includes(word)) ||
+                                                 (foundCategory !== 'Pokemon' && foundCategory !== 'Places');
+                
+                if (isNewDiscovery && isFeaturedCollectionItem) {
                     setTimeout(() => {
                         openCollectionModal(foundCategory, word);
                     }, 400);
@@ -2118,18 +2646,21 @@
             let targetGroupEl = null;
 
             for (let cat in WORD_CATEGORIES) {
-                const words = WORD_CATEGORIES[cat];
-                const found = discoveredWords[cat] || [];
+                let words;
+                if (cat === 'Pokemon') {
+                    words = COLLECTION_POKEMON;
+                } else if (cat === 'Places') {
+                    words = COLLECTION_PLACES;
+                } else {
+                    words = WORD_CATEGORIES[cat];
+                }
+
+                const found = (discoveredWords[cat] || []).filter(w => {
+                    if (cat === 'Pokemon') return COLLECTION_POKEMON.includes(w);
+                    if (cat === 'Places') return COLLECTION_PLACES.includes(w);
+                    return true;
+                });
                 totalDiscovered += found.length;
-
-                let tier34Done = words.slice(0, 12).every(w => found.includes(w));
-                let tier5Done = words.slice(12, 17).every(w => found.includes(w));
-                let tier67Done = words.slice(17, 20).every(w => found.includes(w));
-
-                let tierClass = "";
-                if (tier67Done) tierClass = "tier-gold";
-                else if (tier5Done) tierClass = "tier-silver";
-                else if (tier34Done) tierClass = "tier-blue";
 
                 const group = document.createElement('div');
                 group.className = 'category-group collapsed';
@@ -2139,21 +2670,18 @@
                 }
 
                 const header = document.createElement('div');
-                header.className = `category-header ${tierClass}`;
+                header.className = `category-header`;
                 header.innerHTML = `<span>${cat}</span><span>${found.length} / ${words.length} ▾</span>`;
 
                 const wordsContainer = document.createElement('div');
                 wordsContainer.className = 'category-words';
 
-                words.forEach((w, idx) => {
+                words.forEach((w) => {
                     const badge = document.createElement('span');
                     badge.className = 'word-badge';
                     
                     let wordTierColorClass = "discovered";
-                    if (found.includes(w)) {
-                        if (idx < 12) wordTierColorClass = "tier-blue-word";
-                        else if (idx < 17) wordTierColorClass = "tier-silver-word";
-                        else wordTierColorClass = "tier-gold-word";
+                    if ((discoveredWords[cat] || []).includes(w)) {
                         badge.classList.add(wordTierColorClass);
                     }
 
